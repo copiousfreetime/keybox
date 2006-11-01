@@ -22,6 +22,7 @@ module Keybox
                 letter_set = @source[letters.first] ||= Array.new
                 letter_set << word
             end
+            @randomizer = Keybox::Randomizer.new
         end
 
         def size
@@ -33,6 +34,9 @@ module Keybox
         end
 
         def emit
+            choose_from = 
+            if @last_sequence then
+
         end
     end
 end
