@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+APP_ROOT_DIR     = File.dirname(File.expand_path(File.join(__FILE__,"..")))
+APP_LIB_DIR      = File.join(APP_ROOT_DIR,"lib")
+APP_RESOURCE_DIR = File.join(APP_ROOT_DIR,"resource")
+
+$: << APP_LIB_DIR
+
+require 'apg'
+
+chargram_files = [ "chargrams-length-2.txt", "chargrams-length-3.txt" ]
+
+chargram_files.each do |cfile|
+    p = File.join(APP_RESOURCE_DIR,cfile)
+    c = APG::CharGram.new(File.read(p)) 
+    puts "Chargram has #{c.size} entries"
+end
