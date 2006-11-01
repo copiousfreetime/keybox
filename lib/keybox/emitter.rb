@@ -1,11 +1,18 @@
-module APG
-    class CharacterSource
-        def next_sequence
-            raise "next_sequence must be implemented"
+module Keybox
+
+    # base class for a character emitter.  A character emitter returns
+    # an array of characters with length greater than or equal to 1 with
+    # each call to emit
+    class CharacterEmitter
+        def emit
+            raise "emit must be implemented"
         end
     end
-    class CharGram < CharacterSource
-        attr_reader :last_sequence
+
+    # CharGramEmitter emits a sequence that is a CharGram of length N.
+    # The ngrams can be loaded from a file or an array
+    class CharGramEmitter < CharacterEmitter
+        attr_reader :last_emit
         def initialize(wordlist)
             @last_sequence = nil
             @source        = Hash.new
@@ -25,8 +32,7 @@ module APG
             s
         end
 
-        def next_sequence
-
+        def emit
         end
     end
 end

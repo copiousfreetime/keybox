@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require File.join(File.dirname(__FILE__),"..","config","boot")
+require 'keybox/emitter'
+
+chargram_files = [ "chargrams.txt" ]
+
+chargram_files.each do |cfile|
+    p = File.join(Keybox::APP_RESOURCE_DIR,cfile)
+    c = Keybox::CharGramEmitter.new(File.read(p)) 
+    puts "Chargram has #{c.size} entries"
+end
