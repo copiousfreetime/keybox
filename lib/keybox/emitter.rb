@@ -34,8 +34,9 @@ module Keybox
         end
 
         def emit
-            choose_from = 
+            choose_from = Keybox::Ra
             if @last_sequence then
+
 
         end
     end
