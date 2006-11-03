@@ -1,3 +1,4 @@
+require 'openssl'
 module Keybox
 
     #
@@ -66,7 +67,7 @@ module Keybox
     #
     class RandomSource
         @@SOURCE_CLASSES = [ ::Keybox::RandomDevice, ::OpenSSL::Random ]
-        @@DEFAULT = nil
+        @@SOURCE = nil
 
         class << self
             def register(klass)
@@ -77,17 +78,40 @@ module Keybox
                 end
             end
 
-            def default=(klass)
-                register_source_class(klass)
-                @@DEFAULT = klass
+            def source_classes
+                @@SOURCE_CLASSES
             end
 
-            def default
-                return @@DEFAULT unless @@DEFAULT.nil?
+            def source=(klass)
+                register(klass)
+                @@SOURCE = klass
             end
 
+            def source
+                return @@SOURCE unless @@SOURCE.nil? or not @@SOURCE_CLASSES.include?(@@SOURCE)
+                @@SOURCE_CLASSES.each do |klass|
+                    if klass.random_bytes(2).length == 2 then
+                        RandomSource.source = klass
+                        break
+                    end
+                end
+                @@SOURCE
+            end
+
+            #
+            # behave like Kernel#rand where if no maxis specified return
+            # a value >= 0.0 but < 1.0.
+            #
+            # If a max is specified, return an Integer between 0 and
+            # upto but not including max.
+            #
             def rand(max = nil)
-
+                bytes = source.random_bytes(8)
+                num = bytes.unpack("F").first.abs / Float::MAX
+                if max then
+                    num = bytes.unpack("Q").first % max.floor
+                end
+                return num
             end
         end
     end
