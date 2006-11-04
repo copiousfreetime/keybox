@@ -21,4 +21,3 @@ Spec::Rake::SpecTask.new do |t|
     t.libs      << "./lib" 
 end
 
-# vim: syntax=Ruby
