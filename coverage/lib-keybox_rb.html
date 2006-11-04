@@ -1,7 +1,7 @@
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
       <head>
-        <title>spec/randomizer_spec.rb - C0 code coverage information</title>
+        <title>lib/keybox.rb - C0 code coverage information</title>
         <style type='text/css'>body { background-color: rgb(240, 240, 245); }</style>
         <style type='text/css'>span.cross-ref-title {
  font-size: 140%;
@@ -575,13 +575,13 @@ span.run100 {
       <tbody>
         <tr class='light'>
           <td>
-            <a href='spec-randomizer_spec_rb.html'>spec/randomizer_spec.rb</a>
+            <a href='lib-keybox_rb.html'>lib/keybox.rb</a>
           </td>
           <td class='value'>
-            <tt>116</tt>
+            <tt>7</tt>
           </td>
           <td class='value'>
-            <tt>96</tt>
+            <tt>7</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
@@ -617,122 +617,13 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked1"><a name="line1" />  1 require 'keybox/randomizer'
-</span><span class="inferred0"><a name="line2" />  2 
-</span><span class="marked1"><a name="line3" />  3 context &quot;a random device class&quot; do
-</span><span class="marked0"><a name="line4" />  4     specify &quot;should have a default source&quot; do
-</span><span class="marked1"><a name="line5" />  5         Keybox::RandomDevice.default.should_equal &quot;/dev/urandom&quot; 
-</span><span class="inferred0"><a name="line6" />  6     end
-</span><span class="inferred1"><a name="line7" />  7 
-</span><span class="marked0"><a name="line8" />  8     specify &quot;should produce strings&quot; do
-</span><span class="marked1"><a name="line9" />  9         Keybox::RandomDevice.random_bytes.should_be_an_instance_of(String)
-</span><span class="inferred0"><a name="line10" /> 10     end
-</span><span class="inferred1"><a name="line11" /> 11 
-</span><span class="marked0"><a name="line12" /> 12     specify &quot;should produce strings of a given length&quot; do
-</span><span class="marked1"><a name="line13" /> 13         Keybox::RandomDevice.random_bytes(4).size.should_equal 4 
-</span><span class="inferred0"><a name="line14" /> 14     end
-</span><span class="inferred1"><a name="line15" /> 15 
-</span><span class="marked0"><a name="line16" /> 16     specify &quot;should raise exception when given an invalid device&quot; do
-</span><span class="marked1"><a name="line17" /> 17         Proc.new {Keybox::RandomDevice.default = &quot;/tmp/junk&quot; }.should_raise
-</span><span class="inferred0"><a name="line18" /> 18     end
-</span><span class="inferred1"><a name="line19" /> 19 
-</span><span class="marked0"><a name="line20" /> 20     specify &quot;should be able to assign a new default source&quot; do
-</span><span class="marked1"><a name="line21" /> 21         (Keybox::RandomDevice.default = &quot;/dev/random&quot;).should_equal &quot;/dev/random&quot;
-</span><span class="marked0"><a name="line22" /> 22         Keybox::RandomDevice.default = &quot;/dev/urandom&quot;
-</span><span class="inferred1"><a name="line23" /> 23     end
-</span><span class="inferred0"><a name="line24" /> 24 end
-</span><span class="inferred1"><a name="line25" /> 25 
-</span><span class="marked0"><a name="line26" /> 26 context &quot;a random device instance&quot; do
-</span><span class="marked1"><a name="line27" /> 27     setup do
-</span><span class="marked0"><a name="line28" /> 28         @random_device = Keybox::RandomDevice.new
-</span><span class="inferred1"><a name="line29" /> 29     end
-</span><span class="marked0"><a name="line30" /> 30     specify &quot;should have a source&quot; do
-</span><span class="marked1"><a name="line31" /> 31         @random_device.source.should_equal &quot;/dev/urandom&quot;
-</span><span class="inferred0"><a name="line32" /> 32     end
-</span><span class="inferred1"><a name="line33" /> 33 
-</span><span class="marked0"><a name="line34" /> 34     specify &quot;should produce strings&quot; do
-</span><span class="marked1"><a name="line35" /> 35         @random_device.random_bytes.should_be_an_instance_of(String)
-</span><span class="inferred0"><a name="line36" /> 36     end
-</span><span class="inferred1"><a name="line37" /> 37 
-</span><span class="marked0"><a name="line38" /> 38     specify &quot;should produce strings of a given length&quot; do
-</span><span class="marked1"><a name="line39" /> 39         @random_device.random_bytes(20).size.should_equal 20 
-</span><span class="inferred0"><a name="line40" /> 40     end
-</span><span class="inferred1"><a name="line41" /> 41 
-</span><span class="marked0"><a name="line42" /> 42     specify &quot;should default to the RandomDevice default when given an invalid device &quot; do 
-</span><span class="marked1"><a name="line43" /> 43         rd = Keybox::RandomDevice.new(&quot;/tmp/bad-random-device&quot;)
-</span><span class="marked0"><a name="line44" /> 44         rd.source.should_equal Keybox::RandomDevice.default
-</span><span class="marked1"><a name="line45" /> 45     end
-</span><span class="inferred0"><a name="line46" /> 46 
-</span><span class="marked1"><a name="line47" /> 47     specify &quot;should accept a valid readable device&quot; do
-</span><span class="marked0"><a name="line48" /> 48         rd = Keybox::RandomDevice.new(&quot;/dev/random&quot;)
-</span><span class="marked1"><a name="line49" /> 49         rd.source.should_equal &quot;/dev/random&quot;
-</span><span class="marked0"><a name="line50" /> 50     end
-</span><span class="inferred1"><a name="line51" /> 51 end
-</span><span class="inferred0"><a name="line52" /> 52 
-</span><span class="marked1"><a name="line53" /> 53 context &quot;a random source class &quot; do
-</span><span class="marked0"><a name="line54" /> 54     setup do
-</span><span class="marked1"><a name="line55" /> 55         @random_source_class = mock(&quot;JunkRandomSource&quot;)
-</span><span class="marked0"><a name="line56" /> 56         @random_source_class.should_receive(&quot;random_bytes&quot;).at_least(0).times
-</span><span class="inferred1"><a name="line57" /> 57     end
-</span><span class="marked0"><a name="line58" /> 58     specify &quot;should have a default&quot; do
-</span><span class="marked1"><a name="line59" /> 59         Keybox::RandomSource.source.should_not_equal nil
-</span><span class="inferred0"><a name="line60" /> 60     end
-</span><span class="inferred1"><a name="line61" /> 61 
-</span><span class="marked0"><a name="line62" /> 62     specify &quot;invalid default class should throw exception &quot; do
-</span><span class="marked1"><a name="line63" /> 63         lambda { KeyBox::RandomSource.source = String }.should_raise
-</span><span class="inferred0"><a name="line64" /> 64     end
-</span><span class="inferred1"><a name="line65" /> 65 
-</span><span class="marked0"><a name="line66" /> 66     specify &quot;valid class should allow default to be set&quot; do
-</span><span class="marked1"><a name="line67" /> 67         (Keybox::RandomSource.source = @random_source_class).should_equal @random_source_class
-</span><span class="marked0"><a name="line68" /> 68         Keybox::RandomSource.source_classes.should_have(3).entries
-</span><span class="marked1"><a name="line69" /> 69         Keybox::RandomSource.source_classes.delete(@random_source_class)
-</span><span class="marked0"><a name="line70" /> 70         Keybox::RandomSource.source_classes.should_have(2).entries
-</span><span class="marked1"><a name="line71" /> 71         Keybox::RandomSource.source.should_equal ::Keybox::RandomDevice
-</span><span class="inferred0"><a name="line72" /> 72     end
-</span><span class="inferred1"><a name="line73" /> 73 
-</span><span class="marked0"><a name="line74" /> 74     specify &quot;rand with no parameters should return a value between 0 and 1&quot; do
-</span><span class="marked1"><a name="line75" /> 75         r = Keybox::RandomSource.rand
-</span><span class="marked0"><a name="line76" /> 76         r.should_satisfy { |arg| arg &gt;= 0.0 and arg &lt; 1.0 }
-</span><span class="marked1"><a name="line77" /> 77     end
-</span><span class="inferred0"><a name="line78" /> 78 
-</span><span class="marked1"><a name="line79" /> 79     specify &quot;rand with parameters should return an integer value between 0 and that value&quot; do
-</span><span class="marked0"><a name="line80" /> 80         r = Keybox::RandomSource.rand(42)
-</span><span class="marked1"><a name="line81" /> 81         r.should_be_a_kind_of(Integer)
-</span><span class="marked0"><a name="line82" /> 82         r.should_be &lt; 42
-</span><span class="marked1"><a name="line83" /> 83     end
-</span><span class="inferred0"><a name="line84" /> 84 end
-</span><span class="inferred1"><a name="line85" /> 85 
-</span><span class="marked0"><a name="line86" /> 86 context &quot;a randomzier instance&quot; do 
-</span><span class="marked1"><a name="line87" /> 87     setup do
-</span><span class="marked0"><a name="line88" /> 88         @randomizer = Keybox::Randomizer.new
-</span><span class="marked1"><a name="line89" /> 89         @hash       = { :stuff =&gt; &quot;stuff&quot;, :things =&gt; &quot;things&quot; }
-</span><span class="marked0"><a name="line90" /> 90         @array      = [&quot;foo&quot;, &quot;bar&quot;, &quot;baz&quot; ]
-</span><span class="inferred1"><a name="line91" /> 91     end
-</span><span class="marked0"><a name="line92" /> 92     specify &quot;should have a default random source&quot; do
-</span><span class="marked1"><a name="line93" /> 93         @randomizer.random_source.should_not_be nil
-</span><span class="inferred0"><a name="line94" /> 94     end
-</span><span class="inferred1"><a name="line95" /> 95 
-</span><span class="marked0"><a name="line96" /> 96     specify &quot;giving an invalid default random source should raise an exception&quot; do
-</span><span class="marked1"><a name="line97" /> 97         lambda { r = Keybox::Randomizer.new(Array) }.should_raise
-</span><span class="inferred0"><a name="line98" /> 98     end
-</span><span class="inferred1"><a name="line99" /> 99 
-</span><span class="marked0"><a name="line100" />100     specify &quot;picking from a non-array should raise an exception&quot; do
-</span><span class="marked1"><a name="line101" />101         lambda { @randomizer.pick_count_from(@hash) }.should_raise
-</span><span class="inferred0"><a name="line102" />102     end
-</span><span class="inferred1"><a name="line103" />103 
-</span><span class="marked0"><a name="line104" />104     specify &quot;picking one from an array should be okay&quot; do
-</span><span class="marked1"><a name="line105" />105         @randomizer.pick_one_from(@array).should_satisfy do |x|
-</span><span class="marked0"><a name="line106" />106             @array.include?(x)
-</span><span class="inferred1"><a name="line107" />107         end
-</span><span class="inferred0"><a name="line108" />108     end
-</span><span class="inferred1"><a name="line109" />109 
-</span><span class="marked0"><a name="line110" />110     specify &quot;picking N from an array should result in an array&quot; do
-</span><span class="marked1"><a name="line111" />111         @randomizer.pick_count_from(@array,3).should_have(3).entries
-</span><span class="marked0"><a name="line112" />112         @randomizer.pick_count_from(@array,9).each do |arg|
-</span><span class="marked1"><a name="line113" />113             @array.should_include(arg)
-</span><span class="inferred0"><a name="line114" />114         end
-</span><span class="inferred1"><a name="line115" />115     end
-</span><span class="inferred0"><a name="line116" />116 end
+    </table><pre><span class="marked1"><a name="line1" />1 require 'keybox/randomizer'
+</span><span class="marked0"><a name="line2" />2 require 'keybox/emitter'
+</span><span class="marked1"><a name="line3" />3 module Keybox
+</span><span class="marked0"><a name="line4" />4     VERSION = '1.0.0'
+</span><span class="marked1"><a name="line5" />5     APP_ROOT = File.expand_path(File.join(File.dirname(__FILE__),&quot;..&quot;))
+</span><span class="marked0"><a name="line6" />6     APP_RESOURCE_DIR = File.join(APP_ROOT,&quot;resource&quot;)
+</span><span class="inferred1"><a name="line7" />7 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />
