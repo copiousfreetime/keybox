@@ -9,15 +9,18 @@ module Keybox
         attr_accessor :chunks
         attr_reader :min_length
         attr_reader :max_length
+        attr_accessor :autoclear
 
         def initialize
             @chunks = Array.new
             @min_length = 8
             @max_length = 10
             @randomizer = Keybox::Randomizer.new
+            @autoclear = true
         end
 
         def generate
+            clear if autoclear
             generate_chunk until valid?
             self.to_s
         end

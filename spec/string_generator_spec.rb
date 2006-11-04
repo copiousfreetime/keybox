@@ -96,6 +96,8 @@ context "SymbolSetGenerator" do
             gen.symbols.should_include(c)
         end
     end
-            
 
+    specify "generated passwords autoclear" do
+        @generator.generate.should_not == @generator.generate
+    end
 end
