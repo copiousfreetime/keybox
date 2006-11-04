@@ -116,10 +116,49 @@ module Keybox
         end
     end
 
-    # the Randomizer will randomly pick a value from anything that is an
-    # array or has a to_a method.  The source of randomness is
-    # determined at runtime.  Any class that can provide a method 'rand'
-    # can be a random source
-    class Randomizer
+    #
+    # the Randomizer will randomly pick a value from anything that
+    # behaves like an array or has a 'to_a' method.  Behaving like an
+    # array means have a 'size' or 'length' method along with an 'at'
+    # method.
+    # 
+    # The source of randomness is determined at runtime.  Any class that
+    # can provide a method 'rand' method and operates in the same manner
+    # as Kernel#rand can be a used as the random source
+    #
+    # The item that is being 'picked' from can be any class that has a
+    # 'size' method along with an 'at' method.
+    #
+    class Randomizer 
+
+        REQUIRED_METHODS = %w( at size )
+
+        attr_reader :random_source
+
+        def initialize(random_source_klass = ::Keybox::RandomSource)
+            raise "Invalid random source class" unless random_source_klass.respond_to?("rand")
+            @random_source = random_source_klass
+        end
+
+        def pick_one_from(array)
+            pick_count_from(array).first
+        end
+
+        def pick_count_from(array, count = 1)
+            raise "Unable to pick from object of class #{array.class.name}" unless has_correct_duck_type?(array)
+            results = []
+            range = array.size
+            count.times do
+                rand_index = random_source.rand(range)
+                results << array.at(rand_index)
+            end
+            results
+        end
+
+        private
+
+        def has_correct_duck_type?(obj)
+            (REQUIRED_METHODS  & obj.public_methods).size == REQUIRED_METHODS.size
+        end
     end
 end

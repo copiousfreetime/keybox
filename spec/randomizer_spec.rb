@@ -82,3 +82,35 @@ context "a random source class " do
         r.should_be < 42
     end
 end
+
+context "a randomzier instance" do 
+    setup do
+        @randomizer = Keybox::Randomizer.new
+        @hash       = { :stuff => "stuff", :things => "things" }
+        @array      = ["foo", "bar", "baz" ]
+    end
+    specify "should have a default random source" do
+        @randomizer.random_source.should_not_be nil
+    end
+
+    specify "giving an invalid default random source should raise an exception" do
+        lambda { r = Keybox::Randomizer.new(Array) }.should_raise
+    end
+
+    specify "picking from a non-array should raise an exception" do
+        lambda { @randomizer.pick_count_from(@hash) }.should_raise
+    end
+
+    specify "picking one from an array should be okay" do
+        @randomizer.pick_one_from(@array).should_satisfy do |x|
+            @array.include?(x)
+        end
+    end
+
+    specify "picking N from an array should result in an array" do
+        @randomizer.pick_count_from(@array,3).should_have(3).entries
+        @randomizer.pick_count_from(@array,9).each do |arg|
+            @array.should_include(arg)
+        end
+    end
+end
