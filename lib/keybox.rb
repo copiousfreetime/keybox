@@ -1,5 +1,6 @@
 require 'keybox/randomizer'
 require 'keybox/string_generator'
+require 'keybox/password_hash'
 module Keybox
     VERSION = '1.0.0'
     APP_ROOT = File.expand_path(File.join(File.dirname(__FILE__),".."))
