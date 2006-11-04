@@ -7,8 +7,8 @@ module Keybox
     # to generate one of a certain size.
     class StringGenerator
         attr_accessor :chunks
-        attr_reader :min_length
-        attr_reader :max_length
+        attr_accessor :min_length
+        attr_accessor :max_length
         attr_accessor :autoclear
 
         def initialize
@@ -34,17 +34,8 @@ module Keybox
         end
 
         def valid?
+            raise "max_length (#{max_length}) must be greater than or equal to min_length (#{min_length})" if max_length < min_length
             @chunks.join('').size > @min_length 
-        end
-
-        def max_length=(m)
-            raise "max_length cannot be less than min length (#{min_length})" if m < min_length
-            @max_length = m
-        end
-
-        def min_length=(m)
-            raise "min_length cannot be greater than max length (#{max_length})" if m > max_length
-            @min_length = m
         end
 
         def generate_chunk
@@ -108,8 +99,15 @@ module Keybox
         UPPER_ASCII   = ("A".."Z").to_a
         NUMERAL_ASCII = ("0".."9").to_a
         SPECIAL_ASCII = ("!".."/").to_a + (":".."@").to_a + %w( [ ] ^ _ { } | ~ )
-        
         ALL = LOWER_ASCII + UPPER_ASCII + NUMERAL_ASCII + SPECIAL_ASCII
+
+        MAPPING = {
+            "l" => LOWER_ASCII,
+            "u" => UPPER_ASCII,
+            "n" => NUMERAL_ASCII,
+            "s" => SPECIAL_ASCII,
+            "a" => ALL
+        }
     end
 
     # 

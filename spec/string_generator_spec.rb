@@ -3,16 +3,21 @@ context "string generator" do
     setup do
         @generator = Keybox::StringGenerator.new
     end
+
     specify "should not be used alone" do
         lambda { @generator.generate }.should_raise
     end
 
     specify "cannot have a min length greater than a max length" do
-        lambda { @generator.min_length = 90 }.should_raise
+        @generator.min_length = 90
+        lambda { @generator.generate }.should_raise
+        @generator.min_length = 8
     end
     
     specify "cannot have a max length less than a min length" do
-        lambda { @generator.max_length = 2}.should_raise
+        @generator.max_length = 2
+        lambda { @generator.generate }.should_raise
+        @generator.max_length = 10
     end
 
     specify "initially there are no chunks" do
@@ -100,4 +105,10 @@ context "SymbolSetGenerator" do
     specify "generated passwords autoclear" do
         @generator.generate.should_not == @generator.generate
     end
+
+    specify "setting min and max should not affect " do
+        g = Keybox::SymbolSetGenerator.new(Keybox::SymbolSet::ALL)
+        g.generate.should_be_instance_of(String)
+    end
+
 end
