@@ -83,4 +83,19 @@ context "SymbolSetGenerator" do
         @generator.generate.size.should_be == 25
     end
 
+    specify "required sets are utilized" do
+        gen = Keybox::SymbolSetGenerator.new([Keybox::SymbolSet::NUMERAL_ASCII, Keybox::SymbolSet::LOWER_ASCII])
+        gen.required_sets << Keybox::SymbolSet::UPPER_ASCII
+        p = gen.generate
+        gen.required_sets.flatten.uniq.should_include(p[0].chr)
+    end
+    specify "required sets are merged with symbol sets" do
+        gen = Keybox::SymbolSetGenerator.new([Keybox::SymbolSet::NUMERAL_ASCII, Keybox::SymbolSet::LOWER_ASCII])
+        gen.required_sets << Keybox::SymbolSet::UPPER_ASCII
+        gen.required_sets.flatten.uniq.each do |c|
+            gen.symbols.should_include(c)
+        end
+    end
+            
+
 end

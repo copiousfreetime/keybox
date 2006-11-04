@@ -19,7 +19,6 @@ Spec::Rake::SpecTask.new do |t|
     t.warning   = true
     t.rcov      = true
     t.libs      << "./lib" 
-    
 end
 
 # vim: syntax=Ruby

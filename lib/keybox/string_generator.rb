@@ -126,8 +126,21 @@ module Keybox
         def initialize(set = ALL)
             super()
             @symbols = set.flatten.uniq
-            @required_generated = false
             @required_sets = []
+        end
+
+        # every time we access the symbols set we need to make sure that
+        # the required symbols are a part of it, and if they aren't then
+        # make sure they are.
+        def symbols
+            if @required_sets.size > 0 then
+                if not @symbols.include?(@required_sets.first[0]) then
+                    @symbols << @required_sets
+                    @symbols.flatten!
+                    @symbols.uniq!
+                end
+            end
+            @symbols 
         end
 
         def required_generated?
@@ -140,7 +153,7 @@ module Keybox
                         break
                     end
                 end
-                result = result and set_found
+                result = (result and set_found)
             end
             return result
         end
@@ -150,7 +163,7 @@ module Keybox
         def generate_chunk
             chunk = ""
             if required_generated? then
-                @chunks << @randomizer.pick_one_from(@symbols)
+                @chunks << @randomizer.pick_one_from(symbols)
                 chunk = @chunks.last
             else
                 req = generate_required
