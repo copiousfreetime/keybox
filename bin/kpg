@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+########################################################################
+# 
+########################################################################
+
+#----------------------------------------------------------------------
+# These applications are based upon the commandline gem.
+#----------------------------------------------------------------------
+require 'rubygems'
+require 'commandline'
+
+#----------------------------------------------------------------------
+# bootstrap
+#----------------------------------------------------------------------
+require File.expand_path(File.join(File.dirname(__FILE__),"..","lib","keybox"))
+
+#----------------------------------------------------------------------
+# application basics
+#----------------------------------------------------------------------
+module Keybox
+    class PasswordGenerator < CommandLine::Application
+        def initialize
+            version             Keybox::VERSION
+            author              Keybox::AUTHOR
+            copyright           Keybox::COPYRIGHT
+            synopsis            "[-aMnxhdv]" 
+            short_description   "generate random passwords in a manner similar to apg"
+            long_description    "kpg is a pure ruby implementation of most of the " + 
+                                "Automatic Password Generation program. "
+
+            option :version
+            option :help
+
+            option :names => %w(--algorithm -a),
+                   :arity => 1,
+                   :opt_description => "Pick the algorithm for password generation, r - (default) random, p - pronouncable",
+                   :opt_found => lambda { |opt,name,arg| @algorithm = arg },
+                   :opt_not_found => lambda {  @algorithm = "r" }
+
+        end
+
+        def main
+            puts "algo = #{@algorithm}"
+        end
+    end
+end
