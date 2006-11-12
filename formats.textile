@@ -1,0 +1,79 @@
+h1. Password Database Formats
+
+h2. Keepass 
+
+The entire encrypted database is read into memory at the beginning
+checked to make sure that it is greater than the minimum size of just
+the DB_HEADER.
+
+The Contents of the binary file format are in the general format of an
+unencrypted 124 byte header followed by the encrypted data. The
+encrypted data has 2 sections, the *Groups* section followed by the
+*Entries* section.  The number of *Groups* and *Entries* are listed in
+the header.
+  
+h3. Header
+
+|_/3. Database Header fields, total byte length 124 |
+| Signature 1 | 4 byte int LE order | constant: PWM_DBSIG_1 0x9AA2D903 |
+| Signature 2 | 4 byte int LE order | constant: PWM_DBSIG_2 0xB54BFB65 |
+| Flags       | 4 byte int LE order | Determine what algorithms are used |
+| Version     | 4 byte int LE order | Version of the database format |
+| Final Random Seed | 16 bytes      | Initial random number to start on the sha256 of the key |
+| Init Vector | 16 bytes            | Initialization vector used for all algorithms |
+| Num Groups  | 4 byte int LE order | Number of Groups in the Groups portion of the data  |
+| Num Entries | 4 byte int LE order | Number of Entries in the Entries portion of the data  |
+| Content Hash| 32 bytes            | 
+| Transformed Random Seed | 32 bytes | Random seed used to combine with the master key when calculating the final key |
+| Key Encoding Rounds | 4 byte int  LE order | Number of rounds to do AES block encryption on the Master Key |
+
+|_/2. Flags for 'Flags' variable in header |
+| PWM_FLAG_RIJNDAEL | use the AES algorithm for entries |
+| PWM_FLAG_TWOFISH  | use the twofish algorithm for entries|
+| PWM_FLAG_ARCFOUR  | use the arc for algorithm for entires (unused)|
+| PWM_FLAG_SHA2     | use SHA256 for key stretching |
+
+h3. Groups section
+
+Immediately following the Header, and part of the encrypted content is
+the Groups section.  The number of Records in the Groups section is in
+the header as *Num Groups*.
+
+Each record in Groups has the format:
+|_/3. Group record format |
+| Field Type | 2 byte int LE order | The type of the field, one of valid field types |
+| Field Size | 4 byte int LE order | the number of bytes in the field's data |
+| Field data | N bytes of data | depends upon the Field Type | 
+
+|_. Field Type |_. Field Type |_. Field Data structure |
+| Ignore       | 0x0000       | Ignore the data | 
+| ID           | 0x0001       | 4 byte int LE order |
+| Name         | 0x0002       | UTF 8 encoded string |
+| Creation Date| 0x0003       | 5 bytes packed date for the creation date of the group |
+| Last Modified| 0x0004       | 5 bytes packed date for the last modified date of the group |
+| Last access  | 0x0005       | 5 bytes packed date for the last access date of the group |
+| Expiration   | 0x0006       | 5 bytes packed date for the expiration date of the group |
+| Image ID     | 0x0007       | 4 byte int LE order, the id of an image for the group |
+| Level        | 0x0008       | 2 byte int LE order, the level of the group |
+| Flags        | 0x0009       | 4 byte int LE order, bitvector flags of the group |
+| END OF GROUP | 0xffff       | NA |
+
+
+h3. Encrypt/Decrypt Process
+
+A Master Key is calculated with either a password or file or both.
+Depending on the combination of password and file or both a SHA256 has
+is created of the input password information.
+
+This Master Key SHA256 is Encrypted *Key Encoding Rounds* times with AES
+using *Transformed Random Seed* as the initialization of the encryption
+process.  This producess a *Transformed Master Key*.  This key is hashed
+together with the *Final Random Seed* to create the Final Key used for
+encryption.
+
+After the *Final Key* has been created, the contents are decrypted and a
+sha256 hash of the decrypted contents is compared to the *Content Hash*
+in the header.  
+
+
+
