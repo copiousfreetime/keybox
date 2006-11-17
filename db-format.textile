@@ -1,0 +1,225 @@
+h1. Keybox Database Format
+
+h2. Keepass 
+
+The entire encrypted database is read into memory at the beginning
+checked to make sure that it is greater than the minimum size of just
+the DB_HEADER.
+
+The Contents of the binary file format are in the general format of an
+unencrypted 124 byte header followed by the encrypted data. The
+encrypted data has 2 sections, the *Groups* section followed by the
+*Entries* section.  The number of *Groups* and *Entries* are listed in
+the header.
+  
+h3. Header
+
+|_/3. Database Header fields, total byte length 124 |
+| Signature 1 | 4 byte int LE order | constant: PWM_DBSIG_1 0x9AA2D903 |
+| Signature 2 | 4 byte int LE order | constant: PWM_DBSIG_2 0xB54BFB65 |
+| Flags       | 4 byte int LE order | Determine what algorithms are used |
+| Version     | 4 byte int LE order | Version of the database format |
+| Final Random Seed | 16 bytes      | Initial random number to start on the sha256 of the key |
+| Init Vector | 16 bytes            | Initialization vector used for all algorithms |
+| Num Groups  | 4 byte int LE order | Number of Groups in the Groups portion of the data  |
+| Num Entries | 4 byte int LE order | Number of Entries in the Entries portion of the data  |
+| Content Hash| 32 bytes            | 
+| Transformed Random Seed | 32 bytes | Random seed used to combine with the master key when calculating the final key |
+| Key Encoding Rounds | 4 byte int  LE order | Number of rounds to do AES block encryption on the Master Key |
+
+|_/2. Flags for 'Flags' variable in header |
+| PWM_FLAG_RIJNDAEL | use the AES algorithm for entries |
+| PWM_FLAG_TWOFISH  | use the twofish algorithm for entries|
+| PWM_FLAG_ARCFOUR  | use the arc for algorithm for entires (unused)|
+| PWM_FLAG_SHA2     | use SHA256 for key stretching |
+
+h3. Groups section
+
+Immediately following the Header, and part of the encrypted content is
+the Groups section.  The number of Groups in the Groups section is in
+the header as *Num Groups*.
+
+A Single *Group* is really a collection of all the *Group* records until
+the END OF GROUP record is encountered.  Then this counts as 1 group.   
+
+Each record in Groups has the format:
+|_/3. Group record format |
+| Field Type | 2 byte int LE order | The type of the field, one of valid field types |
+| Field Size | 4 byte int LE order | the number of bytes in the field's data |
+| Field data | N bytes of data | depends upon the Field Type | 
+
+|_. Field Type |_. Field Type |_. Field Data structure |
+| Ignore       | 0x0000       | Ignore the data | 
+| ID           | 0x0001       | 4 byte int LE order |
+| Name         | 0x0002       | UTF 8 encoded string |
+| Creation Date| 0x0003       | 5 bytes packed date for the creation date of the group |
+| Last Modified| 0x0004       | 5 bytes packed date for the last modified date of the group |
+| Last access  | 0x0005       | 5 bytes packed date for the last access date of the group |
+| Expiration   | 0x0006       | 5 bytes packed date for the expiration date of the group |
+| Image ID     | 0x0007       | 4 byte int LE order, the id of an image for the group |
+| Level        | 0x0008       | 2 byte int LE order, the level of the group |
+| Flags        | 0x0009       | 4 byte int LE order, bitvector flags of the group |
+| END OF GROUP | 0xffff       | NA |
+
+h3. Entries section
+
+Following the Groups section is the Entries section.  The number of
+Entries in this section is listed in the file header as *Num Entries*.
+
+A Single *Entry* is really a collection of all the *Entry* records until
+the END OF GROUP record is encountered.  Then this counts as 1 entry.   
+
+Each record in Entries has the format:
+|_/3. Entry record format |
+| Field Type | 2 byte int LE order | The type of the field, one of valid field types |
+| Field Size | 4 byte int LE order | the number of bytes in the field's data |
+| Field data | N bytes of data | depends upon the Field Type | 
+
+|_. Field Type |_. Field Type |_. Field Data structure |
+| Ignore       | 0x0000       | Ignore the data | 
+| UUID         | 0x0001       | 16 byte UUID | 
+| group id     | 0x0002       | Group id this entry belongs to |
+| ImageID      | 0x0003       | Image ID of the icon for this entry |
+| Title        | 0x0004       | UTF8 String with the title of this entry |
+| URL          | 0x0005       | UTF8 encoded string of a URL |
+| User Name    | 0x0006       | UTF8 encoded string of the username |
+| Password     | 0x0007       | UTF8 encoded string of the password | 
+| Additional   | 0x0008       | UTF8 encoded string of additional data |
+| Creation Date| 0x0009       | 5 bytes packed date for the creation date of the entry |
+| Last Modified| 0x000A       | 5 bytes packed date for the last modified date of the entry |
+| Last Access  | 0x000B       | 5 bytes packed date for the last accessed date of the entry |
+| Expiration   | 0x000C       | 5 bytes packed date for the expiration date of the entry |
+| Binary Desc  | 0x000D       | Binary Description |
+| Binary Data  | 0x000E       | Binary Data |
+| END OF ENTRY | 0xffff       | NA |
+
+h3. Encrypt/Decrypt Process
+
+# P = user pass phrase
+# MasterKey = SHA-256(P)
+# TMasterKey = AES-encrypt(RandomSeed, MasterKey, Rounds)
+# FMasterKey = SHA-256(TMasterKey,FinalRandomSeed)
+# Plaintext = AES-decrypt(FMasterKey, IV, Cipher Text)
+# ContentHash = SHA-256(Plaintext)
+
+
+A Master Key is calculated with either a password or file or both.
+Depending on the combination of password and file or both a SHA256 has
+is created of the input password information.
+
+This Master Key SHA256 is Encrypted *Key Encoding Rounds* times with AES
+using *Transformed Random Seed* as the initialization of the encryption
+process.  This producess a *Transformed Master Key*.  This key is hashed
+together with the *Final Random Seed* to create the Final Key used for
+encryption.
+
+After the *Final Key* has been created, the contents are decrypted and a
+sha256 hash of the decrypted contents is compared to the *Content Hash*
+in the header.  
+
+Then *Num Groups* groups are read from the decrypted data stream.
+Following that *Num Entries* are read.
+
+Once the Groups and Entries are decoded and stored, the meta data
+streams in the entries are filtered and removed from the entry data
+rightly.
+
+A MetaData entry is one that has:
+
+| BinaryData | not null |
+| Additional | not the empty string |
+| BinaryDesc | is "bin-stream" |
+| Title      | is "Meta-Info" | 
+| UserName   | is "SYSTEM" |
+| URL        | is "$" |
+| ImageID    | is 0 |
+
+h2. Password Safe V3
+
+The PasswordSafe file format is fully described in the formatV3.txt that
+ships with the source code for PasswordSafe.  It is summarized here.
+The users' pass phrase is denoted as *P'*.
+
+The general format is a Header followed by individual content Records followed
+by an EOF record and a message digest of the Content records.  
+
+h3. File Format
+
+|_/3. Header fields |
+| TAG       | 4 bytes | The 4 ASCII Chacters 'PWS3' |
+| SALT      | 32 bytes | 256 random bit value generated at file creation |
+| ITER      | 32 bit LE value | number of rounds in the key stretch algorithm |
+| H(P')     | 32 bytes | SHA-256 of the user's passphrase |
+| B1        | 16 bytes | Encrypted 128 random value using P' with Twofish algorithm |
+| B2        | 16 bytes | Encrypted 128 random value using P' with Twofish algorithm |
+| B3        | 16 bytes | Encrypted 128 random value using P' with Twofish algorithm |
+| B4        | 16 bytes | Encrypted 128 random value using P' with Twofish algorithm |
+| Init Vector | 16 bytes | 128 bit random value that is the Initiazliation Vector for the content's encryption |
+| Header    | N bytes  | General information for the database |
+| Records   | N bytes  | The records in the database |
+| EOF       |          | unencrypted string "PWS3-EOFPWS3-EOF" |
+| HMAC      | 32 bytes | 256 bit SHA-256 hash of the plaintext contents, starting with the version number in the header and ending with the last field of the last record |
+
+h3. Field data in Password Safe
+
+A field record in PasswordSafe V3 has  a length in blocks, where each
+block has a length that is dependent upon the block size of the
+underlying encryption algorithm.  In the case of Password Safe that is
+TwoFish. 
+
+If the record's data does not fit directly into 'block' size chunks then
+it is padded with random data.
+
+A record starts with a 4 byte LE integer of the length of the data.  The
+first byte of the data is a 1 byte type identifier.
+
+h3. Header (HDR)
+
+|_. Name          |_. Type |_. Data format |
+| Version         | 0x00   | 2 byte LE of the database format | 
+| UUID            | 0x01   | 16 byte UUID of the database used for synchronization |
+| Prefs           | 0x02   | Preferens for the application in a particular format, ignore |
+| Tree Status     | 0x03   | Display status for the tree of data, ignore |
+| last save       | 0x04   | 32 bit, LE unsigned int.  epoc time. |
+| last save by    | 0x05   | text string nnnnu...uh...h where N's forms length of u..u |
+| last save what  | 0x06   | text string Application that last saved data |
+| end of entry    | 0xff   | empty |
+
+h3. Records 
+
+|_. Name          |_. Type |_. Data format |
+| UUID            | 0x01   | 16 byte UUID of the database used for synchronization |
+| Group           | 0x02   | Text |
+| title           | 0x03   | Text |
+| Username        | 0x04   | Text |
+| Notes           | 0x05   | Text |
+| Password        | 0x06   | Text |
+| Creation Time   | 0x07   | time_t 32 bit, LE unsigned int, epoc time |
+| Pass Mod time   | 0x08   | time_t 32 bit, LE unsigned int, epoc time |
+| Last access     | 0x09   | time_t 32 bit, LE unsigned int, epoc time |
+| Password Life   | 0x0A   | time_t 32 bit, LE unsigned int, epoc time - how long before regen of password |
+| Password Policy | 0x0B   | 4 bytes, ignore | 
+| Mod Time        | 0x0C   | time_t, last time any field of this field was updated, created, etc |
+| URL             | 0x0D   | Text | 
+| Autotype        | 0x0E   | What keyboard patterns to type if autotype is turned on |
+| Password History| 0x0F   | Text, history encoded in a format |
+| End of Entry    | 0xFF   | empty |
+
+h3. Encrypt/Decrypt process
+
+The decrypted B1 + B2 form a 256 bit random key K that is used to encrypt
+the actual records
+
+The decrypted B3 + B4 form a 256 bit random key L that is used to
+calculate the HMAC of the encrypted data.  This is the message digest at
+the end of the file.
+
+# Set P = user passphrase
+# Stretch P to P' with the SHA-256 algorithm 
+# Decrypt B1 and B2 using Twofish in ECB mode.  K = D(P',B1) + D(P',B2).
+# Decrypt B3 and B4 using Twofish in ECB mode.  L = D(P',B3) + D(P',B4).
+# Initialize Another TwoFish cipher with IV
+# Decrypt rest of data up to EOF marker with TwoFish instance using K as the key (
+** Plaintext = TwoFish(IV,K,CipherText)
+# Verify final HMAC == HMAC(L,PlainText).
+

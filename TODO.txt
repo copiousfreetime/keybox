@@ -1,3 +1,0 @@
-    - implement password hash from 
-        - http://www.xs4all.nl/~jlpoutre/BoT/Javascript/PasswordComposer/
-        - http://crypto.stanford.edu/PwdHash/

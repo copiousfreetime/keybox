@@ -1,0 +1,1 @@
+require 'keybox/database/entry'

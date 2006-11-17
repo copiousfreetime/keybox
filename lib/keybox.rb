@@ -14,3 +14,4 @@ $: << Keybox::APP_LIB_DIR
 require 'keybox/randomizer'
 require 'keybox/string_generator'
 require 'keybox/password_hash'
+require 'keybox/database'
