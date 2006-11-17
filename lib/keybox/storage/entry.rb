@@ -1,5 +1,5 @@
 module Keybox
-    module Database
+    module Storage
 
         # 
         # Entry is very similar to an OStruct but it keeps track of the
