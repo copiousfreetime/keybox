@@ -2,10 +2,10 @@ module Keybox
     module Storage
 
         # 
-        # Entry is very similar to an OStruct but it keeps track of the
+        # Record is very similar to an OStruct but it keeps track of the
         # last access, creation and modification times of the object
         #
-        class Entry 
+        class Record 
 
             attr_reader :creation_time
             attr_reader :modification_time

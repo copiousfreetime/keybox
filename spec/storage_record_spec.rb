@@ -1,29 +1,29 @@
-require 'keybox/database'
+require 'keybox/storage'
 
-context 'a database entry' do
+context 'a storage record entry' do
     setup do
         @data_fields = %w(uuid title username password url additional_data)
     end
     specify 'has a creation date set on instantiation' do
-        e = Keybox::Database::Entry.new
+        e = Keybox::Storage::Record.new
         e.creation_time.should_be_instance_of(Time)
     end
 
     specify "assigning to a non-existant field creates the appropriate member " do
-        e = Keybox::Database::Entry.new
+        e = Keybox::Storage::Record.new
         e.junk = "junk"
         e.junk.should_equal "junk"
     end
 
     specify 'default values for non-existant fields is nil' do 
-        e = Keybox::Database::Entry.new
+        e = Keybox::Storage::Record.new
         @data_fields.each do |f|
             e.send(f).should_be  nil
         end
     end
 
     specify "assigning to a field makes the modification time > creation time" do
-        e = Keybox::Database::Entry.new
+        e = Keybox::Storage::Record.new
         sleep 1
         e.testing = "testing"
         e.modification_time.should_satisfy { |m| m > e.creation_time }
@@ -31,7 +31,7 @@ context 'a database entry' do
     end
 
     specify "reading a field after assignment the access time > modification time " do
-        e = Keybox::Database::Entry.new
+        e = Keybox::Storage::Record.new
         e.testing = "testing"
         sleep 1
         e.testing
@@ -40,17 +40,17 @@ context 'a database entry' do
     end
 
     specify "assigning to a modification, creation or acces_time should raise and exception " do
-        e = Keybox::Database::Entry.new
+        e = Keybox::Storage::Record.new
         lambda {e.modification_time = Time.now}.should_raise NoMethodError
     end
 
     specify "assiging multiple items should raise an argument exception" do
-        e = Keybox::Database::Entry.new
+        e = Keybox::Storage::Record.new
         lambda {e.send(:stuff=,1,2)}.should_raise ArgumentError
     end
 
     specify "calling a method with arguments should raise exception" do
-        e = Keybox::Database::Entry.new
+        e = Keybox::Storage::Record.new
         lambda {e.stuff(1,2)}.should_raise NoMethodError
     end
 end
