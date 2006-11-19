@@ -47,4 +47,24 @@ context "UUID class" do
         lambda { Keybox::UUID.new(s) }.should_raise ArgumentError
     end
 
+    specify "should equal another keybox created with same data" do
+        s = "c8b5a23a-2507-4834-ab19-60f2cb2a5271"
+        one = Keybox::UUID.new(s)
+        two = Keybox::UUID.new(s)
+        one.should_equal two
+    end
+
+    specify "should equal a string that is the same uuid" do
+        s = "c8b5a23a-2507-4834-ab19-60f2cb2a5271"
+        one = Keybox::UUID.new(s)
+        one.should_equal s
+    end
+
+    specify "should not equal some other uuid or random string" do
+        s = "c8b5a23a-2507-4834-ab19-60f2cb2a5271"
+        one = Keybox::UUID.new(s)
+        one.should_not_equal Keybox::UUID.new
+        one.should_not_equal "i love ruby"
+        one.should_not_equal 4
+    end
 end

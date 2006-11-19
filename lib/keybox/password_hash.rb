@@ -17,7 +17,7 @@ module Keybox
 
         def initialize(master_password)
             @master_password = master_password
-            @digest_class    = Digest::SHA1
+            @digest_class    = ::Digest::SHA1
         end
 
         def password_for_url(url)

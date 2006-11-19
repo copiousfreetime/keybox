@@ -1,10 +1,12 @@
 require 'keybox/randomizer'
+require 'yaml'
 module Keybox
     #
     # A quick implementation of a UUID class using the internal
     # randomizer for byte generation
     # 
     class UUID
+
         attr_reader :bytes
 
         XF     = "%0.2x"
@@ -59,6 +61,22 @@ module Keybox
         
         def to_a
             @bytes.unpack("C*")
+        end
+
+        def ==(other)
+            case other
+            when Keybox::UUID
+                self.bytes == other.bytes
+            when String
+                begin
+                    o = Keybox::UUID.new(other)
+                    self == o
+                rescue 
+                    false
+                end
+            else
+                false
+            end
         end
     end
 end
