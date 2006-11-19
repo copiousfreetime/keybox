@@ -2,7 +2,7 @@ require 'keybox/storage'
 
 context 'a storage record entry' do
     setup do
-        @data_fields = %w(uuid title username password url additional_data)
+        @data_fields = %w(title username password url additional_data)
     end
     specify 'has a creation date set on instantiation' do
         e = Keybox::Storage::Record.new

@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sun Nov 19 01:47:41 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sun Nov 19 02:00:06 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -639,36 +639,36 @@ span.run100 {
 </span><span class="marked1"><a name="line20" /> 20                 @records     = []
 </span><span class="inferred0"><a name="line21" /> 21 
 </span><span class="marked1"><a name="line22" /> 22                 if not load_from_file then
-</span><span class="marked0"><a name="line23" /> 23                     self.uuid                       = Keybox::UUID.new
-</span><span class="marked1"><a name="line24" /> 24                     self.version                    = Keybox::VERSION
-</span><span class="inferred0"><a name="line25" /> 25                     
-</span><span class="marked1"><a name="line26" /> 26                     self.key_calc_iterations        = ITERATIONS
-</span><span class="marked0"><a name="line27" /> 27                     self.key_digest_salt            = Keybox::RandomDevice.random_bytes(32)
-</span><span class="marked1"><a name="line28" /> 28                     self.key_digest_algorithm       = Keybox::Digest::DEFAULT_ALGORITHM
-</span><span class="marked0"><a name="line29" /> 29                     self.key_digest                 = calculated_key_digest(passphrase)
-</span><span class="inferred1"><a name="line30" /> 30 
-</span><span class="marked0"><a name="line31" /> 31                     self.records_init_vector        = Keybox::RandomDevice.random_bytes(16)
-</span><span class="marked1"><a name="line32" /> 32                     self.records_cipher_algorithm   = Keybox::Cipher::DEFAULT_ALGORITHM
-</span><span class="inferred0"><a name="line33" /> 33 
-</span><span class="marked1"><a name="line34" /> 34                     self.records_encrypted_data     = &quot;&quot;
-</span><span class="marked0"><a name="line35" /> 35                     self.records_digest_salt        = Keybox::RandomDevice.random_bytes(32)
-</span><span class="marked1"><a name="line36" /> 36                     self.records_digest_algorithm   = Keybox::Digest::DEFAULT_ALGORITHM
-</span><span class="marked0"><a name="line37" /> 37                     self.records_digest             = &quot;&quot;
-</span><span class="inferred1"><a name="line38" /> 38                 end
-</span><span class="inferred0"><a name="line39" /> 39             end
-</span><span class="inferred1"><a name="line40" /> 40 
-</span><span class="inferred0"><a name="line41" /> 41             #
-</span><span class="inferred1"><a name="line42" /> 42             # load from file, if this is successful then replace the
-</span><span class="inferred0"><a name="line43" /> 43             # existing member fields on this instance with the data from
-</span><span class="inferred1"><a name="line44" /> 44             # the file
-</span><span class="inferred0"><a name="line45" /> 45             #
-</span><span class="marked1"><a name="line46" /> 46             def load_from_file
-</span><span class="marked0"><a name="line47" /> 47                 return false unless File.exists?(@path)
-</span><span class="marked1"><a name="line48" /> 48                 return false unless tmp = YAML.load_file(@path)
-</span><span class="marked0"><a name="line49" /> 49                 @creation_time      = tmp.creation_time
-</span><span class="marked1"><a name="line50" /> 50                 @modification_time  = tmp.modification_time
-</span><span class="marked0"><a name="line51" /> 51                 @last_access_time   = tmp.last_access_time
-</span><span class="marked1"><a name="line52" /> 52                 @data_members       = tmp.data_members
+</span><span class="marked0"><a name="line23" /> 23                     self.version                    = Keybox::VERSION
+</span><span class="inferred1"><a name="line24" /> 24                     
+</span><span class="marked0"><a name="line25" /> 25                     self.key_calc_iterations        = ITERATIONS
+</span><span class="marked1"><a name="line26" /> 26                     self.key_digest_salt            = Keybox::RandomDevice.random_bytes(32)
+</span><span class="marked0"><a name="line27" /> 27                     self.key_digest_algorithm       = Keybox::Digest::DEFAULT_ALGORITHM
+</span><span class="marked1"><a name="line28" /> 28                     self.key_digest                 = calculated_key_digest(passphrase)
+</span><span class="inferred0"><a name="line29" /> 29 
+</span><span class="marked1"><a name="line30" /> 30                     self.records_init_vector        = Keybox::RandomDevice.random_bytes(16)
+</span><span class="marked0"><a name="line31" /> 31                     self.records_cipher_algorithm   = Keybox::Cipher::DEFAULT_ALGORITHM
+</span><span class="inferred1"><a name="line32" /> 32 
+</span><span class="marked0"><a name="line33" /> 33                     self.records_encrypted_data     = &quot;&quot;
+</span><span class="marked1"><a name="line34" /> 34                     self.records_digest_salt        = Keybox::RandomDevice.random_bytes(32)
+</span><span class="marked0"><a name="line35" /> 35                     self.records_digest_algorithm   = Keybox::Digest::DEFAULT_ALGORITHM
+</span><span class="marked1"><a name="line36" /> 36                     self.records_digest             = &quot;&quot;
+</span><span class="inferred0"><a name="line37" /> 37                 end
+</span><span class="inferred1"><a name="line38" /> 38             end
+</span><span class="inferred0"><a name="line39" /> 39 
+</span><span class="inferred1"><a name="line40" /> 40             #
+</span><span class="inferred0"><a name="line41" /> 41             # load from file, if this is successful then replace the
+</span><span class="inferred1"><a name="line42" /> 42             # existing member fields on this instance with the data from
+</span><span class="inferred0"><a name="line43" /> 43             # the file
+</span><span class="inferred1"><a name="line44" /> 44             #
+</span><span class="marked0"><a name="line45" /> 45             def load_from_file
+</span><span class="marked1"><a name="line46" /> 46                 return false unless File.exists?(@path)
+</span><span class="marked0"><a name="line47" /> 47                 return false unless tmp = YAML.load_file(@path)
+</span><span class="marked1"><a name="line48" /> 48                 @creation_time      = tmp.creation_time
+</span><span class="marked0"><a name="line49" /> 49                 @modification_time  = tmp.modification_time
+</span><span class="marked1"><a name="line50" /> 50                 @last_access_time   = tmp.last_access_time
+</span><span class="marked0"><a name="line51" /> 51                 @data_members       = tmp.data_members
+</span><span class="marked1"><a name="line52" /> 52                 @uuid               = tmp.uuid
 </span><span class="marked0"><a name="line53" /> 53                 validate_passphrase
 </span><span class="marked1"><a name="line54" /> 54                 decrypt_records
 </span><span class="marked0"><a name="line55" /> 55                 validate_decryption

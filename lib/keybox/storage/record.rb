@@ -10,12 +10,14 @@ module Keybox
             attr_reader :creation_time
             attr_reader :modification_time
             attr_reader :last_access_time
+            attr_reader :uuid
             attr_reader :data_members
 
             def initialize
                 @creation_time     = Time.now
                 @modification_time = @creation_time.dup
                 @last_access_time  = @creation_time.dup
+                @uuid              = Keybox::UUID.new
                 @data_members      = Hash.new
             end
 
@@ -25,7 +27,7 @@ module Keybox
 
                 # guard against assigning to the time data members and
                 # the data_members element
-                if [:creation_time=, :modification_time=, :last_access_time=, :data_members, :data_members=].include?(method_id) then
+                if [:creation_time=, :modification_time=, :last_access_time=, :uuid=, :data_members=].include?(method_id) then
                     raise NoMethodError, "invalid method #{method_name} for #{self.class.name}", caller(1)
                 end
 
@@ -47,7 +49,7 @@ module Keybox
             end
 
             def to_yaml_properties
-                %w{ @creation_time @modification_time @last_access_time @data_members }
+                %w{ @creation_time @modification_time @last_access_time @data_members @uuid }
             end
         end
     end

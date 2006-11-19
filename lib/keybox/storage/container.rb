@@ -20,7 +20,6 @@ module Keybox
                 @records     = []
 
                 if not load_from_file then
-                    self.uuid                       = Keybox::UUID.new
                     self.version                    = Keybox::VERSION
                     
                     self.key_calc_iterations        = ITERATIONS
@@ -50,6 +49,7 @@ module Keybox
                 @modification_time  = tmp.modification_time
                 @last_access_time   = tmp.last_access_time
                 @data_members       = tmp.data_members
+                @uuid               = tmp.uuid
                 validate_passphrase
                 decrypt_records
                 validate_decryption
