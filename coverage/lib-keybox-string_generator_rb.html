@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sat Nov 18 19:32:32 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sat Nov 18 19:39:34 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -617,200 +617,200 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked1"><a name="line1" />  1 require 'keybox/randomizer'
-</span><span class="inferred0"><a name="line2" />  2 
-</span><span class="marked1"><a name="line3" />  3 module Keybox
-</span><span class="inferred0"><a name="line4" />  4 
-</span><span class="inferred1"><a name="line5" />  5     # base class for string generation.  A string generator can be
-</span><span class="inferred0"><a name="line6" />  6     # called serially to generate a new string in chunks, or all at once
-</span><span class="inferred1"><a name="line7" />  7     # to generate one of a certain size.
-</span><span class="marked0"><a name="line8" />  8     class StringGenerator
-</span><span class="marked1"><a name="line9" />  9         attr_accessor :chunks
-</span><span class="marked0"><a name="line10" /> 10         attr_accessor :min_length
-</span><span class="marked1"><a name="line11" /> 11         attr_accessor :max_length
-</span><span class="marked0"><a name="line12" /> 12         attr_accessor :autoclear
-</span><span class="inferred1"><a name="line13" /> 13 
-</span><span class="marked0"><a name="line14" /> 14         def initialize
-</span><span class="marked1"><a name="line15" /> 15             @chunks = Array.new
-</span><span class="marked0"><a name="line16" /> 16             @min_length = 8
-</span><span class="marked1"><a name="line17" /> 17             @max_length = 10
-</span><span class="marked0"><a name="line18" /> 18             @randomizer = Keybox::Randomizer.new
-</span><span class="marked1"><a name="line19" /> 19             @autoclear = true
-</span><span class="inferred0"><a name="line20" /> 20         end
-</span><span class="inferred1"><a name="line21" /> 21 
-</span><span class="marked0"><a name="line22" /> 22         def generate
-</span><span class="marked1"><a name="line23" /> 23             clear if autoclear
-</span><span class="marked0"><a name="line24" /> 24             generate_chunk until valid?
-</span><span class="marked1"><a name="line25" /> 25             self.to_s
-</span><span class="inferred0"><a name="line26" /> 26         end
-</span><span class="inferred1"><a name="line27" /> 27 
-</span><span class="marked0"><a name="line28" /> 28         def clear
-</span><span class="marked1"><a name="line29" /> 29             @chunks.clear
-</span><span class="marked0"><a name="line30" /> 30         end
-</span><span class="inferred1"><a name="line31" /> 31 
-</span><span class="marked0"><a name="line32" /> 32         def to_s
-</span><span class="marked1"><a name="line33" /> 33             @chunks.join('')[0...@max_length]
-</span><span class="marked0"><a name="line34" /> 34         end
-</span><span class="inferred1"><a name="line35" /> 35 
-</span><span class="marked0"><a name="line36" /> 36         def valid?
-</span><span class="marked1"><a name="line37" /> 37             raise &quot;max_length (#{max_length}) must be greater than or equal to min_length (#{min_length})&quot; if max_length &lt; min_length
-</span><span class="marked0"><a name="line38" /> 38             @chunks.join('').size &gt; @min_length 
-</span><span class="inferred1"><a name="line39" /> 39         end
-</span><span class="inferred0"><a name="line40" /> 40 
-</span><span class="marked1"><a name="line41" /> 41         def generate_chunk
-</span><span class="marked0"><a name="line42" /> 42             raise &quot;generate_chunk Not Implemented&quot;
-</span><span class="marked1"><a name="line43" /> 43         end
-</span><span class="inferred0"><a name="line44" /> 44 
-</span><span class="inferred1"><a name="line45" /> 45     end
-</span><span class="inferred0"><a name="line46" /> 46 
-</span><span class="inferred1"><a name="line47" /> 47     # CharGramGenerator emits a sequence that is a CharGram of length N.
-</span><span class="inferred0"><a name="line48" /> 48     # The ngrams can be the default ones that ship with keybox or an
-</span><span class="inferred1"><a name="line49" /> 49     # array passed in.
-</span><span class="marked0"><a name="line50" /> 50     class CharGramGenerator &lt; StringGenerator
-</span><span class="marked1"><a name="line51" /> 51         attr_reader :pool
-</span><span class="inferred0"><a name="line52" /> 52 
-</span><span class="inferred1"><a name="line53" /> 53 
-</span><span class="marked0"><a name="line54" /> 54         def initialize(chargram_list = nil)
-</span><span class="marked1"><a name="line55" /> 55             super()
-</span><span class="marked0"><a name="line56" /> 56             wordlist = chargram_list || load_default_chargram_list
-</span><span class="marked1"><a name="line57" /> 57             @pool          = Hash.new
-</span><span class="marked0"><a name="line58" /> 58             wordlist.each do |word|
-</span><span class="marked1"><a name="line59" /> 59                 letters = word.split('')
-</span><span class="marked0"><a name="line60" /> 60                 letter_set = @pool[letters.first] ||= Array.new
-</span><span class="marked1"><a name="line61" /> 61                 letter_set &lt;&lt; word
-</span><span class="inferred0"><a name="line62" /> 62             end
-</span><span class="inferred1"><a name="line63" /> 63         end
-</span><span class="inferred0"><a name="line64" /> 64 
-</span><span class="marked1"><a name="line65" /> 65         def size
-</span><span class="marked0"><a name="line66" /> 66             @pool.inject(0) { |sum,h| sum + h[1].size }
-</span><span class="marked1"><a name="line67" /> 67         end
-</span><span class="inferred0"><a name="line68" /> 68 
-</span><span class="inferred1"><a name="line69" /> 69         # return a random chargram from the pool indidcated by the last
-</span><span class="inferred0"><a name="line70" /> 70         # character of the last emitted item
-</span><span class="marked1"><a name="line71" /> 71         def generate_chunk
-</span><span class="marked0"><a name="line72" /> 72             pool_key = &quot;&quot;
-</span><span class="marked1"><a name="line73" /> 73             if @chunks.size &gt; 0 then
-</span><span class="marked0"><a name="line74" /> 74                 pool_key = @chunks.pop
-</span><span class="inferred1"><a name="line75" /> 75             else
-</span><span class="marked0"><a name="line76" /> 76                 pool_key = @randomizer.pick_one_from(@pool.keys)
-</span><span class="inferred1"><a name="line77" /> 77             end
-</span><span class="marked0"><a name="line78" /> 78             new_chunk = @randomizer.pick_one_from(@pool[pool_key])
-</span><span class="marked1"><a name="line79" /> 79             @chunks.concat(new_chunk.split(//))
-</span><span class="marked0"><a name="line80" /> 80             new_chunk
-</span><span class="inferred1"><a name="line81" /> 81         end
-</span><span class="inferred0"><a name="line82" /> 82 
-</span><span class="marked1"><a name="line83" /> 83         private
-</span><span class="inferred0"><a name="line84" /> 84 
-</span><span class="marked1"><a name="line85" /> 85         def load_default_chargram_list
-</span><span class="marked0"><a name="line86" /> 86             list = []
-</span><span class="marked1"><a name="line87" /> 87             File.open(File.join(Keybox::APP_RESOURCE_DIR,&quot;chargrams.txt&quot;)) do |f|
-</span><span class="marked0"><a name="line88" /> 88                 f.each_line do |line|
-</span><span class="marked1"><a name="line89" /> 89                     next if line =~ /^#/
-</span><span class="marked0"><a name="line90" /> 90                     list &lt;&lt; line.rstrip
-</span><span class="inferred1"><a name="line91" /> 91                 end
-</span><span class="inferred0"><a name="line92" /> 92             end
-</span><span class="marked1"><a name="line93" /> 93             list
-</span><span class="inferred0"><a name="line94" /> 94         end
-</span><span class="inferred1"><a name="line95" /> 95     end
-</span><span class="inferred0"><a name="line96" /> 96 
-</span><span class="marked1"><a name="line97" /> 97     module SymbolSet
-</span><span class="marked0"><a name="line98" /> 98         LOWER_ASCII   = (&quot;a&quot;..&quot;z&quot;).to_a
-</span><span class="marked1"><a name="line99" /> 99         UPPER_ASCII   = (&quot;A&quot;..&quot;Z&quot;).to_a
-</span><span class="marked0"><a name="line100" />100         NUMERAL_ASCII = (&quot;0&quot;..&quot;9&quot;).to_a
-</span><span class="marked1"><a name="line101" />101         SPECIAL_ASCII = (&quot;!&quot;..&quot;/&quot;).to_a + (&quot;:&quot;..&quot;@&quot;).to_a + %w( [ ] ^ _ { } | ~ )
-</span><span class="marked0"><a name="line102" />102         ALL = LOWER_ASCII + UPPER_ASCII + NUMERAL_ASCII + SPECIAL_ASCII
-</span><span class="inferred1"><a name="line103" />103 
-</span><span class="marked0"><a name="line104" />104         MAPPING = {
-</span><span class="inferred1"><a name="line105" />105             &quot;l&quot; =&gt; LOWER_ASCII,
-</span><span class="inferred0"><a name="line106" />106             &quot;u&quot; =&gt; UPPER_ASCII,
-</span><span class="inferred1"><a name="line107" />107             &quot;n&quot; =&gt; NUMERAL_ASCII,
-</span><span class="inferred0"><a name="line108" />108             &quot;s&quot; =&gt; SPECIAL_ASCII,
-</span><span class="inferred1"><a name="line109" />109             &quot;a&quot; =&gt; ALL
-</span><span class="inferred0"><a name="line110" />110         }
-</span><span class="inferred1"><a name="line111" />111     end
-</span><span class="inferred0"><a name="line112" />112 
-</span><span class="inferred1"><a name="line113" />113     # 
-</span><span class="inferred0"><a name="line114" />114     # SymbolSetGenerator uses symbol sets and emits a single character
-</span><span class="inferred1"><a name="line115" />115     # from the aggregated symobl sets that the instance is wrapping.
-</span><span class="inferred0"><a name="line116" />116     #
-</span><span class="inferred1"><a name="line117" />117     # That is When a SymbolSetGenerator is instantiated, it can take a
-</span><span class="inferred0"><a name="line118" />118     # list of symbol sets (a-z, A-Z, 0-9) etc as parameters.  Those sets
-</span><span class="inferred1"><a name="line119" />119     # are merged and when 'emit' is called a string of length 1 is
-</span><span class="inferred0"><a name="line120" />120     # returned from the aggregated symbols
-</span><span class="inferred1"><a name="line121" />121     #
-</span><span class="marked0"><a name="line122" />122     class SymbolSetGenerator &lt; StringGenerator
-</span><span class="marked1"><a name="line123" />123         include SymbolSet
-</span><span class="inferred0"><a name="line124" />124 
-</span><span class="marked1"><a name="line125" />125         attr_accessor :required_sets
-</span><span class="inferred0"><a name="line126" />126         
-</span><span class="marked1"><a name="line127" />127         def initialize(set = ALL)
-</span><span class="marked0"><a name="line128" />128             super()
-</span><span class="marked1"><a name="line129" />129             @symbols = set.flatten.uniq
-</span><span class="marked0"><a name="line130" />130             @required_sets = []
-</span><span class="inferred1"><a name="line131" />131         end
-</span><span class="inferred0"><a name="line132" />132 
-</span><span class="inferred1"><a name="line133" />133         # every time we access the symbols set we need to make sure that
-</span><span class="inferred0"><a name="line134" />134         # the required symbols are a part of it, and if they aren't then
-</span><span class="inferred1"><a name="line135" />135         # make sure they are.
-</span><span class="marked0"><a name="line136" />136         def symbols
-</span><span class="marked1"><a name="line137" />137             if @required_sets.size &gt; 0 then
-</span><span class="marked0"><a name="line138" />138                 if not @symbols.include?(@required_sets.first[0]) then
-</span><span class="marked1"><a name="line139" />139                     @symbols &lt;&lt; @required_sets
-</span><span class="marked0"><a name="line140" />140                     @symbols.flatten!
-</span><span class="marked1"><a name="line141" />141                     @symbols.uniq!
-</span><span class="inferred0"><a name="line142" />142                 end
-</span><span class="inferred1"><a name="line143" />143             end
-</span><span class="marked0"><a name="line144" />144             @symbols 
-</span><span class="inferred1"><a name="line145" />145         end
-</span><span class="inferred0"><a name="line146" />146 
-</span><span class="marked1"><a name="line147" />147         def required_generated?
-</span><span class="marked0"><a name="line148" />148             result = true
-</span><span class="marked1"><a name="line149" />149             @required_sets.each do |set|
-</span><span class="marked0"><a name="line150" />150                 set_found = false
-</span><span class="marked1"><a name="line151" />151                 @chunks.each do |chunk|
-</span><span class="marked0"><a name="line152" />152                     if set.include?(chunk) then
-</span><span class="marked1"><a name="line153" />153                         set_found = true
-</span><span class="marked0"><a name="line154" />154                         break
-</span><span class="inferred1"><a name="line155" />155                     end
-</span><span class="inferred0"><a name="line156" />156                 end
-</span><span class="marked1"><a name="line157" />157                 result = (result and set_found)
-</span><span class="inferred0"><a name="line158" />158             end
-</span><span class="marked1"><a name="line159" />159             return result
-</span><span class="inferred0"><a name="line160" />160         end
-</span><span class="inferred1"><a name="line161" />161 
-</span><span class="inferred0"><a name="line162" />162         # we force generation of the required sets at the beginning the
-</span><span class="inferred1"><a name="line163" />163         # first time we are called.
-</span><span class="marked0"><a name="line164" />164         def generate_chunk
-</span><span class="marked1"><a name="line165" />165             chunk = &quot;&quot;
-</span><span class="marked0"><a name="line166" />166             if required_generated? then
-</span><span class="marked1"><a name="line167" />167                 @chunks &lt;&lt; @randomizer.pick_one_from(symbols)
-</span><span class="marked0"><a name="line168" />168                 chunk = @chunks.last
-</span><span class="inferred1"><a name="line169" />169             else
-</span><span class="marked0"><a name="line170" />170                 req = generate_required
-</span><span class="marked1"><a name="line171" />171                 @chunks.concat(req)
-</span><span class="marked0"><a name="line172" />172                 chunk = req.join('')
-</span><span class="inferred1"><a name="line173" />173             end
-</span><span class="marked0"><a name="line174" />174             return chunk
-</span><span class="inferred1"><a name="line175" />175         end
-</span><span class="inferred0"><a name="line176" />176 
-</span><span class="inferred1"><a name="line177" />177         # valid for the symbol set generator means the parent classes
-</span><span class="inferred0"><a name="line178" />178         # validity and that we have in the 
-</span><span class="marked1"><a name="line179" />179         def valid?
-</span><span class="marked0"><a name="line180" />180             super and required_generated?
-</span><span class="marked1"><a name="line181" />181         end
-</span><span class="inferred0"><a name="line182" />182 
-</span><span class="marked1"><a name="line183" />183         private
-</span><span class="inferred0"><a name="line184" />184 
-</span><span class="inferred1"><a name="line185" />185         # generate symbols from the required sets 
-</span><span class="marked0"><a name="line186" />186         def generate_required
-</span><span class="marked1"><a name="line187" />187             req = []
-</span><span class="marked0"><a name="line188" />188             required_sets.each do |set|
-</span><span class="marked1"><a name="line189" />189                 req &lt;&lt; @randomizer.pick_one_from(set)
-</span><span class="inferred0"><a name="line190" />190             end
-</span><span class="marked1"><a name="line191" />191             return req
-</span><span class="inferred0"><a name="line192" />192         end
-</span><span class="inferred1"><a name="line193" />193     end
-</span><span class="inferred0"><a name="line194" />194 end
+    </table><pre><span class="marked0"><a name="line1" />  1 require 'keybox/randomizer'
+</span><span class="inferred1"><a name="line2" />  2 
+</span><span class="marked0"><a name="line3" />  3 module Keybox
+</span><span class="inferred1"><a name="line4" />  4 
+</span><span class="inferred0"><a name="line5" />  5     # base class for string generation.  A string generator can be
+</span><span class="inferred1"><a name="line6" />  6     # called serially to generate a new string in chunks, or all at once
+</span><span class="inferred0"><a name="line7" />  7     # to generate one of a certain size.
+</span><span class="marked1"><a name="line8" />  8     class StringGenerator
+</span><span class="marked0"><a name="line9" />  9         attr_accessor :chunks
+</span><span class="marked1"><a name="line10" /> 10         attr_accessor :min_length
+</span><span class="marked0"><a name="line11" /> 11         attr_accessor :max_length
+</span><span class="marked1"><a name="line12" /> 12         attr_accessor :autoclear
+</span><span class="inferred0"><a name="line13" /> 13 
+</span><span class="marked1"><a name="line14" /> 14         def initialize
+</span><span class="marked0"><a name="line15" /> 15             @chunks = Array.new
+</span><span class="marked1"><a name="line16" /> 16             @min_length = 8
+</span><span class="marked0"><a name="line17" /> 17             @max_length = 10
+</span><span class="marked1"><a name="line18" /> 18             @randomizer = Keybox::Randomizer.new
+</span><span class="marked0"><a name="line19" /> 19             @autoclear = true
+</span><span class="inferred1"><a name="line20" /> 20         end
+</span><span class="inferred0"><a name="line21" /> 21 
+</span><span class="marked1"><a name="line22" /> 22         def generate
+</span><span class="marked0"><a name="line23" /> 23             clear if autoclear
+</span><span class="marked1"><a name="line24" /> 24             generate_chunk until valid?
+</span><span class="marked0"><a name="line25" /> 25             self.to_s
+</span><span class="inferred1"><a name="line26" /> 26         end
+</span><span class="inferred0"><a name="line27" /> 27 
+</span><span class="marked1"><a name="line28" /> 28         def clear
+</span><span class="marked0"><a name="line29" /> 29             @chunks.clear
+</span><span class="marked1"><a name="line30" /> 30         end
+</span><span class="inferred0"><a name="line31" /> 31 
+</span><span class="marked1"><a name="line32" /> 32         def to_s
+</span><span class="marked0"><a name="line33" /> 33             @chunks.join('')[0...@max_length]
+</span><span class="marked1"><a name="line34" /> 34         end
+</span><span class="inferred0"><a name="line35" /> 35 
+</span><span class="marked1"><a name="line36" /> 36         def valid?
+</span><span class="marked0"><a name="line37" /> 37             raise &quot;max_length (#{max_length}) must be greater than or equal to min_length (#{min_length})&quot; if max_length &lt; min_length
+</span><span class="marked1"><a name="line38" /> 38             @chunks.join('').size &gt; @min_length 
+</span><span class="inferred0"><a name="line39" /> 39         end
+</span><span class="inferred1"><a name="line40" /> 40 
+</span><span class="marked0"><a name="line41" /> 41         def generate_chunk
+</span><span class="marked1"><a name="line42" /> 42             raise &quot;generate_chunk Not Implemented&quot;
+</span><span class="marked0"><a name="line43" /> 43         end
+</span><span class="inferred1"><a name="line44" /> 44 
+</span><span class="inferred0"><a name="line45" /> 45     end
+</span><span class="inferred1"><a name="line46" /> 46 
+</span><span class="inferred0"><a name="line47" /> 47     # CharGramGenerator emits a sequence that is a CharGram of length N.
+</span><span class="inferred1"><a name="line48" /> 48     # The ngrams can be the default ones that ship with keybox or an
+</span><span class="inferred0"><a name="line49" /> 49     # array passed in.
+</span><span class="marked1"><a name="line50" /> 50     class CharGramGenerator &lt; StringGenerator
+</span><span class="marked0"><a name="line51" /> 51         attr_reader :pool
+</span><span class="inferred1"><a name="line52" /> 52 
+</span><span class="inferred0"><a name="line53" /> 53 
+</span><span class="marked1"><a name="line54" /> 54         def initialize(chargram_list = nil)
+</span><span class="marked0"><a name="line55" /> 55             super()
+</span><span class="marked1"><a name="line56" /> 56             wordlist = chargram_list || load_default_chargram_list
+</span><span class="marked0"><a name="line57" /> 57             @pool          = Hash.new
+</span><span class="marked1"><a name="line58" /> 58             wordlist.each do |word|
+</span><span class="marked0"><a name="line59" /> 59                 letters = word.split('')
+</span><span class="marked1"><a name="line60" /> 60                 letter_set = @pool[letters.first] ||= Array.new
+</span><span class="marked0"><a name="line61" /> 61                 letter_set &lt;&lt; word
+</span><span class="inferred1"><a name="line62" /> 62             end
+</span><span class="inferred0"><a name="line63" /> 63         end
+</span><span class="inferred1"><a name="line64" /> 64 
+</span><span class="marked0"><a name="line65" /> 65         def size
+</span><span class="marked1"><a name="line66" /> 66             @pool.inject(0) { |sum,h| sum + h[1].size }
+</span><span class="marked0"><a name="line67" /> 67         end
+</span><span class="inferred1"><a name="line68" /> 68 
+</span><span class="inferred0"><a name="line69" /> 69         # return a random chargram from the pool indidcated by the last
+</span><span class="inferred1"><a name="line70" /> 70         # character of the last emitted item
+</span><span class="marked0"><a name="line71" /> 71         def generate_chunk
+</span><span class="marked1"><a name="line72" /> 72             pool_key = &quot;&quot;
+</span><span class="marked0"><a name="line73" /> 73             if @chunks.size &gt; 0 then
+</span><span class="marked1"><a name="line74" /> 74                 pool_key = @chunks.pop
+</span><span class="inferred0"><a name="line75" /> 75             else
+</span><span class="marked1"><a name="line76" /> 76                 pool_key = @randomizer.pick_one_from(@pool.keys)
+</span><span class="inferred0"><a name="line77" /> 77             end
+</span><span class="marked1"><a name="line78" /> 78             new_chunk = @randomizer.pick_one_from(@pool[pool_key])
+</span><span class="marked0"><a name="line79" /> 79             @chunks.concat(new_chunk.split(//))
+</span><span class="marked1"><a name="line80" /> 80             new_chunk
+</span><span class="inferred0"><a name="line81" /> 81         end
+</span><span class="inferred1"><a name="line82" /> 82 
+</span><span class="marked0"><a name="line83" /> 83         private
+</span><span class="inferred1"><a name="line84" /> 84 
+</span><span class="marked0"><a name="line85" /> 85         def load_default_chargram_list
+</span><span class="marked1"><a name="line86" /> 86             list = []
+</span><span class="marked0"><a name="line87" /> 87             File.open(File.join(Keybox::APP_RESOURCE_DIR,&quot;chargrams.txt&quot;)) do |f|
+</span><span class="marked1"><a name="line88" /> 88                 f.each_line do |line|
+</span><span class="marked0"><a name="line89" /> 89                     next if line =~ /^#/
+</span><span class="marked1"><a name="line90" /> 90                     list &lt;&lt; line.rstrip
+</span><span class="inferred0"><a name="line91" /> 91                 end
+</span><span class="inferred1"><a name="line92" /> 92             end
+</span><span class="marked0"><a name="line93" /> 93             list
+</span><span class="inferred1"><a name="line94" /> 94         end
+</span><span class="inferred0"><a name="line95" /> 95     end
+</span><span class="inferred1"><a name="line96" /> 96 
+</span><span class="marked0"><a name="line97" /> 97     module SymbolSet
+</span><span class="marked1"><a name="line98" /> 98         LOWER_ASCII   = (&quot;a&quot;..&quot;z&quot;).to_a
+</span><span class="marked0"><a name="line99" /> 99         UPPER_ASCII   = (&quot;A&quot;..&quot;Z&quot;).to_a
+</span><span class="marked1"><a name="line100" />100         NUMERAL_ASCII = (&quot;0&quot;..&quot;9&quot;).to_a
+</span><span class="marked0"><a name="line101" />101         SPECIAL_ASCII = (&quot;!&quot;..&quot;/&quot;).to_a + (&quot;:&quot;..&quot;@&quot;).to_a + %w( [ ] ^ _ { } | ~ )
+</span><span class="marked1"><a name="line102" />102         ALL = LOWER_ASCII + UPPER_ASCII + NUMERAL_ASCII + SPECIAL_ASCII
+</span><span class="inferred0"><a name="line103" />103 
+</span><span class="marked1"><a name="line104" />104         MAPPING = {
+</span><span class="inferred0"><a name="line105" />105             &quot;l&quot; =&gt; LOWER_ASCII,
+</span><span class="inferred1"><a name="line106" />106             &quot;u&quot; =&gt; UPPER_ASCII,
+</span><span class="inferred0"><a name="line107" />107             &quot;n&quot; =&gt; NUMERAL_ASCII,
+</span><span class="inferred1"><a name="line108" />108             &quot;s&quot; =&gt; SPECIAL_ASCII,
+</span><span class="inferred0"><a name="line109" />109             &quot;a&quot; =&gt; ALL
+</span><span class="inferred1"><a name="line110" />110         }
+</span><span class="inferred0"><a name="line111" />111     end
+</span><span class="inferred1"><a name="line112" />112 
+</span><span class="inferred0"><a name="line113" />113     # 
+</span><span class="inferred1"><a name="line114" />114     # SymbolSetGenerator uses symbol sets and emits a single character
+</span><span class="inferred0"><a name="line115" />115     # from the aggregated symobl sets that the instance is wrapping.
+</span><span class="inferred1"><a name="line116" />116     #
+</span><span class="inferred0"><a name="line117" />117     # That is When a SymbolSetGenerator is instantiated, it can take a
+</span><span class="inferred1"><a name="line118" />118     # list of symbol sets (a-z, A-Z, 0-9) etc as parameters.  Those sets
+</span><span class="inferred0"><a name="line119" />119     # are merged and when 'emit' is called a string of length 1 is
+</span><span class="inferred1"><a name="line120" />120     # returned from the aggregated symbols
+</span><span class="inferred0"><a name="line121" />121     #
+</span><span class="marked1"><a name="line122" />122     class SymbolSetGenerator &lt; StringGenerator
+</span><span class="marked0"><a name="line123" />123         include SymbolSet
+</span><span class="inferred1"><a name="line124" />124 
+</span><span class="marked0"><a name="line125" />125         attr_accessor :required_sets
+</span><span class="inferred1"><a name="line126" />126         
+</span><span class="marked0"><a name="line127" />127         def initialize(set = ALL)
+</span><span class="marked1"><a name="line128" />128             super()
+</span><span class="marked0"><a name="line129" />129             @symbols = set.flatten.uniq
+</span><span class="marked1"><a name="line130" />130             @required_sets = []
+</span><span class="inferred0"><a name="line131" />131         end
+</span><span class="inferred1"><a name="line132" />132 
+</span><span class="inferred0"><a name="line133" />133         # every time we access the symbols set we need to make sure that
+</span><span class="inferred1"><a name="line134" />134         # the required symbols are a part of it, and if they aren't then
+</span><span class="inferred0"><a name="line135" />135         # make sure they are.
+</span><span class="marked1"><a name="line136" />136         def symbols
+</span><span class="marked0"><a name="line137" />137             if @required_sets.size &gt; 0 then
+</span><span class="marked1"><a name="line138" />138                 if not @symbols.include?(@required_sets.first[0]) then
+</span><span class="marked0"><a name="line139" />139                     @symbols &lt;&lt; @required_sets
+</span><span class="marked1"><a name="line140" />140                     @symbols.flatten!
+</span><span class="marked0"><a name="line141" />141                     @symbols.uniq!
+</span><span class="inferred1"><a name="line142" />142                 end
+</span><span class="inferred0"><a name="line143" />143             end
+</span><span class="marked1"><a name="line144" />144             @symbols 
+</span><span class="inferred0"><a name="line145" />145         end
+</span><span class="inferred1"><a name="line146" />146 
+</span><span class="marked0"><a name="line147" />147         def required_generated?
+</span><span class="marked1"><a name="line148" />148             result = true
+</span><span class="marked0"><a name="line149" />149             @required_sets.each do |set|
+</span><span class="marked1"><a name="line150" />150                 set_found = false
+</span><span class="marked0"><a name="line151" />151                 @chunks.each do |chunk|
+</span><span class="marked1"><a name="line152" />152                     if set.include?(chunk) then
+</span><span class="marked0"><a name="line153" />153                         set_found = true
+</span><span class="marked1"><a name="line154" />154                         break
+</span><span class="inferred0"><a name="line155" />155                     end
+</span><span class="inferred1"><a name="line156" />156                 end
+</span><span class="marked0"><a name="line157" />157                 result = (result and set_found)
+</span><span class="inferred1"><a name="line158" />158             end
+</span><span class="marked0"><a name="line159" />159             return result
+</span><span class="inferred1"><a name="line160" />160         end
+</span><span class="inferred0"><a name="line161" />161 
+</span><span class="inferred1"><a name="line162" />162         # we force generation of the required sets at the beginning the
+</span><span class="inferred0"><a name="line163" />163         # first time we are called.
+</span><span class="marked1"><a name="line164" />164         def generate_chunk
+</span><span class="marked0"><a name="line165" />165             chunk = &quot;&quot;
+</span><span class="marked1"><a name="line166" />166             if required_generated? then
+</span><span class="marked0"><a name="line167" />167                 @chunks &lt;&lt; @randomizer.pick_one_from(symbols)
+</span><span class="marked1"><a name="line168" />168                 chunk = @chunks.last
+</span><span class="inferred0"><a name="line169" />169             else
+</span><span class="marked1"><a name="line170" />170                 req = generate_required
+</span><span class="marked0"><a name="line171" />171                 @chunks.concat(req)
+</span><span class="marked1"><a name="line172" />172                 chunk = req.join('')
+</span><span class="inferred0"><a name="line173" />173             end
+</span><span class="marked1"><a name="line174" />174             return chunk
+</span><span class="inferred0"><a name="line175" />175         end
+</span><span class="inferred1"><a name="line176" />176 
+</span><span class="inferred0"><a name="line177" />177         # valid for the symbol set generator means the parent classes
+</span><span class="inferred1"><a name="line178" />178         # validity and that we have in the 
+</span><span class="marked0"><a name="line179" />179         def valid?
+</span><span class="marked1"><a name="line180" />180             super and required_generated?
+</span><span class="marked0"><a name="line181" />181         end
+</span><span class="inferred1"><a name="line182" />182 
+</span><span class="marked0"><a name="line183" />183         private
+</span><span class="inferred1"><a name="line184" />184 
+</span><span class="inferred0"><a name="line185" />185         # generate symbols from the required sets 
+</span><span class="marked1"><a name="line186" />186         def generate_required
+</span><span class="marked0"><a name="line187" />187             req = []
+</span><span class="marked1"><a name="line188" />188             required_sets.each do |set|
+</span><span class="marked0"><a name="line189" />189                 req &lt;&lt; @randomizer.pick_one_from(set)
+</span><span class="inferred1"><a name="line190" />190             end
+</span><span class="marked0"><a name="line191" />191             return req
+</span><span class="inferred1"><a name="line192" />192         end
+</span><span class="inferred0"><a name="line193" />193     end
+</span><span class="inferred1"><a name="line194" />194 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

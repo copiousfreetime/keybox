@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sat Nov 18 19:32:32 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sat Nov 18 19:39:34 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -617,70 +617,70 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked1"><a name="line1" /> 1 require 'keybox/randomizer'
-</span><span class="marked0"><a name="line2" /> 2 module Keybox
-</span><span class="inferred1"><a name="line3" /> 3     #
-</span><span class="inferred0"><a name="line4" /> 4     # A quick implementation of a UUID class using the internal
-</span><span class="inferred1"><a name="line5" /> 5     # randomizer for byte generation
-</span><span class="inferred0"><a name="line6" /> 6     # 
-</span><span class="marked1"><a name="line7" /> 7     class UUID
-</span><span class="marked0"><a name="line8" /> 8         attr_reader :bytes
-</span><span class="inferred1"><a name="line9" /> 9 
-</span><span class="marked0"><a name="line10" />10         XF     = &quot;%0.2x&quot;
-</span><span class="marked1"><a name="line11" />11         FORMAT = sprintf(&quot;%s-%s-%s-%s-%s&quot;, XF * 4, XF * 2, XF * 2, XF * 2, XF * 6)
-</span><span class="marked0"><a name="line12" />12         REGEX  = %r|^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$|
-</span><span class="inferred1"><a name="line13" />13 
-</span><span class="inferred0"><a name="line14" />14         #
-</span><span class="inferred1"><a name="line15" />15         # the UUID can be initialized with:
-</span><span class="inferred0"><a name="line16" />16         #   - nothing ( default case ) in this case the UUID is generated
-</span><span class="inferred1"><a name="line17" />17         #   - a string in the standarde uuid format, in this case it is
-</span><span class="inferred0"><a name="line18" />18         #     decoded and converted to the internal format
-</span><span class="inferred1"><a name="line19" />19         #   - a string of bytes, in this case they are considered to be
-</span><span class="inferred0"><a name="line20" />20         #     the bytes used internally so 16 of them are taken
-</span><span class="marked1"><a name="line21" />21         def initialize(bytes = nil)
-</span><span class="inferred0"><a name="line22" />22 
-</span><span class="marked1"><a name="line23" />23             if bytes.nil? then
-</span><span class="marked0"><a name="line24" />24                 @bytes = Keybox::RandomDevice.random_bytes(16)
-</span><span class="marked1"><a name="line25" />25             elsif bytes.size == 36 and bytes.split(&quot;-&quot;).size == 5 then
-</span><span class="marked0"><a name="line26" />26                 if bytes =~ REGEX then
-</span><span class="inferred1"><a name="line27" />27                     # remove the dashes and make sure that we're all
-</span><span class="inferred0"><a name="line28" />28                     # lowercase
-</span><span class="marked1"><a name="line29" />29                     b = bytes.gsub(/-/,'').downcase
-</span><span class="inferred0"><a name="line30" />30 
-</span><span class="inferred1"><a name="line31" />31                     # convert to an array of hex strings
-</span><span class="marked0"><a name="line32" />32                     b = b.unpack(&quot;a2&quot;*16)
-</span><span class="inferred1"><a name="line33" />33 
-</span><span class="inferred0"><a name="line34" />34                     # convert the hex strings to integers
-</span><span class="marked1"><a name="line35" />35                     b.collect! { |x| x.to_i(16) }
-</span><span class="inferred0"><a name="line36" />36 
-</span><span class="inferred1"><a name="line37" />37                     # and pack those integers into a string
-</span><span class="marked0"><a name="line38" />38                     @bytes = b.pack(&quot;C*&quot;)
-</span><span class="inferred1"><a name="line39" />39 
-</span><span class="inferred0"><a name="line40" />40                     # of course this could all be done in one line with
-</span><span class="inferred1"><a name="line41" />41                     # @bytes = bytes.gsub(/-/,'').downcase.unpack(&quot;a2&quot;*16&quot;).collect {|x| x.to_i(16) }.pack(&quot;C*&quot;)
-</span><span class="inferred0"><a name="line42" />42                 else
-</span><span class="marked1"><a name="line43" />43                     raise ArgumentError, &quot;[#{bytes}] is not a hex encoded UUID&quot;
-</span><span class="inferred0"><a name="line44" />44                 end
-</span><span class="marked1"><a name="line45" />45             elsif bytes.kind_of?(String) and bytes.length &gt;= 16
-</span><span class="marked0"><a name="line46" />46                 @bytes = bytes[0..16]
-</span><span class="inferred1"><a name="line47" />47             else
-</span><span class="marked0"><a name="line48" />48                 raise ArgumentError, &quot;[#{bytes}] cannot be converted to a UUID&quot;
-</span><span class="inferred1"><a name="line49" />49             end
-</span><span class="marked0"><a name="line50" />50         end
-</span><span class="inferred1"><a name="line51" />51 
-</span><span class="inferred0"><a name="line52" />52         #
-</span><span class="inferred1"><a name="line53" />53         # convert the bytes to the hex encoded string format of
-</span><span class="inferred0"><a name="line54" />54         # XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-</span><span class="inferred1"><a name="line55" />55         # 
-</span><span class="marked0"><a name="line56" />56         def to_s
-</span><span class="marked1"><a name="line57" />57             sprintf(FORMAT,*to_a)
-</span><span class="marked0"><a name="line58" />58         end
-</span><span class="inferred1"><a name="line59" />59         
-</span><span class="marked0"><a name="line60" />60         def to_a
-</span><span class="marked1"><a name="line61" />61             @bytes.unpack(&quot;C*&quot;)
-</span><span class="marked0"><a name="line62" />62         end
-</span><span class="inferred1"><a name="line63" />63     end
-</span><span class="inferred0"><a name="line64" />64 end
+    </table><pre><span class="marked0"><a name="line1" /> 1 require 'keybox/randomizer'
+</span><span class="marked1"><a name="line2" /> 2 module Keybox
+</span><span class="inferred0"><a name="line3" /> 3     #
+</span><span class="inferred1"><a name="line4" /> 4     # A quick implementation of a UUID class using the internal
+</span><span class="inferred0"><a name="line5" /> 5     # randomizer for byte generation
+</span><span class="inferred1"><a name="line6" /> 6     # 
+</span><span class="marked0"><a name="line7" /> 7     class UUID
+</span><span class="marked1"><a name="line8" /> 8         attr_reader :bytes
+</span><span class="inferred0"><a name="line9" /> 9 
+</span><span class="marked1"><a name="line10" />10         XF     = &quot;%0.2x&quot;
+</span><span class="marked0"><a name="line11" />11         FORMAT = sprintf(&quot;%s-%s-%s-%s-%s&quot;, XF * 4, XF * 2, XF * 2, XF * 2, XF * 6)
+</span><span class="marked1"><a name="line12" />12         REGEX  = %r|^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$|
+</span><span class="inferred0"><a name="line13" />13 
+</span><span class="inferred1"><a name="line14" />14         #
+</span><span class="inferred0"><a name="line15" />15         # the UUID can be initialized with:
+</span><span class="inferred1"><a name="line16" />16         #   - nothing ( default case ) in this case the UUID is generated
+</span><span class="inferred0"><a name="line17" />17         #   - a string in the standarde uuid format, in this case it is
+</span><span class="inferred1"><a name="line18" />18         #     decoded and converted to the internal format
+</span><span class="inferred0"><a name="line19" />19         #   - a string of bytes, in this case they are considered to be
+</span><span class="inferred1"><a name="line20" />20         #     the bytes used internally so 16 of them are taken
+</span><span class="marked0"><a name="line21" />21         def initialize(bytes = nil)
+</span><span class="inferred1"><a name="line22" />22 
+</span><span class="marked0"><a name="line23" />23             if bytes.nil? then
+</span><span class="marked1"><a name="line24" />24                 @bytes = Keybox::RandomDevice.random_bytes(16)
+</span><span class="marked0"><a name="line25" />25             elsif bytes.size == 36 and bytes.split(&quot;-&quot;).size == 5 then
+</span><span class="marked1"><a name="line26" />26                 if bytes =~ REGEX then
+</span><span class="inferred0"><a name="line27" />27                     # remove the dashes and make sure that we're all
+</span><span class="inferred1"><a name="line28" />28                     # lowercase
+</span><span class="marked0"><a name="line29" />29                     b = bytes.gsub(/-/,'').downcase
+</span><span class="inferred1"><a name="line30" />30 
+</span><span class="inferred0"><a name="line31" />31                     # convert to an array of hex strings
+</span><span class="marked1"><a name="line32" />32                     b = b.unpack(&quot;a2&quot;*16)
+</span><span class="inferred0"><a name="line33" />33 
+</span><span class="inferred1"><a name="line34" />34                     # convert the hex strings to integers
+</span><span class="marked0"><a name="line35" />35                     b.collect! { |x| x.to_i(16) }
+</span><span class="inferred1"><a name="line36" />36 
+</span><span class="inferred0"><a name="line37" />37                     # and pack those integers into a string
+</span><span class="marked1"><a name="line38" />38                     @bytes = b.pack(&quot;C*&quot;)
+</span><span class="inferred0"><a name="line39" />39 
+</span><span class="inferred1"><a name="line40" />40                     # of course this could all be done in one line with
+</span><span class="inferred0"><a name="line41" />41                     # @bytes = bytes.gsub(/-/,'').downcase.unpack(&quot;a2&quot;*16&quot;).collect {|x| x.to_i(16) }.pack(&quot;C*&quot;)
+</span><span class="inferred1"><a name="line42" />42                 else
+</span><span class="marked0"><a name="line43" />43                     raise ArgumentError, &quot;[#{bytes}] is not a hex encoded UUID&quot;
+</span><span class="inferred1"><a name="line44" />44                 end
+</span><span class="marked0"><a name="line45" />45             elsif bytes.kind_of?(String) and bytes.length &gt;= 16
+</span><span class="marked1"><a name="line46" />46                 @bytes = bytes[0..16]
+</span><span class="inferred0"><a name="line47" />47             else
+</span><span class="marked1"><a name="line48" />48                 raise ArgumentError, &quot;[#{bytes}] cannot be converted to a UUID&quot;
+</span><span class="inferred0"><a name="line49" />49             end
+</span><span class="marked1"><a name="line50" />50         end
+</span><span class="inferred0"><a name="line51" />51 
+</span><span class="inferred1"><a name="line52" />52         #
+</span><span class="inferred0"><a name="line53" />53         # convert the bytes to the hex encoded string format of
+</span><span class="inferred1"><a name="line54" />54         # XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+</span><span class="inferred0"><a name="line55" />55         # 
+</span><span class="marked1"><a name="line56" />56         def to_s
+</span><span class="marked0"><a name="line57" />57             sprintf(FORMAT,*to_a)
+</span><span class="marked1"><a name="line58" />58         end
+</span><span class="inferred0"><a name="line59" />59         
+</span><span class="marked1"><a name="line60" />60         def to_a
+</span><span class="marked0"><a name="line61" />61             @bytes.unpack(&quot;C*&quot;)
+</span><span class="marked1"><a name="line62" />62         end
+</span><span class="inferred0"><a name="line63" />63     end
+</span><span class="inferred1"><a name="line64" />64 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

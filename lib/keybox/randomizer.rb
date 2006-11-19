@@ -74,7 +74,7 @@ module Keybox
                 if klass.respond_to?("random_bytes") then 
                     @@SOURCE_CLASSES << klass unless @@SOURCE_CLASSES.include?(klass)
                 else
-                    raise "class #{klass.name} does not have a 'random_bytes' method"
+                    raise ArgumentError, "class #{klass.name} does not have a 'random_bytes' method"
                 end
             end
 

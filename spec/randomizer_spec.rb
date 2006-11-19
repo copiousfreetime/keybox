@@ -60,7 +60,7 @@ context "a random source class " do
     end
 
     specify "invalid default class should throw exception " do
-        lambda { KeyBox::RandomSource.source = String }.should_raise
+        lambda { Keybox::RandomSource.source = String }.should_raise ArgumentError
     end
 
     specify "valid class should allow default to be set" do
