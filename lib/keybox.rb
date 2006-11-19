@@ -11,8 +11,12 @@ end
 
 $: << Keybox::APP_LIB_DIR
 
-require 'keybox/randomizer'
-require 'keybox/string_generator'
+require 'keybox/cipher'
+require 'keybox/digest'
+require 'keybox/entry'
+require 'keybox/error'
 require 'keybox/password_hash'
+require 'keybox/randomizer'
 require 'keybox/storage'
+require 'keybox/string_generator'
 require 'keybox/uuid'

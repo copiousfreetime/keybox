@@ -1,5 +1,6 @@
 require 'keybox/storage'
 require 'keybox/error'
+require 'keybox/entry'
 require 'openssl'
 require 'tempfile'
 
@@ -9,6 +10,7 @@ context 'a storage container' do
         @keybox_file = Tempfile.new("keybox").path
         @testing_file = "/tmp/testing.yml"
         @container   = Keybox::Storage::Container.new(@passphrase, @keybox_file)
+        @container << Keybox::AccountEntry.new("localhost","guest", "rubyrocks")
         @container.save
     end
     teardown do
@@ -43,5 +45,4 @@ context 'a storage container' do
         }.should_raise Keybox::ValidationError
 
     end
-
 end

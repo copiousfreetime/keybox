@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sun Nov 19 00:26:48 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sun Nov 19 01:47:41 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -578,7 +578,7 @@ span.run100 {
             <a href='lib-keybox-storage-record_rb.html'>lib/keybox/storage/record.rb</a>
           </td>
           <td class='value'>
-            <tt>55</tt>
+            <tt>54</tt>
           </td>
           <td class='value'>
             <tt>37</tt>
@@ -617,61 +617,60 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked0"><a name="line1" /> 1 module Keybox
-</span><span class="marked1"><a name="line2" /> 2     module Storage
-</span><span class="inferred0"><a name="line3" /> 3 
-</span><span class="inferred1"><a name="line4" /> 4         # 
-</span><span class="inferred0"><a name="line5" /> 5         # Record is very similar to an OStruct but it keeps track of the
-</span><span class="inferred1"><a name="line6" /> 6         # last access, creation and modification times of the object
-</span><span class="inferred0"><a name="line7" /> 7         #
-</span><span class="marked1"><a name="line8" /> 8         class Record 
-</span><span class="inferred0"><a name="line9" /> 9 
-</span><span class="marked1"><a name="line10" />10             attr_reader :creation_time
-</span><span class="marked0"><a name="line11" />11             attr_reader :modification_time
-</span><span class="marked1"><a name="line12" />12             attr_reader :last_access_time
-</span><span class="marked0"><a name="line13" />13             attr_reader :data_members
-</span><span class="inferred1"><a name="line14" />14 
-</span><span class="marked0"><a name="line15" />15             def initialize
-</span><span class="marked1"><a name="line16" />16                 @creation_time     = Time.now
-</span><span class="marked0"><a name="line17" />17                 @modification_time = @creation_time.dup
-</span><span class="marked1"><a name="line18" />18                 @last_access_time  = @creation_time.dup
-</span><span class="marked0"><a name="line19" />19                 @data_members      = Hash.new
-</span><span class="inferred1"><a name="line20" />20             end
-</span><span class="inferred0"><a name="line21" />21 
-</span><span class="marked1"><a name="line22" />22             def method_missing(method_id, *args)
-</span><span class="marked0"><a name="line23" />23                 method_name = method_id.id2name
-</span><span class="inferred1"><a name="line24" />24                 
-</span><span class="marked0"><a name="line25" />25                 member_sym = method_name.gsub(/=/,'').to_sym
-</span><span class="inferred1"><a name="line26" />26 
-</span><span class="inferred0"><a name="line27" />27                 # guard against assigning to the time data members and
-</span><span class="inferred1"><a name="line28" />28                 # the data_members element
-</span><span class="marked0"><a name="line29" />29                 if [:creation_time=, :modification_time=, :last_access_time=, :data_members, :data_members=].include?(method_id) then
-</span><span class="marked1"><a name="line30" />30                     raise NoMethodError, &quot;invalid method #{method_name} for #{self.class.name}&quot;, caller(1)
-</span><span class="inferred0"><a name="line31" />31                 end
-</span><span class="inferred1"><a name="line32" />32 
-</span><span class="inferred0"><a name="line33" />33                 # if the method ends with '=' and has a single argument,
-</span><span class="inferred1"><a name="line34" />34                 # then convert the name to the appropriate data member
-</span><span class="inferred0"><a name="line35" />35                 # and store the argument in the hash. 
-</span><span class="marked1"><a name="line36" />36                 if method_name[-1].chr == &quot;=&quot; then
-</span><span class="marked0"><a name="line37" />37                     raise ArgumentError, &quot;'#{method_name}' requires one and only one argument&quot;, caller(1) unless args.size == 1
-</span><span class="marked1"><a name="line38" />38                     @modification_time        = Time.now
-</span><span class="marked0"><a name="line39" />39                     @last_access_time         = @modification_time.dup
-</span><span class="marked1"><a name="line40" />40                     @data_members[member_sym]  = args[0]
-</span><span class="marked0"><a name="line41" />41                 elsif args.size == 0 then
-</span><span class="inferred1"><a name="line42" />42 
-</span><span class="marked0"><a name="line43" />43                     @last_access_time = Time.now
-</span><span class="marked1"><a name="line44" />44                     @data_members[member_sym]
-</span><span class="inferred0"><a name="line45" />45                 else
-</span><span class="marked1"><a name="line46" />46                     raise NoMethodError, &quot;undefined method #{method_name} for #{self.class.name}&quot;, caller(1)
-</span><span class="inferred0"><a name="line47" />47                 end
-</span><span class="inferred1"><a name="line48" />48             end
-</span><span class="inferred0"><a name="line49" />49 
-</span><span class="marked1"><a name="line50" />50             def to_yaml_properties
-</span><span class="marked0"><a name="line51" />51                 %w{ @creation_time @modification_time @last_access_time @data_members }
-</span><span class="marked1"><a name="line52" />52             end
-</span><span class="inferred0"><a name="line53" />53         end
-</span><span class="inferred1"><a name="line54" />54     end
-</span><span class="inferred0"><a name="line55" />55 end
+    </table><pre><span class="marked1"><a name="line1" /> 1 module Keybox
+</span><span class="marked0"><a name="line2" /> 2     module Storage
+</span><span class="inferred1"><a name="line3" /> 3 
+</span><span class="inferred0"><a name="line4" /> 4         # 
+</span><span class="inferred1"><a name="line5" /> 5         # Record is very similar to an OStruct but it keeps track of the
+</span><span class="inferred0"><a name="line6" /> 6         # last access, creation and modification times of the object
+</span><span class="inferred1"><a name="line7" /> 7         #
+</span><span class="marked0"><a name="line8" /> 8         class Record 
+</span><span class="inferred1"><a name="line9" /> 9 
+</span><span class="marked0"><a name="line10" />10             attr_reader :creation_time
+</span><span class="marked1"><a name="line11" />11             attr_reader :modification_time
+</span><span class="marked0"><a name="line12" />12             attr_reader :last_access_time
+</span><span class="marked1"><a name="line13" />13             attr_reader :data_members
+</span><span class="inferred0"><a name="line14" />14 
+</span><span class="marked1"><a name="line15" />15             def initialize
+</span><span class="marked0"><a name="line16" />16                 @creation_time     = Time.now
+</span><span class="marked1"><a name="line17" />17                 @modification_time = @creation_time.dup
+</span><span class="marked0"><a name="line18" />18                 @last_access_time  = @creation_time.dup
+</span><span class="marked1"><a name="line19" />19                 @data_members      = Hash.new
+</span><span class="inferred0"><a name="line20" />20             end
+</span><span class="inferred1"><a name="line21" />21 
+</span><span class="marked0"><a name="line22" />22             def method_missing(method_id, *args)
+</span><span class="marked1"><a name="line23" />23                 method_name = method_id.id2name
+</span><span class="marked0"><a name="line24" />24                 member_sym  = method_name.gsub(/=/,'').to_sym
+</span><span class="inferred1"><a name="line25" />25 
+</span><span class="inferred0"><a name="line26" />26                 # guard against assigning to the time data members and
+</span><span class="inferred1"><a name="line27" />27                 # the data_members element
+</span><span class="marked0"><a name="line28" />28                 if [:creation_time=, :modification_time=, :last_access_time=, :data_members, :data_members=].include?(method_id) then
+</span><span class="marked1"><a name="line29" />29                     raise NoMethodError, &quot;invalid method #{method_name} for #{self.class.name}&quot;, caller(1)
+</span><span class="inferred0"><a name="line30" />30                 end
+</span><span class="inferred1"><a name="line31" />31 
+</span><span class="inferred0"><a name="line32" />32                 # if the method ends with '=' and has a single argument,
+</span><span class="inferred1"><a name="line33" />33                 # then convert the name to the appropriate data member
+</span><span class="inferred0"><a name="line34" />34                 # and store the argument in the hash. 
+</span><span class="marked1"><a name="line35" />35                 if method_name[-1].chr == &quot;=&quot; then
+</span><span class="marked0"><a name="line36" />36                     raise ArgumentError, &quot;'#{method_name}' requires one and only one argument&quot;, caller(1) unless args.size == 1
+</span><span class="marked1"><a name="line37" />37                     @modification_time        = Time.now
+</span><span class="marked0"><a name="line38" />38                     @last_access_time         = @modification_time.dup
+</span><span class="marked1"><a name="line39" />39                     @data_members[member_sym] = args[0]
+</span><span class="marked0"><a name="line40" />40                 elsif args.size == 0 then
+</span><span class="inferred1"><a name="line41" />41 
+</span><span class="marked0"><a name="line42" />42                     @last_access_time = Time.now
+</span><span class="marked1"><a name="line43" />43                     @data_members[member_sym]
+</span><span class="inferred0"><a name="line44" />44                 else
+</span><span class="marked1"><a name="line45" />45                     raise NoMethodError, &quot;undefined method #{method_name} for #{self.class.name}&quot;, caller(1)
+</span><span class="inferred0"><a name="line46" />46                 end
+</span><span class="inferred1"><a name="line47" />47             end
+</span><span class="inferred0"><a name="line48" />48 
+</span><span class="marked1"><a name="line49" />49             def to_yaml_properties
+</span><span class="marked0"><a name="line50" />50                 %w{ @creation_time @modification_time @last_access_time @data_members }
+</span><span class="marked1"><a name="line51" />51             end
+</span><span class="inferred0"><a name="line52" />52         end
+</span><span class="inferred1"><a name="line53" />53     end
+</span><span class="inferred0"><a name="line54" />54 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

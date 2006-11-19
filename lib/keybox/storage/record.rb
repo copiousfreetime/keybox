@@ -21,8 +21,7 @@ module Keybox
 
             def method_missing(method_id, *args)
                 method_name = method_id.id2name
-                
-                member_sym = method_name.gsub(/=/,'').to_sym
+                member_sym  = method_name.gsub(/=/,'').to_sym
 
                 # guard against assigning to the time data members and
                 # the data_members element
@@ -37,7 +36,7 @@ module Keybox
                     raise ArgumentError, "'#{method_name}' requires one and only one argument", caller(1) unless args.size == 1
                     @modification_time        = Time.now
                     @last_access_time         = @modification_time.dup
-                    @data_members[member_sym]  = args[0]
+                    @data_members[member_sym] = args[0]
                 elsif args.size == 0 then
 
                     @last_access_time = Time.now
