@@ -3,6 +3,7 @@ require 'keybox/digest'
 require 'keybox/storage/record'
 require 'keybox/uuid'
 require 'keybox/randomizer'
+require 'keybox/error'
 require 'openssl'
 require 'yaml'
 
@@ -17,7 +18,7 @@ module Keybox
                 @path        = path
                 @passphrase  = passphrase
 
-                if not load_from_file(@path,@passphrase) then
+                if not load_from_file then
                     self.uuid                       = Keybox::UUID.new
                     self.version                    = Keybox::VERSION
                     
@@ -35,25 +36,36 @@ module Keybox
                 end
             end
 
-            def load_from_file(path,passphrase)
-                tmp = YAML.load_file(path)
-                if tmp then
-                    @creation_time      = tmp.creation_time
-                    @modification_time  = tmp.modification_time
-                    @last_access_time   = tmp.last_access_time
-                    @data_members       = tmp.data_members
-                    true
-                else
-                    false
-                end
+            #
+            # load from file, if this is successful then replace the
+            # existing member fields on this instance with the data from
+            # the file
+            #
+            def load_from_file
+                return false unless File.exists?(@path)
+                return false unless tmp = YAML.load_file(@path)
+                @creation_time      = tmp.creation_time
+                @modification_time  = tmp.modification_time
+                @last_access_time   = tmp.last_access_time
+                @data_members       = tmp.data_members
+                validate_passphrase
+                decrypt_data
+                validate_decryption
+                true
             end
 
+            #
+            # save the current container to a file
+            #
             def save(path = @path)
                 File.open(path,"w") do |f|
                     f.write(self.to_yaml)
                 end
             end
 
+            #
+            # calculate the encryption key from the initial passphrase
+            #
             def calculated_key(passphrase)
                 key = self.key_digest_salt + passphrase
                 self.key_calc_iterations.times do 
@@ -62,8 +74,23 @@ module Keybox
                 return key
             end
 
+            # 
+            # calculate the key digest of the encryption key
+            #
             def calculated_key_digest(passphrase)
                 Keybox::Digest::CLASSES[self.key_digest_algorithm].hexdigest(calculated_key(passphrase))
+            end
+
+            private
+
+            #
+            # calculate the key digest of the input pass phrase and
+            # compare that to the digest in the data file.  If they are
+            # the same, then the pass phrase should be the correct one
+            # for the data.
+            #
+            def validate_passphrase
+                raise Keybox::ValidationError, "Passphrase digests do not match.  The passphrase given does not decrypt the data in this file" unless key_digest == calculated_key_digest(@passphrase)
             end
         end
     end

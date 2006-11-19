@@ -1,7 +1,7 @@
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
       <head>
-        <title>lib/keybox/storage/container.rb - C0 code coverage information</title>
+        <title>lib/keybox/error.rb - C0 code coverage information</title>
         <style type='text/css'>body { background-color: rgb(240, 240, 245); }</style>
         <style type='text/css'>span.cross-ref-title {
  font-size: 140%;
@@ -575,13 +575,13 @@ span.run100 {
       <tbody>
         <tr class='light'>
           <td>
-            <a href='lib-keybox-storage-container_rb.html'>lib/keybox/storage/container.rb</a>
+            <a href='lib-keybox-error_rb.html'>lib/keybox/error.rb</a>
           </td>
           <td class='value'>
-            <tt>97</tt>
+            <tt>3</tt>
           </td>
           <td class='value'>
-            <tt>64</tt>
+            <tt>3</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
@@ -617,103 +617,9 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked1"><a name="line1" /> 1 require 'keybox/cipher'
-</span><span class="marked0"><a name="line2" /> 2 require 'keybox/digest'
-</span><span class="marked1"><a name="line3" /> 3 require 'keybox/storage/record'
-</span><span class="marked0"><a name="line4" /> 4 require 'keybox/uuid'
-</span><span class="marked1"><a name="line5" /> 5 require 'keybox/randomizer'
-</span><span class="marked0"><a name="line6" /> 6 require 'keybox/error'
-</span><span class="marked1"><a name="line7" /> 7 require 'openssl'
-</span><span class="marked0"><a name="line8" /> 8 require 'yaml'
-</span><span class="inferred1"><a name="line9" /> 9 
-</span><span class="marked0"><a name="line10" />10 module Keybox
-</span><span class="marked1"><a name="line11" />11     module Storage
-</span><span class="marked0"><a name="line12" />12         class Container &lt; Keybox::Storage::Record
-</span><span class="inferred1"><a name="line13" />13 
-</span><span class="marked0"><a name="line14" />14             ITERATIONS = 2048 
-</span><span class="marked1"><a name="line15" />15             def initialize(passphrase,path)
-</span><span class="marked0"><a name="line16" />16                 super()
-</span><span class="inferred1"><a name="line17" />17 
-</span><span class="marked0"><a name="line18" />18                 @path        = path
-</span><span class="marked1"><a name="line19" />19                 @passphrase  = passphrase
-</span><span class="inferred0"><a name="line20" />20 
-</span><span class="marked1"><a name="line21" />21                 if not load_from_file then
-</span><span class="marked0"><a name="line22" />22                     self.uuid                       = Keybox::UUID.new
-</span><span class="marked1"><a name="line23" />23                     self.version                    = Keybox::VERSION
-</span><span class="inferred0"><a name="line24" />24                     
-</span><span class="marked1"><a name="line25" />25                     self.key_calc_iterations        = ITERATIONS
-</span><span class="marked0"><a name="line26" />26                     self.key_digest_salt            = Keybox::RandomDevice.random_bytes(32)
-</span><span class="marked1"><a name="line27" />27                     self.key_digest_algorithm       = Keybox::Digest::DEFAULT_ALGORITHM
-</span><span class="marked0"><a name="line28" />28                     self.key_digest                 = calculated_key_digest(passphrase)
-</span><span class="inferred1"><a name="line29" />29 
-</span><span class="marked0"><a name="line30" />30                     self.record_init_vector         = Keybox::RandomDevice.random_bytes(16)
-</span><span class="marked1"><a name="line31" />31                     self.record_cipher_algorithm    = Keybox::Cipher::DEFAULT_ALGORITHM
-</span><span class="inferred0"><a name="line32" />32 
-</span><span class="marked1"><a name="line33" />33                     self.record_digest_salt         = Keybox::RandomDevice.random_bytes(32)
-</span><span class="marked0"><a name="line34" />34                     self.record_digest_algorithm    = Keybox::Digest::DEFAULT_ALGORITHM
-</span><span class="marked1"><a name="line35" />35                     self.record_data                = &quot;&quot;
-</span><span class="inferred0"><a name="line36" />36                 end
-</span><span class="inferred1"><a name="line37" />37             end
-</span><span class="inferred0"><a name="line38" />38 
-</span><span class="inferred1"><a name="line39" />39             #
-</span><span class="inferred0"><a name="line40" />40             # load from file, if this is successful then replace the
-</span><span class="inferred1"><a name="line41" />41             # existing member fields on this instance with the data from
-</span><span class="inferred0"><a name="line42" />42             # the file
-</span><span class="inferred1"><a name="line43" />43             #
-</span><span class="marked0"><a name="line44" />44             def load_from_file
-</span><span class="marked1"><a name="line45" />45                 return false unless File.exists?(@path)
-</span><span class="marked0"><a name="line46" />46                 return false unless tmp = YAML.load_file(@path)
-</span><span class="marked1"><a name="line47" />47                 @creation_time      = tmp.creation_time
-</span><span class="marked0"><a name="line48" />48                 @modification_time  = tmp.modification_time
-</span><span class="marked1"><a name="line49" />49                 @last_access_time   = tmp.last_access_time
-</span><span class="marked0"><a name="line50" />50                 @data_members       = tmp.data_members
-</span><span class="marked1"><a name="line51" />51                 validate_passphrase
-</span><span class="marked0"><a name="line52" />52                 decrypt_data
-</span><span class="marked1"><a name="line53" />53                 validate_decryption
-</span><span class="marked0"><a name="line54" />54                 true
-</span><span class="inferred1"><a name="line55" />55             end
-</span><span class="inferred0"><a name="line56" />56 
-</span><span class="inferred1"><a name="line57" />57             #
-</span><span class="inferred0"><a name="line58" />58             # save the current container to a file
-</span><span class="inferred1"><a name="line59" />59             #
-</span><span class="marked0"><a name="line60" />60             def save(path = @path)
-</span><span class="marked1"><a name="line61" />61                 File.open(path,&quot;w&quot;) do |f|
-</span><span class="marked0"><a name="line62" />62                     f.write(self.to_yaml)
-</span><span class="inferred1"><a name="line63" />63                 end
-</span><span class="marked0"><a name="line64" />64             end
-</span><span class="inferred1"><a name="line65" />65 
-</span><span class="inferred0"><a name="line66" />66             #
-</span><span class="inferred1"><a name="line67" />67             # calculate the encryption key from the initial passphrase
-</span><span class="inferred0"><a name="line68" />68             #
-</span><span class="marked1"><a name="line69" />69             def calculated_key(passphrase)
-</span><span class="marked0"><a name="line70" />70                 key = self.key_digest_salt + passphrase
-</span><span class="marked1"><a name="line71" />71                 self.key_calc_iterations.times do 
-</span><span class="marked0"><a name="line72" />72                     key = Keybox::Digest::CLASSES[self.key_digest_algorithm].digest(key)
-</span><span class="inferred1"><a name="line73" />73                 end
-</span><span class="marked0"><a name="line74" />74                 return key
-</span><span class="inferred1"><a name="line75" />75             end
-</span><span class="inferred0"><a name="line76" />76 
-</span><span class="inferred1"><a name="line77" />77             # 
-</span><span class="inferred0"><a name="line78" />78             # calculate the key digest of the encryption key
-</span><span class="inferred1"><a name="line79" />79             #
-</span><span class="marked0"><a name="line80" />80             def calculated_key_digest(passphrase)
-</span><span class="marked1"><a name="line81" />81                 Keybox::Digest::CLASSES[self.key_digest_algorithm].hexdigest(calculated_key(passphrase))
-</span><span class="marked0"><a name="line82" />82             end
-</span><span class="inferred1"><a name="line83" />83 
-</span><span class="marked0"><a name="line84" />84             private
-</span><span class="inferred1"><a name="line85" />85 
-</span><span class="inferred0"><a name="line86" />86             #
-</span><span class="inferred1"><a name="line87" />87             # calculate the key digest of the input pass phrase and
-</span><span class="inferred0"><a name="line88" />88             # compare that to the digest in the data file.  If they are
-</span><span class="inferred1"><a name="line89" />89             # the same, then the pass phrase should be the correct one
-</span><span class="inferred0"><a name="line90" />90             # for the data.
-</span><span class="inferred1"><a name="line91" />91             #
-</span><span class="marked0"><a name="line92" />92             def validate_passphrase
-</span><span class="marked1"><a name="line93" />93                 raise Keybox::ValidationError, &quot;Passphrase digests do not match.  The passphrase given does not decrypt the data in this file&quot; unless key_digest == calculated_key_digest(@passphrase)
-</span><span class="marked0"><a name="line94" />94             end
-</span><span class="inferred1"><a name="line95" />95         end
-</span><span class="inferred0"><a name="line96" />96     end
-</span><span class="inferred1"><a name="line97" />97 end
+    </table><pre><span class="marked1"><a name="line1" />1 module Keybox
+</span><span class="marked0"><a name="line2" />2     class ValidationError &lt; StandardError ; end
+</span><span class="inferred1"><a name="line3" />3 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />
