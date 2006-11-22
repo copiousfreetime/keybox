@@ -11,6 +11,8 @@ module Keybox
     module Storage
         class Container < Keybox::Storage::Record
 
+            attr_reader :records
+
             ITERATIONS = 2048 
             def initialize(passphrase,path)
                 super()
@@ -86,9 +88,21 @@ module Keybox
                 Keybox::Digest::CLASSES[self.key_digest_algorithm].hexdigest(calculated_key(passphrase))
             end
 
+            #
+            # Add a record to the system
+            #
             def <<(obj)
+                if obj.respond_to?("needs_container_passphrase?") and obj.needs_container_passphrase? then
+                    obj.container_passphrase = @passphrase
+                end
                 @records << obj
             end
+
+            def find_by_url(url)
+                regexp = Regexp.new(url)
+                @records.find_all { |r| regexp.match(r.url) }
+            end
+
             private
 
             #
@@ -145,6 +159,14 @@ module Keybox
 
             def load_records
                 @records = YAML.load(@decrypted_yaml)
+
+                # if a record wants, it can have a reference to the
+                # container
+                @records.each do |record|
+                    if record.respond_to?("needs_container_passphrase?") and record.needs_container_passphrase? then
+                        record.container_passphrase = @passphrase
+                    end
+                end
             end
         end
     end

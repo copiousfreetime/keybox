@@ -15,7 +15,7 @@ module Keybox
 
         attr_writer :master_password
 
-        def initialize(master_password)
+        def initialize(master_password = "")
             @master_password = master_password
             @digest_class    = ::Digest::SHA1
         end

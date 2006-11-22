@@ -3,6 +3,7 @@ require 'keybox/error'
 require 'keybox/entry'
 require 'openssl'
 require 'tempfile'
+require 'yaml'
 
 context 'a storage container' do
     setup do
@@ -10,9 +11,11 @@ context 'a storage container' do
         @keybox_file = Tempfile.new("keybox").path
         @testing_file = "/tmp/testing.yml"
         @container   = Keybox::Storage::Container.new(@passphrase, @keybox_file)
-        @container << Keybox::AccountEntry.new("localhost","guest", "rubyrocks")
+        @container << Keybox::HostAccountEntry.new("test account","localhost","guest", "rubyrocks")
+        @container << Keybox::URLAccountEntry.new("the times", "http://www.nytimes.com", "rubyhacker")
         @container.save
     end
+
     teardown do
         File.unlink(@testing_file) if File.exists?(@testing_file)
     end
@@ -44,5 +47,14 @@ context 'a storage container' do
             Keybox::Storage::Container.new("i hate ruby", @testing_file)
         }.should_raise Keybox::ValidationError
 
+    end
+
+    specify "url accounts should have the correct password after save" do
+        @container.save(@testing_file)
+        new_container = Keybox::Storage::Container.new(@passphrase, @testing_file)
+        recs = new_container.find_by_url("nytimes")
+        new_container.records.size.should_equal 2
+        recs.size.should_equal 1
+        recs[0].password.should_equal "2f85a2e2f"
     end
 end
