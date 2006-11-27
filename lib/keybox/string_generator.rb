@@ -102,11 +102,11 @@ module Keybox
         ALL = LOWER_ASCII + UPPER_ASCII + NUMERAL_ASCII + SPECIAL_ASCII
 
         MAPPING = {
-            "l" => LOWER_ASCII,
-            "u" => UPPER_ASCII,
-            "n" => NUMERAL_ASCII,
-            "s" => SPECIAL_ASCII,
-            "a" => ALL
+            "lower"     => LOWER_ASCII,
+            "upper"     => UPPER_ASCII,
+            "numerical" => NUMERAL_ASCII,
+            "special"   => SPECIAL_ASCII,
+            "all"       => ALL
         }
     end
 

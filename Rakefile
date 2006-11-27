@@ -7,7 +7,7 @@ require 'spec/rake/spectask'
 require 'hoe'
 require 'keybox'
 
-Hoe.new('keybox', Keybox::VERSION) do |p|
+Hoe.new('keybox', Keybox::VERSION.join(".") do |p|
   p.rubyforge_name = 'keybox'
   # p.summary = 'FIX'
   # p.description = p.paragraphs_of('README.txt', 2..5).join("\n\n")

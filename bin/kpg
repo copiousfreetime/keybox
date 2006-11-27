@@ -4,114 +4,15 @@
 ########################################################################
 
 #----------------------------------------------------------------------
-# These applications are based upon the commandline gem.
-#----------------------------------------------------------------------
-require 'rubygems'
-require 'commandline'
-
-#----------------------------------------------------------------------
 # bootstrap
 #----------------------------------------------------------------------
 require File.expand_path(File.join(File.dirname(__FILE__),"..","lib","keybox"))
+require 'keybox/application/password_generator'
 
 #----------------------------------------------------------------------
-# application basics
+# instantiate the program and pass it the commandline parameters
 #----------------------------------------------------------------------
-module Keybox
-    class PasswordGenerator < CommandLine::Application
-        OPTION_LIST = %w(algorithm number_to_generate min_length
-                         max_length use_symbols require_symbols)
-       
-        OPTION_LIST.each do |o|
-            attr_reader o.to_sym
-        end
 
-        def initialize
-            version             Keybox::VERSION
-            author              Keybox::AUTHOR
-            copyright           Keybox::COPYRIGHT
-            synopsis            "[-aMnxhdv]" 
-            short_description   "generate random passwords in a manner similar to apg"
-            long_description    "kpg is a pure ruby implementation of most of the " + 
-                                "Automatic Password Generation program. "
+kpg = Keybox::Application::PasswordGenerator.new(ARGV)
+kpg.run
 
-            option :debug
-            option :version
-            option :help
-
-            option :names => %w(--algorithm -a),
-                   :arity => 1,
-                   :opt_description => "Pick the algorithm for password generation",
-                   :arg_description => "[r - (default) random, p - pronouncable]",
-                   :opt_found => lambda { |opt,name,arg| @algorithm = arg.first },
-                   :opt_not_found => lambda {  @algorithm = "r" }
-
-            option :names => %w(--number -n),
-                   :arity => 1,
-                   :opt_description => "Generate a number of passwords",
-                   :arg_description => "[Number of passwords to generate (default 6)]",
-                   :opt_found => lambda { |opt,name,arg| @number_to_generate = arg.first.to_i },
-                   :opt_not_found => lambda { @number_to_generate = 6 }
-
-            option :names => %w(--min-length -m),
-                   :arity => 1,
-                   :opt_description => "Minimum length of the password",
-                   :arg_description => "[length in letters]",
-                   :opt_found => lambda { |opt,name,arg| @min_length = arg.first.to_i },
-                   :opt_not_found => lambda { @min_length = 8 }
-            
-            option :names => %w(--max-length -x),
-                   :arity => 1,
-                   :opt_description => "Maximum length of the password",
-                   :arg_description => "[length in letters]",
-                   :opt_found => lambda { |opt,name,arg| @max_length = arg.first.to_i },
-                   :opt_not_found => lambda { @max_length = 10 }
-
-            option :names => %w(--use -u),
-                   :arity => [1,4],
-                   :opt_description => "Use the specified symbol sets",
-                   :arg_description => "[s - special, n - numbers, u - uppercase, l - lowercase, a - all (default)]",
-                   :opt_found => lambda { |opt,name,arg| @use_symbols = options_to_symbol_sets(arg) },
-                   :opt_not_found => lambda { @use_symbols = options_to_symbol_sets(["a"]) }
-            
-            option :names => %w(--require -r),
-                   :arity => [1,4],
-                   :opt_description => "Require the specified symbol sets",
-                   :arg_description => "[s - special, n - numbers, u - uppercase, l - lowercase, a - all]",
-                   :opt_found => lambda { |opt,name,arg| @require_symbols = options_to_symbol_sets(arg) },
-                   :opt_not_found => lambda { @require_symbols = options_to_symbol_sets([]) }
-        end
-
-        def options_to_symbol_sets(args)
-            sets = []
-            args.each do |a|
-                a.split(//).each do |l|
-                    sets << Keybox::SymbolSet::MAPPING[l]
-                end
-            end
-            sets
-        end
-
-        def create_generator
-            if @algorithm == "p" then
-                generator = Keybox::CharGramGenerator.new
-            else
-                generator = Keybox::SymbolSetGenerator.new(@use_symbols)
-                @require_symbols.each do |r|
-                    generator.required_sets << r
-                end
-            end
-            
-            generator.max_length = [@max_length, @min_length].max
-            generator.min_length = [@max_length, @min_length].min
-            return generator
-        end
-
-        def main
-            generator = create_generator
-            @number_to_generate.times do 
-                puts generator.generate
-            end
-        end
-    end
-end
