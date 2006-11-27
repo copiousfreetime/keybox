@@ -9,14 +9,9 @@ module Keybox
     module Application   
         class PasswordGenerator
 
-            ALGORITHMS  = OptionParser::CompletingHash.new
-            ALGORITHMS["random"]        = :random
-            ALGORITHMS["pronounceable"] = :pronounceable
-
-            SYMBOL_SETS = OptionParser::CompletingHash.new
-            Keybox::SymbolSet::MAPPING.keys.each do |k|
-                SYMBOL_SETS[k] = k
-            end
+            ALGORITHMS  =  { "random"        => :random, 
+                             "pronounceable" => :pronounceable }
+            SYMBOL_SETS = Keybox::SymbolSet::MAPPING.keys
 
             attr_reader   :options
             attr_reader   :error_message
@@ -56,7 +51,8 @@ module Keybox
                     op.on("-aALGORITHM", "--algorithm ALGORITHM", ALGORITHMS.keys,
                           "Select the algorithm for password generation",
                           " #{ALGORITHMS.keys.join(', ')}") do |alg|
-                            @options.algorithm = ALGORITHMS.match(alg)[1]
+                           key = ALGORITHMS.keys.find { |x| x =~ /^#{alg}/ }
+                            @options.algorithm = ALGORITHMS[key]
                     end
 
                     op.on("-h", "--help") do 
@@ -80,27 +76,23 @@ module Keybox
 
                     op.on("-uLIST", "--use symbol,set,list", Array,
                           "Use only one ore more of the following symbol sets:",
-                          " [#{SYMBOL_SETS.keys.join(', ')}]") do |list|
+                          " [#{SYMBOL_SETS.join(', ')}]") do |list|
                         list.each do |symbol_set|
-                            if SYMBOL_SETS.match(symbol_set).nil? then
-                                @error_message = "#{symbol_set} is not one of #{SYMBOL_SETS.keys.join(', ')}}"
-                                break
-                            end
+                            sym = SYMBOL_SETS.find { |s| s =~ /^#{symbol_set}/ }
+                            raise OptionParser::InvalidArgument, ": #{symbol_set} does not match any of #{SYMBOL_SETS.join(', ')}" if sym.nil?
                         end
                         
-                        @options.use_symbols = options_to_symbol_sets(list) unless @error_message
+                        @options.use_symbols = options_to_symbol_sets(list)
                     end
 
                     op.on("-rLIST","--require symbol,set,list", Array,
                           "Require passwords have letters from one or more of the following symbol sets:",
-                          " [#{SYMBOL_SETS.keys.join(', ')}]") do |list|
+                          " [#{SYMBOL_SETS.join(', ')}]") do |list|
                         list.each do |symbol_set|
-                            if SYMBOL_SETS.match(symbol_set).nil? then
-                                @error_message = "#{symbol_set} is not one of #{SYMBOL_SETS.keys.join(', ')}}"
-                                break
-                            end
+                            sym = SYMBOL_SETS.find { |s| s =~ /^#{symbol_set}/ }
+                            raise OptionParser::InvalidArgument, ": #{symbol_set} does not match any of #{SYMBOL_SETS.join(', ')}" if sym.nil?
                         end
-                        @options.require_symbols = options_to_symbol_sets(list) unless @error_message
+                        @options.require_symbols = options_to_symbol_sets(list)
                     end
                 end
             end
@@ -122,8 +114,8 @@ module Keybox
             def options_to_symbol_sets(args)
                 sets = []
                 args.each do |a|
-                    key = SYMBOL_SETS.match(a)[1]
-                    sets << Keybox::SymbolSet::MAPPING[key]
+                    sym = SYMBOL_SETS.find { |s| s =~ /^#{a}/ }
+                    sets << Keybox::SymbolSet::MAPPING[sym]
                 end
                 sets
             end
