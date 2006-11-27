@@ -9,20 +9,41 @@ module Keybox
     module Application   
         class PasswordGenerator
 
-            ALGORITHM_LIST  = %w(random pronouncable)
-            SYMBOL_SET_LIST = Keybox::SymbolSet::MAPPING.keys
+            ALGORITHMS  = OptionParser::CompletingHash.new
+            ALGORITHMS["random"]        = :random
+            ALGORITHMS["pronounceable"] = :pronounceable
 
-            attr_reader :options
+            SYMBOL_SETS = OptionParser::CompletingHash.new
+            Keybox::SymbolSet::MAPPING.keys.each do |k|
+                SYMBOL_SETS[k] = k
+            end
 
-            def initialize(argv)
-                @options = self.default_options
-                @parser  = self.option_parser
+            attr_reader   :options
+            attr_reader   :error_message
+
+            # these are here for testing instrumentation
+            attr_accessor :stdout
+            attr_accessor :stderr
+
+            def initialize(argv = [])
+                # make sure we have an empty array, we could be passed
+                # nil explicitly
+                argv ||= []
+
+                # for testing instrumentation
+                @stdout = $stdout
+                @stderr = $stderr
+
+                @options        = self.default_options
+                @parser         = self.option_parser
+                @error_message  = nil
+
                 begin
                     @parser.parse!(argv)
                 rescue OptionParser::ParseError => pe
-                    puts "#{@parser.program_name}: #{pe}"
-                    puts "Try `#{@parser.program_name} --help` for more information"
-                    exit 1
+                    msg = ["#{@parser.program_name}: #{pe}",
+                           "Try `#{@parser.program_name} --help` for more information"]
+                    @error_message = msg.join("\n") 
                 end 
             end
 
@@ -32,15 +53,14 @@ module Keybox
 
                     op.separator "Options:"
 
-                    op.on("-aALGORITHM", "--algorithm ALGORITHM", ALGORITHM_LIST,
+                    op.on("-aALGORITHM", "--algorithm ALGORITHM", ALGORITHMS.keys,
                           "Select the algorithm for password generation",
-                          " #{ALGORITHM_LIST.join(', ')}") do |alg|
-                            @options.algorithm = alg.to_sym
+                          " #{ALGORITHMS.keys.join(', ')}") do |alg|
+                            @options.algorithm = ALGORITHMS.match(alg)[1]
                     end
 
                     op.on("-h", "--help") do 
-                        puts op
-                        exit 0
+                        @options.show_help = true
                     end
 
                     op.on("-mLENGTH ", "--min-length LENGTH", Integer,
@@ -53,31 +73,34 @@ module Keybox
                         @options.max_length = len
                     end
                     
-                    op.on("-nNUMER", "--number NUMBER", :REQUIRED, Integer,
+                    op.on("-nNUMER", "--number NUMBER", Integer,
                           "Generate NUMBER of passwords (default 6)") do |n|
-                        @options.number = n
+                        @options.number_to_generate = n
                     end
 
                     op.on("-uLIST", "--use symbol,set,list", Array,
                           "Use only one ore more of the following symbol sets:",
-                          " [#{SYMBOL_SET_LIST.join(', ')}]") do |list|
+                          " [#{SYMBOL_SETS.keys.join(', ')}]") do |list|
                         list.each do |symbol_set|
-                            if not SYMBOL_SET_LIST.include?(symbol_set) then
-                                raise OptionParser::InvalidArgument, "#{symbol_set} is not one of #{SYMBOL_SET_LIST.join(', ')}}" 
+                            if SYMBOL_SETS.match(symbol_set).nil? then
+                                @error_message = "#{symbol_set} is not one of #{SYMBOL_SETS.keys.join(', ')}}"
+                                break
                             end
                         end
-                        @options.use_symbols = options_to_symbol_sets(list)
+                        
+                        @options.use_symbols = options_to_symbol_sets(list) unless @error_message
                     end
 
                     op.on("-rLIST","--require symbol,set,list", Array,
                           "Require passwords have letters from one or more of the following symbol sets:",
-                          " [#{SYMBOL_SET_LIST.join(', ')}]") do |list|
+                          " [#{SYMBOL_SETS.keys.join(', ')}]") do |list|
                         list.each do |symbol_set|
-                            if not SYMBOL_SET_LIST.include?(symbol_set) then
-                                raise OptionParser::InvalidArgument, "#{symbol_set} is not one of #{SYMBOL_SET_LIST.join(', ')}}" 
+                            if SYMBOL_SETS.match(symbol_set).nil? then
+                                @error_message = "#{symbol_set} is not one of #{SYMBOL_SETS.keys.join(', ')}}"
+                                break
                             end
                         end
-                        @options.require_symbols = options_to_symbol_sets(list)
+                        @options.require_symbols = options_to_symbol_sets(list) unless @error_message
                     end
                 end
             end
@@ -86,7 +109,7 @@ module Keybox
                 options = OpenStruct.new
                 options.debug               = 0
                 options.version             = Keybox::VERSION
-                options.help                = false
+                options.show_help           = false
                 options.algorithm           = :random
                 options.number_to_generate  = 6
                 options.min_length          = 8
@@ -99,7 +122,8 @@ module Keybox
             def options_to_symbol_sets(args)
                 sets = []
                 args.each do |a|
-                    sets << Keybox::SymbolSet::MAPPING[a]
+                    key = SYMBOL_SETS.match(a)[1]
+                    sets << Keybox::SymbolSet::MAPPING[key]
                 end
                 sets
             end
@@ -115,16 +139,28 @@ module Keybox
                     end
                 end
                 
-                generator.max_length = [@options.max_length, @options.min_length].max
-                generator.min_length = [@options.max_length, @options.min_length].min
+                generator.max_length = [@options.min_length,@options.max_length].max
+                generator.min_length = [@options.min_length,@options.max_length].min
+
+                # record what we set the generator to
+                @options.max_length = generator.max_length
+                @options.min_length = generator.min_length
 
                 return generator
             end
 
             def run
-                generator = create_generator
-                @options.number_to_generate.times do 
-                    puts generator.generate
+                if @error_message then
+                    @stderr.puts @error_message 
+                    exit 1
+                elsif @options.show_help then
+                    @stdout.puts @parser
+                    exit 0
+                else
+                    generator = create_generator
+                    @options.number_to_generate.times do 
+                        @stdout.puts generator.generate
+                    end
                 end
             end
         end

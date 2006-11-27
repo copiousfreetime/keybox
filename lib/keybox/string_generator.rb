@@ -34,12 +34,12 @@ module Keybox
         end
 
         def valid?
-            raise "max_length (#{max_length}) must be greater than or equal to min_length (#{min_length})" if max_length < min_length
-            @chunks.join('').size > @min_length 
+            raise Keybox::ValidationError, "max_length (#{max_length}) must be greater than or equal to min_length (#{min_length})", caller if max_length < min_length
+            @chunks.join('').size >= @min_length 
         end
 
         def generate_chunk
-            raise "generate_chunk Not Implemented"
+            raise Keybox::KeyboxError, "generate_chunk Not Implemented"
         end
 
     end

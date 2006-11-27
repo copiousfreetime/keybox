@@ -16,3 +16,4 @@ require 'keybox/application/password_generator'
 kpg = Keybox::Application::PasswordGenerator.new(ARGV)
 kpg.run
 
+

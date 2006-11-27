@@ -5,18 +5,18 @@ context "string generator" do
     end
 
     specify "should not be used alone" do
-        lambda { @generator.generate }.should_raise
+        lambda { @generator.generate }.should_raise Keybox::KeyboxError
     end
 
     specify "cannot have a min length greater than a max length" do
         @generator.min_length = 90
-        lambda { @generator.generate }.should_raise
+        lambda { @generator.generate }.should_raise Keybox::ValidationError
         @generator.min_length = 8
     end
     
     specify "cannot have a max length less than a min length" do
         @generator.max_length = 2
-        lambda { @generator.generate }.should_raise
+        lambda { @generator.generate }.should_raise Keybox::ValidationError
         @generator.max_length = 10
     end
 

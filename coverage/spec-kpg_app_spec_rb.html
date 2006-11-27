@@ -1,7 +1,7 @@
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
       <head>
-        <title>lib/keybox/cipher.rb - C0 code coverage information</title>
+        <title>spec/kpg_app_spec.rb - C0 code coverage information</title>
         <style type='text/css'>body { background-color: rgb(240, 240, 245); }</style>
         <style type='text/css'>span.cross-ref-title {
  font-size: 140%;
@@ -575,24 +575,24 @@ span.run100 {
       <tbody>
         <tr class='light'>
           <td>
-            <a href='lib-keybox-cipher_rb.html'>lib/keybox/cipher.rb</a>
+            <a href='spec-kpg_app_spec_rb.html'>spec/kpg_app_spec.rb</a>
           </td>
           <td class='value'>
-            <tt>6</tt>
+            <tt>121</tt>
           </td>
           <td class='value'>
-            <tt>6</tt>
+            <tt>98</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
               <tr>
                 <td>
-                  <tt>100.0%</tt>&nbsp;</td>
+                  <tt>95.0%</tt>&nbsp;</td>
                 <td>
                   <table cellspacing='0' class='percent_graph' cellpadding='0' width='100'>
                     <tr>
-                      <td class='covered' width='100' />
-                      <td class='uncovered' width='0' />
+                      <td class='covered' width='95' />
+                      <td class='uncovered' width='5' />
                     </tr>
                   </table>
                 </td>
@@ -603,12 +603,12 @@ span.run100 {
             <table cellspacing='0' cellpadding='0' align='right'>
               <tr>
                 <td>
-                  <tt>100.0%</tt>&nbsp;</td>
+                  <tt>93.9%</tt>&nbsp;</td>
                 <td>
                   <table cellspacing='0' class='percent_graph' cellpadding='0' width='100'>
                     <tr>
-                      <td class='covered' width='100' />
-                      <td class='uncovered' width='0' />
+                      <td class='covered' width='94' />
+                      <td class='uncovered' width='6' />
                     </tr>
                   </table>
                 </td>
@@ -617,12 +617,127 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked1"><a name="line1" />1 module Keybox
-</span><span class="marked0"><a name="line2" />2     module Cipher
-</span><span class="marked1"><a name="line3" />3         AES_256             = &quot;aes-256-cbc&quot;
-</span><span class="marked0"><a name="line4" />4         DEFAULT_ALGORITHM   = AES_256
-</span><span class="inferred1"><a name="line5" />5     end
-</span><span class="inferred0"><a name="line6" />6 end
+    </table><pre><span class="marked0"><a name="line1" />  1 require 'keybox'
+</span><span class="marked1"><a name="line2" />  2 require 'keybox/application/password_generator'
+</span><span class="inferred0"><a name="line3" />  3 
+</span><span class="marked1"><a name="line4" />  4 context &quot;Keybox Password Generator Application&quot; do
+</span><span class="marked0"><a name="line5" />  5     setup do
+</span><span class="inferred1"><a name="line6" />  6     end
+</span><span class="inferred0"><a name="line7" />  7 
+</span><span class="marked1"><a name="line8" />  8     specify &quot;nil argv should do nothing&quot; do
+</span><span class="marked0"><a name="line9" />  9         kpg = Keybox::Application::PasswordGenerator.new(nil)
+</span><span class="marked1"><a name="line10" /> 10         kpg.error_message.should_be nil
+</span><span class="marked0"><a name="line11" /> 11     end
+</span><span class="inferred1"><a name="line12" /> 12 
+</span><span class="marked0"><a name="line13" /> 13     specify &quot;invalid options set the error message, exit 1 and have output on stderr&quot; do
+</span><span class="marked1"><a name="line14" /> 14         kpg = Keybox::Application::PasswordGenerator.new([&quot;--invalid-option&quot;])
+</span><span class="marked0"><a name="line15" /> 15         kpg.stderr = StringIO.new
+</span><span class="marked1"><a name="line16" /> 16         begin
+</span><span class="marked0"><a name="line17" /> 17             kpg.run
+</span><span class="inferred1"><a name="line18" /> 18         rescue SystemExit =&gt; se
+</span><span class="marked0"><a name="line19" /> 19             kpg.error_message.should_satisfy { |msg| msg =~ /Try.*--help/m }
+</span><span class="marked1"><a name="line20" /> 20             kpg.stderr.string.should_satisfy { |msg| msg =~ /Try.*--help/m }
+</span><span class="marked0"><a name="line21" /> 21             se.status.should_equal 1
+</span><span class="inferred1"><a name="line22" /> 22         end
+</span><span class="marked0"><a name="line23" /> 23     end
+</span><span class="inferred1"><a name="line24" /> 24 
+</span><span class="marked0"><a name="line25" /> 25     specify &quot;can set the algorithm&quot; do
+</span><span class="marked1"><a name="line26" /> 26         kpg = Keybox::Application::PasswordGenerator.new([&quot;--alg&quot;, &quot;pron&quot;])
+</span><span class="marked0"><a name="line27" /> 27         kpg.stdout = StringIO.new
+</span><span class="marked1"><a name="line28" /> 28         kpg.run
+</span><span class="marked0"><a name="line29" /> 29         kpg.options.algorithm.should_equal :pronounceable
+</span><span class="marked1"><a name="line30" /> 30     end
+</span><span class="inferred0"><a name="line31" /> 31     
+</span><span class="marked1"><a name="line32" /> 32     specify &quot;can specify the number of passwords created &quot; do
+</span><span class="marked0"><a name="line33" /> 33         kpg = Keybox::Application::PasswordGenerator.new([&quot;--num&quot;, &quot;4&quot;])
+</span><span class="marked1"><a name="line34" /> 34         kpg.stdout = StringIO.new
+</span><span class="marked0"><a name="line35" /> 35         kpg.run
+</span><span class="inferred1"><a name="line36" /> 36 
+</span><span class="marked0"><a name="line37" /> 37         kpg.options.number_to_generate.should_equal 4
+</span><span class="marked1"><a name="line38" /> 38         kpg.stdout.string.split(/\s+/).size.should_equal 4
+</span><span class="marked0"><a name="line39" /> 39     end
+</span><span class="inferred1"><a name="line40" /> 40 
+</span><span class="marked0"><a name="line41" /> 41     specify &quot;help has output on stdout and exits 0&quot; do
+</span><span class="marked1"><a name="line42" /> 42         kpg = Keybox::Application::PasswordGenerator.new([&quot;--h&quot;]) 
+</span><span class="marked0"><a name="line43" /> 43         kpg.stdout = StringIO.new
+</span><span class="marked1"><a name="line44" /> 44         begin
+</span><span class="marked0"><a name="line45" /> 45             kpg.run
+</span><span class="inferred1"><a name="line46" /> 46         rescue SystemExit =&gt; se
+</span><span class="marked0"><a name="line47" /> 47             se.status.should_equal 0
+</span><span class="marked1"><a name="line48" /> 48             kpg.stdout.string.length.should_be &gt; 0
+</span><span class="inferred0"><a name="line49" /> 49         end
+</span><span class="marked1"><a name="line50" /> 50     end
+</span><span class="inferred0"><a name="line51" /> 51 
+</span><span class="marked1"><a name="line52" /> 52     specify &quot;minimum length can be set and all generated passwords will have length &gt;= minimum length&quot; do
+</span><span class="marked0"><a name="line53" /> 53         kpg = Keybox::Application::PasswordGenerator.new([&quot;--min&quot;, &quot;4&quot;]) 
+</span><span class="marked1"><a name="line54" /> 54         kpg.stdout = StringIO.new
+</span><span class="marked0"><a name="line55" /> 55         kpg.run
+</span><span class="inferred1"><a name="line56" /> 56 
+</span><span class="marked0"><a name="line57" /> 57         kpg.options.min_length.should_equal 4
+</span><span class="marked1"><a name="line58" /> 58         kpg.stdout.string.split(&quot;\n&quot;).each do |pass|
+</span><span class="marked0"><a name="line59" /> 59             pass.length.should_satisfy { |s| s &gt;= kpg.options.min_length }
+</span><span class="inferred1"><a name="line60" /> 60         end
+</span><span class="marked0"><a name="line61" /> 61     end
+</span><span class="inferred1"><a name="line62" /> 62 
+</span><span class="marked0"><a name="line63" /> 63     specify &quot;maximum length can be set and all generated passwords will have length &lt;= maximum length&quot; do
+</span><span class="marked1"><a name="line64" /> 64         kpg = Keybox::Application::PasswordGenerator.new([&quot;--max&quot;, &quot;4&quot;, &quot;--min&quot;, &quot;3&quot;]) 
+</span><span class="marked0"><a name="line65" /> 65         kpg.stdout = StringIO.new
+</span><span class="marked1"><a name="line66" /> 66         kpg.run
+</span><span class="inferred0"><a name="line67" /> 67 
+</span><span class="marked1"><a name="line68" /> 68         kpg.options.max_length.should_equal 4
+</span><span class="marked0"><a name="line69" /> 69         kpg.stdout.string.split(&quot;\n&quot;).each do |pass|
+</span><span class="marked1"><a name="line70" /> 70             pass.length.should_satisfy { |s| s &lt;= 4 }
+</span><span class="inferred0"><a name="line71" /> 71         end
+</span><span class="marked1"><a name="line72" /> 72     end
+</span><span class="inferred0"><a name="line73" /> 73 
+</span><span class="marked1"><a name="line74" /> 74     specify &quot;setting an invalid required symbol set exits 1 and outputs data on stderr&quot; do
+</span><span class="marked0"><a name="line75" /> 75         kpg = Keybox::Application::PasswordGenerator.new([&quot;--req&quot;,&quot;bunk&quot;])
+</span><span class="marked1"><a name="line76" /> 76         kpg.stderr = StringIO.new
+</span><span class="marked0"><a name="line77" /> 77         begin
+</span><span class="marked1"><a name="line78" /> 78             kpg.run
+</span><span class="inferred0"><a name="line79" /> 79         rescue SystemExit =&gt; se
+</span><span class="marked1"><a name="line80" /> 80             kpg.error_message.should_satisfy { |msg| msg =~ /Try.*--help/m }
+</span><span class="uncovered0"><a name="line81" /> 81             kpg.stderr.string.should_satisfy { |msg| msg =~ /Try.*--help/m }
+</span><span class="uncovered1"><a name="line82" /> 82             se.status.should_equal 1
+</span><span class="uncovered0"><a name="line83" /> 83         end
+</span><span class="inferred1"><a name="line84" /> 84  
+</span><span class="marked0"><a name="line85" /> 85     end
+</span><span class="inferred1"><a name="line86" /> 86 
+</span><span class="marked0"><a name="line87" /> 87     specify &quot;setting an invalid use symbol set exits 1 and outputs data on stderr&quot; do
+</span><span class="marked1"><a name="line88" /> 88         kpg = Keybox::Application::PasswordGenerator.new([&quot;--use&quot;,&quot;bunk&quot;])
+</span><span class="marked0"><a name="line89" /> 89         kpg.stderr = StringIO.new
+</span><span class="marked1"><a name="line90" /> 90         begin
+</span><span class="marked0"><a name="line91" /> 91             kpg.run
+</span><span class="inferred1"><a name="line92" /> 92         rescue SystemExit =&gt; se
+</span><span class="marked0"><a name="line93" /> 93             kpg.error_message.should_satisfy { |msg| msg =~ /Try.*--help/m }
+</span><span class="uncovered1"><a name="line94" /> 94             kpg.stderr.string.should_satisfy { |msg| msg =~ /Try.*--help/m }
+</span><span class="uncovered0"><a name="line95" /> 95             se.status.should_equal 1
+</span><span class="uncovered1"><a name="line96" /> 96         end
+</span><span class="inferred0"><a name="line97" /> 97  
+</span><span class="marked1"><a name="line98" /> 98     end
+</span><span class="inferred0"><a name="line99" /> 99 
+</span><span class="marked1"><a name="line100" />100     specify &quot;setting an valid use symbol works&quot; do
+</span><span class="marked0"><a name="line101" />101         kpg = Keybox::Application::PasswordGenerator.new([&quot;--use&quot;,&quot;l&quot;])
+</span><span class="marked1"><a name="line102" />102         kpg.stdout = StringIO.new
+</span><span class="marked0"><a name="line103" />103         kpg.run
+</span><span class="marked1"><a name="line104" />104         kpg.options.use_symbols.should_include Keybox::SymbolSet::LOWER_ASCII
+</span><span class="marked0"><a name="line105" />105         kpg.stdout.string.split(/\s+/).size.should_equal 6
+</span><span class="marked1"><a name="line106" />106     end
+</span><span class="inferred0"><a name="line107" />107 
+</span><span class="marked1"><a name="line108" />108     specify &quot;setting an valid required symbol works&quot; do
+</span><span class="marked0"><a name="line109" />109         kpg = Keybox::Application::PasswordGenerator.new([&quot;--req&quot;,&quot;l&quot;])
+</span><span class="marked1"><a name="line110" />110         kpg.stdout = StringIO.new
+</span><span class="marked0"><a name="line111" />111         kpg.run
+</span><span class="marked1"><a name="line112" />112         kpg.options.require_symbols.should_include Keybox::SymbolSet::LOWER_ASCII
+</span><span class="marked0"><a name="line113" />113         kpg.stdout.string.split(/\s+/).size.should_equal 6
+</span><span class="marked1"><a name="line114" />114     end
+</span><span class="inferred0"><a name="line115" />115 
+</span><span class="inferred1"><a name="line116" />116 
+</span><span class="inferred0"><a name="line117" />117 
+</span><span class="inferred1"><a name="line118" />118 
+</span><span class="inferred0"><a name="line119" />119 
+</span><span class="inferred1"><a name="line120" />120 end
+</span><span class="inferred0"><a name="line121" />121 
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />
