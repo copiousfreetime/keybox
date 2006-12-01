@@ -18,7 +18,7 @@ context "Keybox Password Generator Application" do
         rescue SystemExit => se
             kpg.error_message.should_satisfy { |msg| msg =~ /Try.*--help/m }
             kpg.stderr.string.should_satisfy { |msg| msg =~ /Try.*--help/m }
-            se.status.should_equal 1
+            se.status.should == 1
         end
     end
 
@@ -26,16 +26,15 @@ context "Keybox Password Generator Application" do
         kpg = Keybox::Application::PasswordGenerator.new(["--alg", "pron"])
         kpg.stdout = StringIO.new
         kpg.run
-        kpg.options.algorithm.should_equal :pronounceable
+        kpg.options.algorithm.should == :pronounceable
     end
     
     specify "can specify the number of passwords created " do
         kpg = Keybox::Application::PasswordGenerator.new(["--num", "4"])
         kpg.stdout = StringIO.new
         kpg.run
-
-        kpg.options.number_to_generate.should_equal 4
-        kpg.stdout.string.split(/\s+/).size.should_equal 4
+        kpg.options.number_to_generate.should_eql 4
+        kpg.stdout.string.split(/\s+/).size.should == 4
     end
 
     specify "help has output on stdout and exits 0" do
@@ -44,7 +43,7 @@ context "Keybox Password Generator Application" do
         begin
             kpg.run
         rescue SystemExit => se
-            se.status.should_equal 0
+            se.status.should_eql 0
             kpg.stdout.string.length.should_be > 0
         end
     end
@@ -54,7 +53,7 @@ context "Keybox Password Generator Application" do
         kpg.stdout = StringIO.new
         kpg.run
 
-        kpg.options.min_length.should_equal 4
+        kpg.options.min_length.should_eql 4
         kpg.stdout.string.split("\n").each do |pass|
             pass.length.should_satisfy { |s| s >= kpg.options.min_length }
         end
@@ -65,7 +64,7 @@ context "Keybox Password Generator Application" do
         kpg.stdout = StringIO.new
         kpg.run
 
-        kpg.options.max_length.should_equal 4
+        kpg.options.max_length.should_eql 4
         kpg.stdout.string.split("\n").each do |pass|
             pass.length.should_satisfy { |s| s <= 4 }
         end
@@ -79,7 +78,7 @@ context "Keybox Password Generator Application" do
         rescue SystemExit => se
             kpg.error_message.should_satisfy { |msg| msg =~ /Try.*--help/m }
             kpg.stderr.string.should_satisfy { |msg| msg =~ /Try.*--help/m }
-            se.status.should_equal 1
+            se.status.should == 1
         end
  
     end
@@ -92,7 +91,7 @@ context "Keybox Password Generator Application" do
         rescue SystemExit => se
             kpg.error_message.should_satisfy { |msg| msg =~ /Try.*--help/m }
             kpg.stderr.string.should_satisfy { |msg| msg =~ /Try.*--help/m }
-            se.status.should_equal 1
+            se.status.should == 1
         end
  
     end
@@ -102,7 +101,7 @@ context "Keybox Password Generator Application" do
         kpg.stdout = StringIO.new
         kpg.run
         kpg.options.use_symbols.should_include Keybox::SymbolSet::LOWER_ASCII
-        kpg.stdout.string.split(/\s+/).size.should_equal 6
+        kpg.stdout.string.split(/\s+/).size.should == 6
     end
 
     specify "setting an valid required symbol works" do
@@ -110,7 +109,7 @@ context "Keybox Password Generator Application" do
         kpg.stdout = StringIO.new
         kpg.run
         kpg.options.require_symbols.should_include Keybox::SymbolSet::LOWER_ASCII
-        kpg.stdout.string.split(/\s+/).size.should_equal 6
+        kpg.stdout.string.split(/\s+/).size.should == 6
     end
 
 

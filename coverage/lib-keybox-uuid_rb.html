@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Mon Nov 27 00:00:36 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Thu Nov 30 20:10:44 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -578,10 +578,10 @@ span.run100 {
             <a href='lib-keybox-uuid_rb.html'>lib/keybox/uuid.rb</a>
           </td>
           <td class='value'>
-            <tt>82</tt>
+            <tt>86</tt>
           </td>
           <td class='value'>
-            <tt>49</tt>
+            <tt>52</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
@@ -683,22 +683,26 @@ span.run100 {
 </span><span class="marked1"><a name="line64" />64         end
 </span><span class="inferred0"><a name="line65" />65 
 </span><span class="marked1"><a name="line66" />66         def ==(other)
-</span><span class="marked0"><a name="line67" />67             case other
-</span><span class="marked1"><a name="line68" />68             when Keybox::UUID
-</span><span class="marked0"><a name="line69" />69                 self.bytes == other.bytes
-</span><span class="marked1"><a name="line70" />70             when String
-</span><span class="marked0"><a name="line71" />71                 begin
-</span><span class="marked1"><a name="line72" />72                     o = Keybox::UUID.new(other)
-</span><span class="marked0"><a name="line73" />73                     self == o
-</span><span class="inferred1"><a name="line74" />74                 rescue 
-</span><span class="marked0"><a name="line75" />75                     false
-</span><span class="inferred1"><a name="line76" />76                 end
-</span><span class="inferred0"><a name="line77" />77             else
-</span><span class="marked1"><a name="line78" />78                 false
-</span><span class="inferred0"><a name="line79" />79             end
-</span><span class="marked1"><a name="line80" />80         end
-</span><span class="inferred0"><a name="line81" />81     end
-</span><span class="inferred1"><a name="line82" />82 end
+</span><span class="marked0"><a name="line67" />67             self.eql?(other)
+</span><span class="marked1"><a name="line68" />68         end
+</span><span class="inferred0"><a name="line69" />69 
+</span><span class="marked1"><a name="line70" />70         def eql?(other)
+</span><span class="marked0"><a name="line71" />71             case other
+</span><span class="marked1"><a name="line72" />72             when Keybox::UUID
+</span><span class="marked0"><a name="line73" />73                 self.bytes == other.bytes
+</span><span class="marked1"><a name="line74" />74             when String
+</span><span class="marked0"><a name="line75" />75                 begin
+</span><span class="marked1"><a name="line76" />76                     o = Keybox::UUID.new(other)
+</span><span class="marked0"><a name="line77" />77                     self == o
+</span><span class="inferred1"><a name="line78" />78                 rescue 
+</span><span class="marked0"><a name="line79" />79                     false
+</span><span class="inferred1"><a name="line80" />80                 end
+</span><span class="inferred0"><a name="line81" />81             else
+</span><span class="marked1"><a name="line82" />82                 false
+</span><span class="inferred0"><a name="line83" />83             end
+</span><span class="marked1"><a name="line84" />84         end
+</span><span class="inferred0"><a name="line85" />85     end
+</span><span class="inferred1"><a name="line86" />86 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

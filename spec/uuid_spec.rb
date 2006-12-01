@@ -2,12 +2,12 @@ require 'keybox/uuid'
 context "UUID class" do
     specify "should have 16 bytes" do
         uuid = Keybox::UUID.new
-        uuid.bytes.size.should_equal 16 
+        uuid.bytes.size.should == 16 
     end
 
     specify "as an array should have 16 members" do
         uuid = Keybox::UUID.new
-        uuid.to_a.size.should_equal 16
+        uuid.to_a.size.should == 16
     end
 
     specify "array elements should have values between 0 and 256 " do
@@ -28,13 +28,13 @@ context "UUID class" do
         s_a    = s.unpack("C*")
         s_uuid = sprintf(Keybox::UUID::FORMAT,*s_a)
         uuid = Keybox::UUID.new(s)
-        uuid.to_s.should_equal(s_uuid)
+        uuid.to_s.should == s_uuid
     end
 
     specify "initialized with a string in the format of a uuid is valid " do
         s = "c8b5a23a-2507-4834-ab19-60f2cb2a5271"
         uuid = Keybox::UUID.new(s)
-        uuid.to_s.should_equal(s)
+        uuid.to_s.should == s
     end
     
     specify "not enough bytes should throw an expeption" do
@@ -42,29 +42,33 @@ context "UUID class" do
         lambda { Keybox::UUID.new(s) }.should_raise ArgumentError
     end
 
-    specify "invalid uuid string should throw an expeption" do
+    specify "invalid uuid string should throw an exception" do
         s = "z8b5a23a-2507-4834-ab19-60f2cb2a5271"
         lambda { Keybox::UUID.new(s) }.should_raise ArgumentError
+    end
+
+    specify "initialing with a non-string raises an exception" do
+        lambda { Keybox::UUID.new(42) }.should_raise ArgumentError
     end
 
     specify "should equal another keybox created with same data" do
         s = "c8b5a23a-2507-4834-ab19-60f2cb2a5271"
         one = Keybox::UUID.new(s)
         two = Keybox::UUID.new(s)
-        one.should_equal two
+        one.should == two
     end
 
     specify "should equal a string that is the same uuid" do
         s = "c8b5a23a-2507-4834-ab19-60f2cb2a5271"
         one = Keybox::UUID.new(s)
-        one.should_equal s
+        one.should == s
     end
 
     specify "should not equal some other uuid or random string" do
         s = "c8b5a23a-2507-4834-ab19-60f2cb2a5271"
         one = Keybox::UUID.new(s)
-        one.should_not_equal Keybox::UUID.new
-        one.should_not_equal "i love ruby"
-        one.should_not_equal 4
+        one.should_not_eql Keybox::UUID.new
+        one.should_not_eql "i love ruby"
+        one.should_not_eql 4
     end
 end

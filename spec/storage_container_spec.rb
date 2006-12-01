@@ -36,13 +36,13 @@ context 'a storage container' do
     specify "should load correctly from a file" do
         @container.save(@testing_file)
         new_container = Keybox::Storage::Container.new(@passphrase,@testing_file)
-        new_container.uuid.should_equal @container.uuid
+        new_container.uuid.should == @container.uuid
     end
 
     specify "should validate passphrase" do
         nc = Keybox::Storage::Container.new("i love ruby", @keybox_file)
         nc.save(@testing_file)
-        nc.key_digest.should_equal @container.key_digest
+        nc.key_digest.should_eql @container.key_digest
         lambda {
             Keybox::Storage::Container.new("i hate ruby", @testing_file)
         }.should_raise Keybox::ValidationError
@@ -53,8 +53,8 @@ context 'a storage container' do
         @container.save(@testing_file)
         new_container = Keybox::Storage::Container.new(@passphrase, @testing_file)
         recs = new_container.find_by_url("nytimes")
-        new_container.records.size.should_equal 2
-        recs.size.should_equal 1
-        recs[0].password.should_equal "2f85a2e2f"
+        new_container.records.size.should_eql 2
+        recs.size.should_eql 1
+        recs[0].password.should == "2f85a2e2f"
     end
 end

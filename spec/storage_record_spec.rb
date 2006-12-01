@@ -12,7 +12,7 @@ context 'a storage record entry' do
     specify "assigning to a non-existant field creates the appropriate member " do
         e = Keybox::Storage::Record.new
         e.junk = "junk"
-        e.junk.should_equal "junk"
+        e.junk.should == "junk"
     end
 
     specify 'default values for non-existant fields is nil' do 
@@ -27,7 +27,7 @@ context 'a storage record entry' do
         sleep 1
         e.testing = "testing"
         e.modification_time.should_satisfy { |m| m > e.creation_time }
-        e.last_access_time.should_equal e.modification_time
+        e.last_access_time.should == e.modification_time
     end
 
     specify "reading a field after assignment the access time > modification time " do

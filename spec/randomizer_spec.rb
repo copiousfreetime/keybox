@@ -2,7 +2,7 @@ require 'keybox/randomizer'
 
 context "a random device class" do
     specify "should have a default source" do
-        Keybox::RandomDevice.default.should_equal "/dev/urandom" 
+        Keybox::RandomDevice.default.should_eql "/dev/urandom" 
     end
 
     specify "should produce strings" do
@@ -10,7 +10,7 @@ context "a random device class" do
     end
 
     specify "should produce strings of a given length" do
-        Keybox::RandomDevice.random_bytes(4).size.should_equal 4 
+        Keybox::RandomDevice.random_bytes(4).size.should_eql 4 
     end
 
     specify "should raise exception when given an invalid device" do
@@ -18,7 +18,7 @@ context "a random device class" do
     end
 
     specify "should be able to assign a new default source" do
-        (Keybox::RandomDevice.default = "/dev/random").should_equal "/dev/random"
+        (Keybox::RandomDevice.default = "/dev/random").should_eql "/dev/random"
         Keybox::RandomDevice.default = "/dev/urandom"
     end
 end
@@ -28,7 +28,7 @@ context "a random device instance" do
         @random_device = Keybox::RandomDevice.new
     end
     specify "should have a source" do
-        @random_device.source.should_equal "/dev/urandom"
+        @random_device.source.should_eql "/dev/urandom"
     end
 
     specify "should produce strings" do
@@ -36,17 +36,17 @@ context "a random device instance" do
     end
 
     specify "should produce strings of a given length" do
-        @random_device.random_bytes(20).size.should_equal 20 
+        @random_device.random_bytes(20).size.should_eql 20 
     end
 
     specify "should default to the RandomDevice default when given an invalid device " do 
         rd = Keybox::RandomDevice.new("/tmp/bad-random-device")
-        rd.source.should_equal Keybox::RandomDevice.default
+        rd.source.should_eql Keybox::RandomDevice.default
     end
 
     specify "should accept a valid readable device" do
         rd = Keybox::RandomDevice.new("/dev/random")
-        rd.source.should_equal "/dev/random"
+        rd.source.should_eql "/dev/random"
     end
 end
 
@@ -64,11 +64,11 @@ context "a random source class " do
     end
 
     specify "valid class should allow default to be set" do
-        (Keybox::RandomSource.source = @random_source_class).should_equal @random_source_class
+        (Keybox::RandomSource.source = @random_source_class).should_eql @random_source_class
         Keybox::RandomSource.source_classes.should_have(3).entries
         Keybox::RandomSource.source_classes.delete(@random_source_class)
         Keybox::RandomSource.source_classes.should_have(2).entries
-        Keybox::RandomSource.source.should_equal ::Keybox::RandomDevice
+        Keybox::RandomSource.source.should_eql ::Keybox::RandomDevice
     end
 
     specify "rand with no parameters should return a value between 0 and 1" do

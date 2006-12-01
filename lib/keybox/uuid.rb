@@ -64,6 +64,10 @@ module Keybox
         end
 
         def ==(other)
+            self.eql?(other)
+        end
+
+        def eql?(other)
             case other
             when Keybox::UUID
                 self.bytes == other.bytes
