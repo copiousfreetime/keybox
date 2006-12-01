@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Thu Nov 30 20:56:44 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Thu Nov 30 20:59:00 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -617,40 +617,40 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked0"><a name="line1" /> 1 context &quot;Account Entry&quot; do
-</span><span class="marked1"><a name="line2" /> 2     specify &quot;fields get set correctly&quot; do
-</span><span class="marked0"><a name="line3" /> 3         k = Keybox::AccountEntry.new(&quot;a test title&quot;, &quot;user&quot;)
-</span><span class="marked1"><a name="line4" /> 4         k.username.should_eql &quot;user&quot;
-</span><span class="marked0"><a name="line5" /> 5         k.title.should_eql &quot;a test title&quot;
-</span><span class="marked1"><a name="line6" /> 6     end
-</span><span class="inferred0"><a name="line7" /> 7 end
-</span><span class="inferred1"><a name="line8" /> 8 
-</span><span class="marked0"><a name="line9" /> 9 context &quot;Host Account&quot; do
-</span><span class="marked1"><a name="line10" />10     specify &quot;fields get set correctly&quot; do
-</span><span class="marked0"><a name="line11" />11         ha = Keybox::HostAccountEntry.new(&quot;a title&quot;, &quot;host&quot;, &quot;user&quot;, &quot;password&quot;)
-</span><span class="marked1"><a name="line12" />12         ha.title.should_eql &quot;a title&quot;
-</span><span class="marked0"><a name="line13" />13         ha.username.should_eql &quot;user&quot;
-</span><span class="marked1"><a name="line14" />14         ha.hostname.should_eql &quot;host&quot;
-</span><span class="marked0"><a name="line15" />15         ha.password.should_eql &quot;password&quot;
-</span><span class="marked1"><a name="line16" />16     end
-</span><span class="inferred0"><a name="line17" />17 end
-</span><span class="inferred1"><a name="line18" />18 
-</span><span class="marked0"><a name="line19" />19 context &quot;URL Account&quot; do
-</span><span class="marked1"><a name="line20" />20     specify &quot;fields get set correctly&quot; do
-</span><span class="marked0"><a name="line21" />21         urla = Keybox::URLAccountEntry.new(&quot;url title&quot;, &quot;http://www.gmail.com&quot;, &quot;someuser&quot;)
-</span><span class="marked1"><a name="line22" />22         urla.title.should_eql &quot;url title&quot;
-</span><span class="marked0"><a name="line23" />23         urla.url.should_eql &quot;http://www.gmail.com&quot;
-</span><span class="marked1"><a name="line24" />24         urla.username.should_eql &quot;someuser&quot;
-</span><span class="marked0"><a name="line25" />25     end
-</span><span class="inferred1"><a name="line26" />26 
-</span><span class="marked0"><a name="line27" />27     specify &quot;password hash is used&quot; do
-</span><span class="marked1"><a name="line28" />28         container = Keybox::Storage::Container.new(&quot;i love ruby&quot;, &quot;/tmp/junk.yml&quot;)
-</span><span class="marked0"><a name="line29" />29         urla = Keybox::URLAccountEntry.new(&quot;url title&quot;, &quot;http://www.nytimes.com&quot;, &quot;someuser&quot;)
-</span><span class="marked1"><a name="line30" />30         container &lt;&lt; urla
-</span><span class="marked0"><a name="line31" />31         urla.password.should_eql &quot;2f85a2e2f&quot;
-</span><span class="marked1"><a name="line32" />32     end
-</span><span class="inferred0"><a name="line33" />33 end
-</span><span class="inferred1"><a name="line34" />34                                           
+    </table><pre><span class="marked1"><a name="line1" /> 1 context &quot;Account Entry&quot; do
+</span><span class="marked0"><a name="line2" /> 2     specify &quot;fields get set correctly&quot; do
+</span><span class="marked1"><a name="line3" /> 3         k = Keybox::AccountEntry.new(&quot;a test title&quot;, &quot;user&quot;)
+</span><span class="marked0"><a name="line4" /> 4         k.username.should_eql &quot;user&quot;
+</span><span class="marked1"><a name="line5" /> 5         k.title.should_eql &quot;a test title&quot;
+</span><span class="marked0"><a name="line6" /> 6     end
+</span><span class="inferred1"><a name="line7" /> 7 end
+</span><span class="inferred0"><a name="line8" /> 8 
+</span><span class="marked1"><a name="line9" /> 9 context &quot;Host Account&quot; do
+</span><span class="marked0"><a name="line10" />10     specify &quot;fields get set correctly&quot; do
+</span><span class="marked1"><a name="line11" />11         ha = Keybox::HostAccountEntry.new(&quot;a title&quot;, &quot;host&quot;, &quot;user&quot;, &quot;password&quot;)
+</span><span class="marked0"><a name="line12" />12         ha.title.should_eql &quot;a title&quot;
+</span><span class="marked1"><a name="line13" />13         ha.username.should_eql &quot;user&quot;
+</span><span class="marked0"><a name="line14" />14         ha.hostname.should_eql &quot;host&quot;
+</span><span class="marked1"><a name="line15" />15         ha.password.should_eql &quot;password&quot;
+</span><span class="marked0"><a name="line16" />16     end
+</span><span class="inferred1"><a name="line17" />17 end
+</span><span class="inferred0"><a name="line18" />18 
+</span><span class="marked1"><a name="line19" />19 context &quot;URL Account&quot; do
+</span><span class="marked0"><a name="line20" />20     specify &quot;fields get set correctly&quot; do
+</span><span class="marked1"><a name="line21" />21         urla = Keybox::URLAccountEntry.new(&quot;url title&quot;, &quot;http://www.gmail.com&quot;, &quot;someuser&quot;)
+</span><span class="marked0"><a name="line22" />22         urla.title.should_eql &quot;url title&quot;
+</span><span class="marked1"><a name="line23" />23         urla.url.should_eql &quot;http://www.gmail.com&quot;
+</span><span class="marked0"><a name="line24" />24         urla.username.should_eql &quot;someuser&quot;
+</span><span class="marked1"><a name="line25" />25     end
+</span><span class="inferred0"><a name="line26" />26 
+</span><span class="marked1"><a name="line27" />27     specify &quot;password hash is used&quot; do
+</span><span class="marked0"><a name="line28" />28         container = Keybox::Storage::Container.new(&quot;i love ruby&quot;, &quot;/tmp/junk.yml&quot;)
+</span><span class="marked1"><a name="line29" />29         urla = Keybox::URLAccountEntry.new(&quot;url title&quot;, &quot;http://www.nytimes.com&quot;, &quot;someuser&quot;)
+</span><span class="marked0"><a name="line30" />30         container &lt;&lt; urla
+</span><span class="marked1"><a name="line31" />31         urla.password.should_eql &quot;2f85a2e2f&quot;
+</span><span class="marked0"><a name="line32" />32     end
+</span><span class="inferred1"><a name="line33" />33 end
+</span><span class="inferred0"><a name="line34" />34                                           
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />
