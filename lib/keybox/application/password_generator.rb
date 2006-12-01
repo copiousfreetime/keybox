@@ -1,3 +1,4 @@
+require 'keybox/application/base'
 require 'keybox/string_generator'
 require 'optparse'
 require 'ostruct'
@@ -7,40 +8,11 @@ require 'ostruct'
 #----------------------------------------------------------------------
 module Keybox
     module Application   
-        class PasswordGenerator
+        class PasswordGenerator < Base
 
             ALGORITHMS  =  { "random"        => :random, 
                              "pronounceable" => :pronounceable }
             SYMBOL_SETS = Keybox::SymbolSet::MAPPING.keys
-
-            attr_reader   :options
-            attr_reader   :error_message
-
-            # these are here for testing instrumentation
-            attr_accessor :stdout
-            attr_accessor :stderr
-
-            def initialize(argv = [])
-                # make sure we have an empty array, we could be passed
-                # nil explicitly
-                argv ||= []
-
-                # for testing instrumentation
-                @stdout = $stdout
-                @stderr = $stderr
-
-                @options        = self.default_options
-                @parser         = self.option_parser
-                @error_message  = nil
-
-                begin
-                    @parser.parse!(argv)
-                rescue OptionParser::ParseError => pe
-                    msg = ["#{@parser.program_name}: #{pe}",
-                           "Try `#{@parser.program_name} --help` for more information"]
-                    @error_message = msg.join("\n") 
-                end 
-            end
 
             def option_parser
                 OptionParser.new do |op|
@@ -142,17 +114,10 @@ module Keybox
             end
 
             def run
-                if @error_message then
-                    @stderr.puts @error_message 
-                    exit 1
-                elsif @options.show_help then
-                    @stdout.puts @parser
-                    exit 0
-                else
-                    generator = create_generator
-                    @options.number_to_generate.times do 
-                        @stdout.puts generator.generate
-                    end
+                exit_or_help
+                generator = create_generator
+                @options.number_to_generate.times do 
+                    @stdout.puts generator.generate
                 end
             end
         end

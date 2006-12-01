@@ -3,5 +3,6 @@ Manifest.txt
 README.txt
 Rakefile
 bin/keybox
+bin/kpg
 lib/keybox.rb
 test/test_keybox.rb
