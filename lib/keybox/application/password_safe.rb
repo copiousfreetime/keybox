@@ -1,7 +1,6 @@
 require 'keybox/storage'
 require 'keybox/application/base'
 require 'optparse'
-require 'optparse/version'
 require 'ostruct'
 
 #-----------------------------------------------------------------------
@@ -10,8 +9,10 @@ require 'ostruct'
 module Keybox
     module Application 
         class PasswordSafe < Base
+            include Keybox::TermIO
 
             attr_accessor :actions
+            attr_reader   :db
 
             DEFAULT_DIRECTORY = File.join(ENV["HOME"],'.keybox')
             DEFUALT_DB        = File.join(DEFAULT_DIRECTORY,"database.yaml")
@@ -36,7 +37,6 @@ module Keybox
 
                     op.separator ""
                     op.separator "General Options:"
-
                     
                     op.on("-f", "--file DATABASE_FILE", "The Database File to use") do |db_file|
                         @options.db_file = db_file
@@ -50,8 +50,8 @@ module Keybox
                         @options.debug = true
                     end
 
-                    op.on("--use-hash-for-url", "Use the password hash algorithm for URL accounts") do
-                        @options.use_password_hash_for_url = true
+                    op.on("--[no-]use-hash-for-url", "Use the password hash algorithm for URL accounts") do |r|
+                        @options.use_password_hash_for_url = r
                     end
 
 
@@ -105,10 +105,15 @@ module Keybox
                 return options
             end
 
-            def merge_config
+            def merge_configurations
+                # get defaults
+                # layer on config files
+                # 
             end
 
             def load_database
+                password  = prompt("Password for (#{@options.db_file}): ", false)
+                @db = Keybox::Storage::Container.new(password,@options.db_file)
             end
 
             def run

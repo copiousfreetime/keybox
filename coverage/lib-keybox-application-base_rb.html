@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sat Dec 09 18:19:42 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sun Dec 10 00:52:06 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -578,10 +578,10 @@ span.run100 {
             <a href='lib-keybox-application-base_rb.html'>lib/keybox/application/base.rb</a>
           </td>
           <td class='value'>
-            <tt>91</tt>
+            <tt>93</tt>
           </td>
           <td class='value'>
-            <tt>62</tt>
+            <tt>64</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
@@ -617,97 +617,99 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked1"><a name="line1" /> 1 require 'optparse'
-</span><span class="marked0"><a name="line2" /> 2 require 'ostruct'
-</span><span class="inferred1"><a name="line3" /> 3 
-</span><span class="inferred0"><a name="line4" /> 4 #------------------------------------------------------------------------
-</span><span class="inferred1"><a name="line5" /> 5 # Base class for applications in keybox
-</span><span class="inferred0"><a name="line6" /> 6 #
-</span><span class="inferred1"><a name="line7" /> 7 # All of they keybox base applications are instantiated and then the
-</span><span class="inferred0"><a name="line8" /> 8 # .run method is called on the instance.  In otherwards
-</span><span class="inferred1"><a name="line9" /> 9 #
-</span><span class="inferred0"><a name="line10" />10 # kapp = Keybox::Application::KeyApp.new(ARGV)
-</span><span class="inferred1"><a name="line11" />11 # kapp.run
-</span><span class="inferred0"><a name="line12" />12 # 
-</span><span class="inferred1"><a name="line13" />13 #------------------------------------------------------------------------
-</span><span class="inferred0"><a name="line14" />14 
-</span><span class="marked1"><a name="line15" />15 module Keybox
-</span><span class="marked0"><a name="line16" />16     module Application
-</span><span class="marked1"><a name="line17" />17         class Base
-</span><span class="inferred0"><a name="line18" />18             # all applications have options and an error message
-</span><span class="marked1"><a name="line19" />19             attr_accessor :options
-</span><span class="marked0"><a name="line20" />20             attr_accessor :error_message
-</span><span class="inferred1"><a name="line21" />21 
-</span><span class="inferred0"><a name="line22" />22             # these allow for testing instrumentation
-</span><span class="marked1"><a name="line23" />23             attr_accessor :stdout
-</span><span class="marked0"><a name="line24" />24             attr_accessor :stderr
-</span><span class="inferred1"><a name="line25" />25 
-</span><span class="marked0"><a name="line26" />26             def initialize(argv = [])
-</span><span class="inferred1"><a name="line27" />27                 # make sure we have an empty array, we could be
-</span><span class="inferred0"><a name="line28" />28                 # initially passed nil explicitly
-</span><span class="marked1"><a name="line29" />29                 argv ||= []
-</span><span class="inferred0"><a name="line30" />30 
-</span><span class="inferred1"><a name="line31" />31                 # for testing instrumentation
-</span><span class="marked0"><a name="line32" />32                 @stdout = $stdout
-</span><span class="marked1"><a name="line33" />33                 @stderr = $stderr
-</span><span class="inferred0"><a name="line34" />34 
-</span><span class="marked1"><a name="line35" />35                 @options        = self.default_options
-</span><span class="marked0"><a name="line36" />36                 @parser         = self.option_parser
-</span><span class="marked1"><a name="line37" />37                 @error_message  = nil
-</span><span class="inferred0"><a name="line38" />38 
-</span><span class="marked1"><a name="line39" />39                 begin
-</span><span class="marked0"><a name="line40" />40                     @parser.parse!(argv)
-</span><span class="inferred1"><a name="line41" />41                 rescue OptionParser::ParseError =&gt; pe
-</span><span class="marked0"><a name="line42" />42                     msg = [&quot;#{@parser.program_name}: #{pe}&quot;,
-</span><span class="marked1"><a name="line43" />43                             &quot;Try `#{@parser.program_name} --help` for more information&quot;]
-</span><span class="marked0"><a name="line44" />44                     @error_message = msg.join(&quot;\n&quot;)
-</span><span class="inferred1"><a name="line45" />45                 end
-</span><span class="inferred0"><a name="line46" />46             end
-</span><span class="inferred1"><a name="line47" />47 
-</span><span class="marked0"><a name="line48" />48             def option_parser
-</span><span class="marked1"><a name="line49" />49                 OptionParser.new do |op|
-</span><span class="marked0"><a name="line50" />50                     op.separator &quot;&quot;
-</span><span class="marked1"><a name="line51" />51                     op.separator &quot;Options:&quot;
-</span><span class="inferred0"><a name="line52" />52 
-</span><span class="marked1"><a name="line53" />53                     op.on(&quot;-h&quot;, &quot;--help&quot;) do
-</span><span class="marked0"><a name="line54" />54                         @options.show_help = true
-</span><span class="inferred1"><a name="line55" />55                     end
-</span><span class="inferred0"><a name="line56" />56 
-</span><span class="marked1"><a name="line57" />57                     op.on(&quot;-v&quot;, &quot;--version&quot;, &quot;Show version information&quot;) do
-</span><span class="marked0"><a name="line58" />58                         @options.show_version = true
-</span><span class="inferred1"><a name="line59" />59                     end 
-</span><span class="inferred0"><a name="line60" />60 
-</span><span class="inferred1"><a name="line61" />61                 end
-</span><span class="marked0"><a name="line62" />62             end
-</span><span class="inferred1"><a name="line63" />63 
-</span><span class="marked0"><a name="line64" />64             def default_options
-</span><span class="marked1"><a name="line65" />65                 options = OpenStruct.new
-</span><span class="marked0"><a name="line66" />66                 options.debug           = 0
-</span><span class="marked1"><a name="line67" />67                 options.show_version    = false
-</span><span class="marked0"><a name="line68" />68                 options.show_help       = false
-</span><span class="marked1"><a name="line69" />69                 return options
-</span><span class="inferred0"><a name="line70" />70             end
-</span><span class="inferred1"><a name="line71" />71             
-</span><span class="marked0"><a name="line72" />72             def error_version_help
-</span><span class="marked1"><a name="line73" />73                 if @error_message then
-</span><span class="marked0"><a name="line74" />74                     @stderr.puts @error_message
-</span><span class="marked1"><a name="line75" />75                     exit 1
-</span><span class="marked0"><a name="line76" />76                 elsif @options.show_version then
-</span><span class="marked1"><a name="line77" />77                     @stdout.puts OptionParser::show_version(Keybox)
-</span><span class="marked0"><a name="line78" />78                     exit 0
-</span><span class="marked1"><a name="line79" />79                 elsif @options.show_help then
-</span><span class="marked0"><a name="line80" />80                     @stdout.puts @parser
-</span><span class="marked1"><a name="line81" />81                     exit 0
-</span><span class="inferred0"><a name="line82" />82                 end
-</span><span class="marked1"><a name="line83" />83             end
-</span><span class="inferred0"><a name="line84" />84 
-</span><span class="marked1"><a name="line85" />85             def run 
-</span><span class="marked0"><a name="line86" />86                 error_version_help
-</span><span class="marked1"><a name="line87" />87                 @stdout.puts &quot;Keybox Base Application.  Doing nothing but output this line.&quot;
-</span><span class="inferred0"><a name="line88" />88             end
-</span><span class="inferred1"><a name="line89" />89         end
-</span><span class="inferred0"><a name="line90" />90     end
-</span><span class="inferred1"><a name="line91" />91 end
+    </table><pre><span class="marked0"><a name="line1" /> 1 require 'optparse'
+</span><span class="marked1"><a name="line2" /> 2 require 'ostruct'
+</span><span class="inferred0"><a name="line3" /> 3 
+</span><span class="inferred1"><a name="line4" /> 4 #------------------------------------------------------------------------
+</span><span class="inferred0"><a name="line5" /> 5 # Base class for applications in keybox
+</span><span class="inferred1"><a name="line6" /> 6 #
+</span><span class="inferred0"><a name="line7" /> 7 # All of they keybox base applications are instantiated and then the
+</span><span class="inferred1"><a name="line8" /> 8 # .run method is called on the instance.  In otherwards
+</span><span class="inferred0"><a name="line9" /> 9 #
+</span><span class="inferred1"><a name="line10" />10 # kapp = Keybox::Application::KeyApp.new(ARGV)
+</span><span class="inferred0"><a name="line11" />11 # kapp.run
+</span><span class="inferred1"><a name="line12" />12 # 
+</span><span class="inferred0"><a name="line13" />13 #------------------------------------------------------------------------
+</span><span class="inferred1"><a name="line14" />14 
+</span><span class="marked0"><a name="line15" />15 module Keybox
+</span><span class="marked1"><a name="line16" />16     module Application
+</span><span class="marked0"><a name="line17" />17         class Base
+</span><span class="inferred1"><a name="line18" />18             # all applications have options and an error message
+</span><span class="marked0"><a name="line19" />19             attr_accessor :options
+</span><span class="marked1"><a name="line20" />20             attr_accessor :error_message
+</span><span class="inferred0"><a name="line21" />21 
+</span><span class="inferred1"><a name="line22" />22             # these allow for testing instrumentation
+</span><span class="marked0"><a name="line23" />23             attr_accessor :stdout
+</span><span class="marked1"><a name="line24" />24             attr_accessor :stderr
+</span><span class="marked0"><a name="line25" />25             attr_accessor :stdin
+</span><span class="inferred1"><a name="line26" />26 
+</span><span class="marked0"><a name="line27" />27             def initialize(argv = [])
+</span><span class="inferred1"><a name="line28" />28                 # make sure we have an empty array, we could be
+</span><span class="inferred0"><a name="line29" />29                 # initially passed nil explicitly
+</span><span class="marked1"><a name="line30" />30                 argv ||= []
+</span><span class="inferred0"><a name="line31" />31 
+</span><span class="inferred1"><a name="line32" />32                 # for testing instrumentation
+</span><span class="marked0"><a name="line33" />33                 @stdin  = $stdin
+</span><span class="marked1"><a name="line34" />34                 @stdout = $stdout
+</span><span class="marked0"><a name="line35" />35                 @stderr = $stderr
+</span><span class="inferred1"><a name="line36" />36 
+</span><span class="marked0"><a name="line37" />37                 @options        = self.default_options
+</span><span class="marked1"><a name="line38" />38                 @parser         = self.option_parser
+</span><span class="marked0"><a name="line39" />39                 @error_message  = nil
+</span><span class="inferred1"><a name="line40" />40 
+</span><span class="marked0"><a name="line41" />41                 begin
+</span><span class="marked1"><a name="line42" />42                     @parser.parse!(argv)
+</span><span class="inferred0"><a name="line43" />43                 rescue OptionParser::ParseError =&gt; pe
+</span><span class="marked1"><a name="line44" />44                     msg = [&quot;#{@parser.program_name}: #{pe}&quot;,
+</span><span class="marked0"><a name="line45" />45                             &quot;Try `#{@parser.program_name} --help` for more information&quot;]
+</span><span class="marked1"><a name="line46" />46                     @error_message = msg.join(&quot;\n&quot;)
+</span><span class="inferred0"><a name="line47" />47                 end
+</span><span class="inferred1"><a name="line48" />48             end
+</span><span class="inferred0"><a name="line49" />49 
+</span><span class="marked1"><a name="line50" />50             def option_parser
+</span><span class="marked0"><a name="line51" />51                 OptionParser.new do |op|
+</span><span class="marked1"><a name="line52" />52                     op.separator &quot;&quot;
+</span><span class="marked0"><a name="line53" />53                     op.separator &quot;Options:&quot;
+</span><span class="inferred1"><a name="line54" />54 
+</span><span class="marked0"><a name="line55" />55                     op.on(&quot;-h&quot;, &quot;--help&quot;) do
+</span><span class="marked1"><a name="line56" />56                         @options.show_help = true
+</span><span class="inferred0"><a name="line57" />57                     end
+</span><span class="inferred1"><a name="line58" />58 
+</span><span class="marked0"><a name="line59" />59                     op.on(&quot;-v&quot;, &quot;--version&quot;, &quot;Show version information&quot;) do
+</span><span class="marked1"><a name="line60" />60                         @options.show_version = true
+</span><span class="inferred0"><a name="line61" />61                     end 
+</span><span class="inferred1"><a name="line62" />62 
+</span><span class="inferred0"><a name="line63" />63                 end
+</span><span class="marked1"><a name="line64" />64             end
+</span><span class="inferred0"><a name="line65" />65 
+</span><span class="marked1"><a name="line66" />66             def default_options
+</span><span class="marked0"><a name="line67" />67                 options = OpenStruct.new
+</span><span class="marked1"><a name="line68" />68                 options.debug           = 0
+</span><span class="marked0"><a name="line69" />69                 options.show_version    = false
+</span><span class="marked1"><a name="line70" />70                 options.show_help       = false
+</span><span class="marked0"><a name="line71" />71                 return options
+</span><span class="inferred1"><a name="line72" />72             end
+</span><span class="inferred0"><a name="line73" />73             
+</span><span class="marked1"><a name="line74" />74             def error_version_help
+</span><span class="marked0"><a name="line75" />75                 if @error_message then
+</span><span class="marked1"><a name="line76" />76                     @stderr.puts @error_message
+</span><span class="marked0"><a name="line77" />77                     exit 1
+</span><span class="marked1"><a name="line78" />78                 elsif @options.show_version then
+</span><span class="marked0"><a name="line79" />79                     @stdout.puts &quot;#{@parser.program_name}: version #{Keybox::VERSION.join(&quot;.&quot;)}&quot;
+</span><span class="marked1"><a name="line80" />80                     exit 0
+</span><span class="marked0"><a name="line81" />81                 elsif @options.show_help then
+</span><span class="marked1"><a name="line82" />82                     @stdout.puts @parser
+</span><span class="marked0"><a name="line83" />83                     exit 0
+</span><span class="inferred1"><a name="line84" />84                 end
+</span><span class="marked0"><a name="line85" />85             end
+</span><span class="inferred1"><a name="line86" />86 
+</span><span class="marked0"><a name="line87" />87             def run 
+</span><span class="marked1"><a name="line88" />88                 error_version_help
+</span><span class="marked0"><a name="line89" />89                 @stdout.puts &quot;Keybox Base Application.  Doing nothing but output this line.&quot;
+</span><span class="inferred1"><a name="line90" />90             end
+</span><span class="inferred0"><a name="line91" />91         end
+</span><span class="inferred1"><a name="line92" />92     end
+</span><span class="inferred0"><a name="line93" />93 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

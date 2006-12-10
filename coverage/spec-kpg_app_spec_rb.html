@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sat Dec 09 18:19:43 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sun Dec 10 00:52:06 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -675,7 +675,7 @@ span.run100 {
 </span><span class="inferred0"><a name="line56" /> 56         rescue SystemExit =&gt; se
 </span><span class="marked1"><a name="line57" /> 57             se.status.should_eql 0
 </span><span class="marked0"><a name="line58" /> 58             kpg.options.show_version.should_eql true
-</span><span class="marked1"><a name="line59" /> 59             kpg.stdout.string.length.should_be &gt; 0
+</span><span class="marked1"><a name="line59" /> 59             kpg.stdout.string.should_satisfy { |msg| msg =~ /version 1.0.0/m }
 </span><span class="inferred0"><a name="line60" /> 60         end
 </span><span class="marked1"><a name="line61" /> 61     end
 </span><span class="inferred0"><a name="line62" /> 62 

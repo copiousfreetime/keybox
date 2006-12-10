@@ -56,7 +56,7 @@ context "Keybox Password Generator Application" do
         rescue SystemExit => se
             se.status.should_eql 0
             kpg.options.show_version.should_eql true
-            kpg.stdout.string.length.should_be > 0
+            kpg.stdout.string.should_satisfy { |msg| msg =~ /version 1.0.0/m }
         end
     end
 

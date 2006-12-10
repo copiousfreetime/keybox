@@ -22,6 +22,7 @@ module Keybox
             # these allow for testing instrumentation
             attr_accessor :stdout
             attr_accessor :stderr
+            attr_accessor :stdin
 
             def initialize(argv = [])
                 # make sure we have an empty array, we could be
@@ -29,6 +30,7 @@ module Keybox
                 argv ||= []
 
                 # for testing instrumentation
+                @stdin  = $stdin
                 @stdout = $stdout
                 @stderr = $stderr
 
@@ -74,7 +76,7 @@ module Keybox
                     @stderr.puts @error_message
                     exit 1
                 elsif @options.show_version then
-                    @stdout.puts OptionParser::show_version(Keybox)
+                    @stdout.puts "#{@parser.program_name}: version #{Keybox::VERSION.join(".")}"
                     exit 0
                 elsif @options.show_help then
                     @stdout.puts @parser
