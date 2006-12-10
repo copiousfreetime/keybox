@@ -67,9 +67,8 @@ module Keybox
                         @options.require_symbols = options_to_symbol_sets(list)
                     end
 
-                   op.on("-v", "--version", "Show version information") do
-                        @stdout.puts "#{op.program_name}: version #{@options.version.join(".")}"
-                        exit 0
+                    op.on("-v", "--version", "Show version information") do
+                        @options.show_version = true
                     end 
 
                 end
@@ -78,7 +77,7 @@ module Keybox
             def default_options
                 options = OpenStruct.new
                 options.debug               = 0
-                options.version             = Keybox::VERSION
+                options.show_version        = false
                 options.show_help           = false
                 options.algorithm           = :random
                 options.number_to_generate  = 6
@@ -120,7 +119,7 @@ module Keybox
             end
 
             def run
-                exit_or_help
+                error_version_help
                 generator = create_generator
                 @options.number_to_generate.times do 
                     @stdout.puts generator.generate

@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Thu Nov 30 20:59:00 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sat Dec 09 18:19:42 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -578,10 +578,10 @@ span.run100 {
             <a href='spec-base_app_spec_rb.html'>spec/base_app_spec.rb</a>
           </td>
           <td class='value'>
-            <tt>44</tt>
+            <tt>56</tt>
           </td>
           <td class='value'>
-            <tt>37</tt>
+            <tt>47</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
@@ -659,8 +659,20 @@ span.run100 {
 </span><span class="marked0"><a name="line40" />40             kba.stdout.string.length.should_be &gt; 0
 </span><span class="inferred1"><a name="line41" />41         end
 </span><span class="marked0"><a name="line42" />42     end
-</span><span class="inferred1"><a name="line43" />43 end
-</span><span class="inferred0"><a name="line44" />44 
+</span><span class="inferred1"><a name="line43" />43 
+</span><span class="marked0"><a name="line44" />44     specify &quot;version has output on stdout and exits 0&quot; do
+</span><span class="marked1"><a name="line45" />45         kba = Keybox::Application::Base.new([&quot;--ver&quot;]) 
+</span><span class="marked0"><a name="line46" />46         kba.stdout = StringIO.new
+</span><span class="marked1"><a name="line47" />47         begin
+</span><span class="marked0"><a name="line48" />48             kba.run
+</span><span class="inferred1"><a name="line49" />49         rescue SystemExit =&gt; se
+</span><span class="marked0"><a name="line50" />50             se.status.should_eql 0
+</span><span class="marked1"><a name="line51" />51             kba.stdout.string.length.should_be &gt; 0
+</span><span class="inferred0"><a name="line52" />52         end
+</span><span class="marked1"><a name="line53" />53     end
+</span><span class="inferred0"><a name="line54" />54  
+</span><span class="inferred1"><a name="line55" />55 end
+</span><span class="inferred0"><a name="line56" />56 
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

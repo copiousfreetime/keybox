@@ -54,9 +54,8 @@ module Keybox
                         @options.show_help = true
                     end
 
-                   op.on("-v", "--version", "Show version information") do
-                        @stdout.puts "#{op.program_name}: version #{@options.version.join(".")}"
-                        exit 0
+                    op.on("-v", "--version", "Show version information") do
+                        @options.show_version = true
                     end 
 
                 end
@@ -64,16 +63,19 @@ module Keybox
 
             def default_options
                 options = OpenStruct.new
-                options.debug       = 0
-                options.version     = Keybox::VERSION
-                options.show_help   = false
+                options.debug           = 0
+                options.show_version    = false
+                options.show_help       = false
                 return options
             end
             
-            def exit_or_help
+            def error_version_help
                 if @error_message then
                     @stderr.puts @error_message
                     exit 1
+                elsif @options.show_version then
+                    @stdout.puts OptionParser::show_version(Keybox)
+                    exit 0
                 elsif @options.show_help then
                     @stdout.puts @parser
                     exit 0
@@ -81,7 +83,7 @@ module Keybox
             end
 
             def run 
-                exit_or_help
+                error_version_help
                 @stdout.puts "Keybox Base Application.  Doing nothing but output this line."
             end
         end

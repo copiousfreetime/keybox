@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Thu Nov 30 20:59:00 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sat Dec 09 18:19:42 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -578,10 +578,10 @@ span.run100 {
             <a href='lib-keybox-application-base_rb.html'>lib/keybox/application/base.rb</a>
           </td>
           <td class='value'>
-            <tt>83</tt>
+            <tt>91</tt>
           </td>
           <td class='value'>
-            <tt>56</tt>
+            <tt>62</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
@@ -672,34 +672,42 @@ span.run100 {
 </span><span class="marked1"><a name="line53" />53                     op.on(&quot;-h&quot;, &quot;--help&quot;) do
 </span><span class="marked0"><a name="line54" />54                         @options.show_help = true
 </span><span class="inferred1"><a name="line55" />55                     end
-</span><span class="inferred0"><a name="line56" />56                 end
-</span><span class="marked1"><a name="line57" />57             end
-</span><span class="inferred0"><a name="line58" />58 
-</span><span class="marked1"><a name="line59" />59             def default_options
-</span><span class="marked0"><a name="line60" />60                 options = OpenStruct.new
-</span><span class="marked1"><a name="line61" />61                 options.debug       = 0
-</span><span class="marked0"><a name="line62" />62                 options.version     = Keybox::VERSION
-</span><span class="marked1"><a name="line63" />63                 options.show_help   = false
-</span><span class="marked0"><a name="line64" />64                 return options
-</span><span class="inferred1"><a name="line65" />65             end
-</span><span class="inferred0"><a name="line66" />66             
-</span><span class="marked1"><a name="line67" />67             def exit_or_help
-</span><span class="marked0"><a name="line68" />68                 if @error_message then
-</span><span class="marked1"><a name="line69" />69                     @stderr.puts @error_message
-</span><span class="marked0"><a name="line70" />70                     exit 1
-</span><span class="marked1"><a name="line71" />71                 elsif @options.show_help then
-</span><span class="marked0"><a name="line72" />72                     @stdout.puts @parser
-</span><span class="marked1"><a name="line73" />73                     exit 0
-</span><span class="inferred0"><a name="line74" />74                 end
-</span><span class="marked1"><a name="line75" />75             end
-</span><span class="inferred0"><a name="line76" />76 
-</span><span class="marked1"><a name="line77" />77             def run 
-</span><span class="marked0"><a name="line78" />78                 exit_or_help
-</span><span class="marked1"><a name="line79" />79                 @stdout.puts &quot;Keybox Base Application.  Doing nothing but output this line.&quot;
-</span><span class="inferred0"><a name="line80" />80             end
-</span><span class="inferred1"><a name="line81" />81         end
-</span><span class="inferred0"><a name="line82" />82     end
-</span><span class="inferred1"><a name="line83" />83 end
+</span><span class="inferred0"><a name="line56" />56 
+</span><span class="marked1"><a name="line57" />57                     op.on(&quot;-v&quot;, &quot;--version&quot;, &quot;Show version information&quot;) do
+</span><span class="marked0"><a name="line58" />58                         @options.show_version = true
+</span><span class="inferred1"><a name="line59" />59                     end 
+</span><span class="inferred0"><a name="line60" />60 
+</span><span class="inferred1"><a name="line61" />61                 end
+</span><span class="marked0"><a name="line62" />62             end
+</span><span class="inferred1"><a name="line63" />63 
+</span><span class="marked0"><a name="line64" />64             def default_options
+</span><span class="marked1"><a name="line65" />65                 options = OpenStruct.new
+</span><span class="marked0"><a name="line66" />66                 options.debug           = 0
+</span><span class="marked1"><a name="line67" />67                 options.show_version    = false
+</span><span class="marked0"><a name="line68" />68                 options.show_help       = false
+</span><span class="marked1"><a name="line69" />69                 return options
+</span><span class="inferred0"><a name="line70" />70             end
+</span><span class="inferred1"><a name="line71" />71             
+</span><span class="marked0"><a name="line72" />72             def error_version_help
+</span><span class="marked1"><a name="line73" />73                 if @error_message then
+</span><span class="marked0"><a name="line74" />74                     @stderr.puts @error_message
+</span><span class="marked1"><a name="line75" />75                     exit 1
+</span><span class="marked0"><a name="line76" />76                 elsif @options.show_version then
+</span><span class="marked1"><a name="line77" />77                     @stdout.puts OptionParser::show_version(Keybox)
+</span><span class="marked0"><a name="line78" />78                     exit 0
+</span><span class="marked1"><a name="line79" />79                 elsif @options.show_help then
+</span><span class="marked0"><a name="line80" />80                     @stdout.puts @parser
+</span><span class="marked1"><a name="line81" />81                     exit 0
+</span><span class="inferred0"><a name="line82" />82                 end
+</span><span class="marked1"><a name="line83" />83             end
+</span><span class="inferred0"><a name="line84" />84 
+</span><span class="marked1"><a name="line85" />85             def run 
+</span><span class="marked0"><a name="line86" />86                 error_version_help
+</span><span class="marked1"><a name="line87" />87                 @stdout.puts &quot;Keybox Base Application.  Doing nothing but output this line.&quot;
+</span><span class="inferred0"><a name="line88" />88             end
+</span><span class="inferred1"><a name="line89" />89         end
+</span><span class="inferred0"><a name="line90" />90     end
+</span><span class="inferred1"><a name="line91" />91 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

@@ -40,5 +40,17 @@ context "Keybox Base Application" do
             kba.stdout.string.length.should_be > 0
         end
     end
+
+    specify "version has output on stdout and exits 0" do
+        kba = Keybox::Application::Base.new(["--ver"]) 
+        kba.stdout = StringIO.new
+        begin
+            kba.run
+        rescue SystemExit => se
+            se.status.should_eql 0
+            kba.stdout.string.length.should_be > 0
+        end
+    end
+ 
 end
 

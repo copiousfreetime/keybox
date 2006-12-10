@@ -88,8 +88,7 @@ module Keybox
                     end
 
                     op.on("-v", "--version", "Show version information") do
-                        @stdout.puts "#{op.program_name}: version #{@options.version.join(".")}"
-                        exit 0
+                        @options.show_version = true
                     end
 
                 end
@@ -98,8 +97,8 @@ module Keybox
             def default_options
                 options = OpenStruct.new
                 options.debug                       = 0
-                options.version                     = Keybox::VERSION
                 options.show_help                   = false
+                options.show_version                = false
                 options.config_file                 = Keybox::Application::PasswordSafe::DEFUALT_CONFIG
                 options.db_file                     = Keybox::Application::PasswordSafe::DEFUALT_DB
                 options.use_password_hash_for_url   = true
@@ -107,11 +106,13 @@ module Keybox
             end
 
             def merge_config
-                
+            end
+
+            def load_database
             end
 
             def run
-                exit_or_help
+                error_version_help
                 merge_config
                 load_database
                 @stdout.puts "Keybox application, nothing here yet"

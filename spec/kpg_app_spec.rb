@@ -48,6 +48,18 @@ context "Keybox Password Generator Application" do
         end
     end
 
+    specify "version has output on stdout and exits 0" do
+        kpg = Keybox::Application::PasswordGenerator.new(["--version"]) 
+        kpg.stdout = StringIO.new
+        begin
+            kpg.run
+        rescue SystemExit => se
+            se.status.should_eql 0
+            kpg.options.show_version.should_eql true
+            kpg.stdout.string.length.should_be > 0
+        end
+    end
+
     specify "minimum length can be set and all generated passwords will have length >= minimum length" do
         kpg = Keybox::Application::PasswordGenerator.new(["--min", "4"]) 
         kpg.stdout = StringIO.new
