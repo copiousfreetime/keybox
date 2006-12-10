@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sun Dec 10 00:52:07 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sun Dec 10 16:09:49 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -617,80 +617,80 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked0"><a name="line1" /> 1 require 'keybox/uuid'
-</span><span class="marked1"><a name="line2" /> 2 context &quot;UUID class&quot; do
-</span><span class="marked0"><a name="line3" /> 3     specify &quot;should have 16 bytes&quot; do
-</span><span class="marked1"><a name="line4" /> 4         uuid = Keybox::UUID.new
-</span><span class="marked0"><a name="line5" /> 5         uuid.bytes.size.should == 16 
-</span><span class="marked1"><a name="line6" /> 6     end
-</span><span class="inferred0"><a name="line7" /> 7 
-</span><span class="marked1"><a name="line8" /> 8     specify &quot;as an array should have 16 members&quot; do
-</span><span class="marked0"><a name="line9" /> 9         uuid = Keybox::UUID.new
-</span><span class="marked1"><a name="line10" />10         uuid.to_a.size.should == 16
-</span><span class="marked0"><a name="line11" />11     end
-</span><span class="inferred1"><a name="line12" />12 
-</span><span class="marked0"><a name="line13" />13     specify &quot;array elements should have values between 0 and 256 &quot; do
-</span><span class="marked1"><a name="line14" />14         uuid = Keybox::UUID.new
-</span><span class="marked0"><a name="line15" />15         uuid.to_a.each do |b|
-</span><span class="marked1"><a name="line16" />16             b.should_satisfy { |s| s.between?(0,256) }
-</span><span class="inferred0"><a name="line17" />17         end
-</span><span class="marked1"><a name="line18" />18     end
-</span><span class="inferred0"><a name="line19" />19 
-</span><span class="marked1"><a name="line20" />20     specify &quot;as a string should match regex&quot; do
-</span><span class="marked0"><a name="line21" />21         regex = Keybox::UUID::REGEX
-</span><span class="marked1"><a name="line22" />22         uuid  = Keybox::UUID.new
-</span><span class="marked0"><a name="line23" />23         uuid.to_s.should_match(regex)
-</span><span class="marked1"><a name="line24" />24     end
-</span><span class="inferred0"><a name="line25" />25 
-</span><span class="marked1"><a name="line26" />26     specify &quot;initialized with a string should give a valid uuid&quot; do
-</span><span class="marked0"><a name="line27" />27         s      = &quot;0123456789abcdef&quot;
-</span><span class="marked1"><a name="line28" />28         s_a    = s.unpack(&quot;C*&quot;)
-</span><span class="marked0"><a name="line29" />29         s_uuid = sprintf(Keybox::UUID::FORMAT,*s_a)
-</span><span class="marked1"><a name="line30" />30         uuid = Keybox::UUID.new(s)
-</span><span class="marked0"><a name="line31" />31         uuid.to_s.should == s_uuid
-</span><span class="marked1"><a name="line32" />32     end
-</span><span class="inferred0"><a name="line33" />33 
-</span><span class="marked1"><a name="line34" />34     specify &quot;initialized with a string in the format of a uuid is valid &quot; do
-</span><span class="marked0"><a name="line35" />35         s = &quot;c8b5a23a-2507-4834-ab19-60f2cb2a5271&quot;
-</span><span class="marked1"><a name="line36" />36         uuid = Keybox::UUID.new(s)
-</span><span class="marked0"><a name="line37" />37         uuid.to_s.should == s
-</span><span class="marked1"><a name="line38" />38     end
-</span><span class="inferred0"><a name="line39" />39     
-</span><span class="marked1"><a name="line40" />40     specify &quot;not enough bytes should throw an expeption&quot; do
-</span><span class="marked0"><a name="line41" />41         s = &quot;0123456789&quot;
-</span><span class="marked1"><a name="line42" />42         lambda { Keybox::UUID.new(s) }.should_raise ArgumentError
-</span><span class="marked0"><a name="line43" />43     end
-</span><span class="inferred1"><a name="line44" />44 
-</span><span class="marked0"><a name="line45" />45     specify &quot;invalid uuid string should throw an exception&quot; do
-</span><span class="marked1"><a name="line46" />46         s = &quot;z8b5a23a-2507-4834-ab19-60f2cb2a5271&quot;
-</span><span class="marked0"><a name="line47" />47         lambda { Keybox::UUID.new(s) }.should_raise ArgumentError
-</span><span class="marked1"><a name="line48" />48     end
-</span><span class="inferred0"><a name="line49" />49 
-</span><span class="marked1"><a name="line50" />50     specify &quot;initialing with a non-string raises an exception&quot; do
-</span><span class="marked0"><a name="line51" />51         lambda { Keybox::UUID.new(42) }.should_raise ArgumentError
-</span><span class="inferred1"><a name="line52" />52     end
-</span><span class="inferred0"><a name="line53" />53 
-</span><span class="marked1"><a name="line54" />54     specify &quot;should equal another keybox created with same data&quot; do
-</span><span class="marked0"><a name="line55" />55         s = &quot;c8b5a23a-2507-4834-ab19-60f2cb2a5271&quot;
-</span><span class="marked1"><a name="line56" />56         one = Keybox::UUID.new(s)
-</span><span class="marked0"><a name="line57" />57         two = Keybox::UUID.new(s)
-</span><span class="marked1"><a name="line58" />58         one.should == two
-</span><span class="marked0"><a name="line59" />59     end
-</span><span class="inferred1"><a name="line60" />60 
-</span><span class="marked0"><a name="line61" />61     specify &quot;should equal a string that is the same uuid&quot; do
-</span><span class="marked1"><a name="line62" />62         s = &quot;c8b5a23a-2507-4834-ab19-60f2cb2a5271&quot;
-</span><span class="marked0"><a name="line63" />63         one = Keybox::UUID.new(s)
-</span><span class="marked1"><a name="line64" />64         one.should == s
-</span><span class="marked0"><a name="line65" />65     end
-</span><span class="inferred1"><a name="line66" />66 
-</span><span class="marked0"><a name="line67" />67     specify &quot;should not equal some other uuid or random string&quot; do
-</span><span class="marked1"><a name="line68" />68         s = &quot;c8b5a23a-2507-4834-ab19-60f2cb2a5271&quot;
-</span><span class="marked0"><a name="line69" />69         one = Keybox::UUID.new(s)
-</span><span class="marked1"><a name="line70" />70         one.should_not_eql Keybox::UUID.new
-</span><span class="marked0"><a name="line71" />71         one.should_not_eql &quot;i love ruby&quot;
-</span><span class="marked1"><a name="line72" />72         one.should_not_eql 4
-</span><span class="marked0"><a name="line73" />73     end
-</span><span class="inferred1"><a name="line74" />74 end
+    </table><pre><span class="marked1"><a name="line1" /> 1 require 'keybox/uuid'
+</span><span class="marked0"><a name="line2" /> 2 context &quot;UUID class&quot; do
+</span><span class="marked1"><a name="line3" /> 3     specify &quot;should have 16 bytes&quot; do
+</span><span class="marked0"><a name="line4" /> 4         uuid = Keybox::UUID.new
+</span><span class="marked1"><a name="line5" /> 5         uuid.bytes.size.should == 16 
+</span><span class="marked0"><a name="line6" /> 6     end
+</span><span class="inferred1"><a name="line7" /> 7 
+</span><span class="marked0"><a name="line8" /> 8     specify &quot;as an array should have 16 members&quot; do
+</span><span class="marked1"><a name="line9" /> 9         uuid = Keybox::UUID.new
+</span><span class="marked0"><a name="line10" />10         uuid.to_a.size.should == 16
+</span><span class="marked1"><a name="line11" />11     end
+</span><span class="inferred0"><a name="line12" />12 
+</span><span class="marked1"><a name="line13" />13     specify &quot;array elements should have values between 0 and 256 &quot; do
+</span><span class="marked0"><a name="line14" />14         uuid = Keybox::UUID.new
+</span><span class="marked1"><a name="line15" />15         uuid.to_a.each do |b|
+</span><span class="marked0"><a name="line16" />16             b.should_satisfy { |s| s.between?(0,256) }
+</span><span class="inferred1"><a name="line17" />17         end
+</span><span class="marked0"><a name="line18" />18     end
+</span><span class="inferred1"><a name="line19" />19 
+</span><span class="marked0"><a name="line20" />20     specify &quot;as a string should match regex&quot; do
+</span><span class="marked1"><a name="line21" />21         regex = Keybox::UUID::REGEX
+</span><span class="marked0"><a name="line22" />22         uuid  = Keybox::UUID.new
+</span><span class="marked1"><a name="line23" />23         uuid.to_s.should_match(regex)
+</span><span class="marked0"><a name="line24" />24     end
+</span><span class="inferred1"><a name="line25" />25 
+</span><span class="marked0"><a name="line26" />26     specify &quot;initialized with a string should give a valid uuid&quot; do
+</span><span class="marked1"><a name="line27" />27         s      = &quot;0123456789abcdef&quot;
+</span><span class="marked0"><a name="line28" />28         s_a    = s.unpack(&quot;C*&quot;)
+</span><span class="marked1"><a name="line29" />29         s_uuid = sprintf(Keybox::UUID::FORMAT,*s_a)
+</span><span class="marked0"><a name="line30" />30         uuid = Keybox::UUID.new(s)
+</span><span class="marked1"><a name="line31" />31         uuid.to_s.should == s_uuid
+</span><span class="marked0"><a name="line32" />32     end
+</span><span class="inferred1"><a name="line33" />33 
+</span><span class="marked0"><a name="line34" />34     specify &quot;initialized with a string in the format of a uuid is valid &quot; do
+</span><span class="marked1"><a name="line35" />35         s = &quot;c8b5a23a-2507-4834-ab19-60f2cb2a5271&quot;
+</span><span class="marked0"><a name="line36" />36         uuid = Keybox::UUID.new(s)
+</span><span class="marked1"><a name="line37" />37         uuid.to_s.should == s
+</span><span class="marked0"><a name="line38" />38     end
+</span><span class="inferred1"><a name="line39" />39     
+</span><span class="marked0"><a name="line40" />40     specify &quot;not enough bytes should throw an expeption&quot; do
+</span><span class="marked1"><a name="line41" />41         s = &quot;0123456789&quot;
+</span><span class="marked0"><a name="line42" />42         lambda { Keybox::UUID.new(s) }.should_raise ArgumentError
+</span><span class="marked1"><a name="line43" />43     end
+</span><span class="inferred0"><a name="line44" />44 
+</span><span class="marked1"><a name="line45" />45     specify &quot;invalid uuid string should throw an exception&quot; do
+</span><span class="marked0"><a name="line46" />46         s = &quot;z8b5a23a-2507-4834-ab19-60f2cb2a5271&quot;
+</span><span class="marked1"><a name="line47" />47         lambda { Keybox::UUID.new(s) }.should_raise ArgumentError
+</span><span class="marked0"><a name="line48" />48     end
+</span><span class="inferred1"><a name="line49" />49 
+</span><span class="marked0"><a name="line50" />50     specify &quot;initialing with a non-string raises an exception&quot; do
+</span><span class="marked1"><a name="line51" />51         lambda { Keybox::UUID.new(42) }.should_raise ArgumentError
+</span><span class="inferred0"><a name="line52" />52     end
+</span><span class="inferred1"><a name="line53" />53 
+</span><span class="marked0"><a name="line54" />54     specify &quot;should equal another keybox created with same data&quot; do
+</span><span class="marked1"><a name="line55" />55         s = &quot;c8b5a23a-2507-4834-ab19-60f2cb2a5271&quot;
+</span><span class="marked0"><a name="line56" />56         one = Keybox::UUID.new(s)
+</span><span class="marked1"><a name="line57" />57         two = Keybox::UUID.new(s)
+</span><span class="marked0"><a name="line58" />58         one.should == two
+</span><span class="marked1"><a name="line59" />59     end
+</span><span class="inferred0"><a name="line60" />60 
+</span><span class="marked1"><a name="line61" />61     specify &quot;should equal a string that is the same uuid&quot; do
+</span><span class="marked0"><a name="line62" />62         s = &quot;c8b5a23a-2507-4834-ab19-60f2cb2a5271&quot;
+</span><span class="marked1"><a name="line63" />63         one = Keybox::UUID.new(s)
+</span><span class="marked0"><a name="line64" />64         one.should == s
+</span><span class="marked1"><a name="line65" />65     end
+</span><span class="inferred0"><a name="line66" />66 
+</span><span class="marked1"><a name="line67" />67     specify &quot;should not equal some other uuid or random string&quot; do
+</span><span class="marked0"><a name="line68" />68         s = &quot;c8b5a23a-2507-4834-ab19-60f2cb2a5271&quot;
+</span><span class="marked1"><a name="line69" />69         one = Keybox::UUID.new(s)
+</span><span class="marked0"><a name="line70" />70         one.should_not_eql Keybox::UUID.new
+</span><span class="marked1"><a name="line71" />71         one.should_not_eql &quot;i love ruby&quot;
+</span><span class="marked0"><a name="line72" />72         one.should_not_eql 4
+</span><span class="marked1"><a name="line73" />73     end
+</span><span class="inferred0"><a name="line74" />74 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

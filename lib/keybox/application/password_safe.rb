@@ -2,6 +2,7 @@ require 'keybox/storage'
 require 'keybox/application/base'
 require 'optparse'
 require 'ostruct'
+require 'uri'
 
 #-----------------------------------------------------------------------
 # The Password Safe application
@@ -108,7 +109,7 @@ module Keybox
             def merge_configurations
                 # get defaults
                 # layer on config files
-                # 
+                # then add commandline overrides
             end
 
             def load_database
@@ -116,11 +117,82 @@ module Keybox
                 @db = Keybox::Storage::Container.new(password,@options.db_file)
             end
 
+            # list the entries that match the regex
+            def list(regex)
+            end
+
+            #
+            # add an account to the database If the account is a URL and
+            # use_password_hash_for_url is true then don't us the
+            # URLAccountEntry instead of the usual HostAccountEntry
+            #
+            def add(account) 
+                entry = Keybox::HostAccountEntry.new(account, account)
+
+                if @options.use_password_hash_for_url then
+                    account_uri = URI.parse(account) 
+                    if not account_uri.scheme.nil? then
+                        entry = Keybox::URLAccountEntry.new(account,account)
+                    end
+                end
+
+                gathered = false
+                while not gathered do
+                    @stdout.puts "Gathering information for entry '#{account}'"
+
+                    entry = fill_entry(entry)
+
+                    # dump the info we have gathered and make sure that
+                    # it is the input that the user wants to store.
+                    
+                    @stdout.puts "-" * 40
+                    entry.fields.each do |field|
+                        if not (field =~ /^pass/) then
+                            @stdout.puts "\t#{field.to_s.rjust(15)} : #{entry.send(field)}"
+                        end
+                    end
+
+                    response = prompt("Is this information correct (y/n) [N] ?")
+                    if response.size > 0 and response.downcase[0].chr == "y" then
+                        gathered = true
+                    end
+                end
+
+                @stdout.puts "Adding #{entry.title} to database"
+                @db << entry
+            end
+
+            def fill_entry(entry)
+                entry.fields.each do |field|
+                    echo = true
+                    validate = false
+                    default = entry.send(field)
+                    p = "\t#{field} [#{default}] :"
+
+                    if field =~ /^pass/ then
+                        echo = false
+                        validate = true
+                        p = "\t#{field} :"
+                    end
+
+                    value = prompt(p,echo,validate)
+                    if value.nil? or value.size == 0 then
+                        value = default
+                    end
+                    entry.send("#{field}=",value)
+                end
+                return entry
+            end
+
             def run
                 error_version_help
-                merge_config
+                merge_configurations
                 load_database
-                @stdout.puts "Keybox application, nothing here yet"
+                if @actions.size == 0 then
+                    @actions << [:list, ".*"]
+                end
+                action, param = *@actions.shift
+                self.send(action, param)
             end
         end
     end

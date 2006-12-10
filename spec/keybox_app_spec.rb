@@ -94,5 +94,14 @@ context "Keybox Password Safe Application" do
         kps.db.records.size.should_eql 2
     end
 
+    specify "adding an entry to the database works" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--add", "example.com"])
+        kps.stdout = StringIO.new
+        prompted_values = [@passphrase] + %w(example.con example.com someuser apassword apassword noinfo yes)
+        kps.stdin  = StringIO.new(prompted_values.join("\n"))
+        kps.run
+        kps.db.records.size.should_eql 3
+    end
+
 end
 

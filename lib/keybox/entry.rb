@@ -8,6 +8,10 @@ module Keybox
     #
     class AccountEntry < Keybox::Storage::Record
 
+        def fields
+            @data_members.keys.sort
+        end
+
         def initialize(title = "",username = "")
             super()
             self.title              = title
@@ -24,7 +28,12 @@ module Keybox
     # Host Accounts are those typical login accounts on machines
     #
     class HostAccountEntry < Keybox::AccountEntry
-        def initialize(title,hostname,username,password)
+
+        def fields
+            %w(title hostname username password additional_info)
+        end
+
+        def initialize(title = "",hostname = "",username = "",password = "")
             super(title,username)
             self.hostname = hostname
             self.password = password
@@ -39,8 +48,11 @@ module Keybox
     # calculate the password for the account.
     #
     class URLAccountEntry < Keybox::AccountEntry
+        def fields
+            %w(title url username additional_info)
+        end
 
-        def initialize(title,url,username)
+        def initialize(title = "",url = "",username = "")
             super(title,username)
             self.url = url
         end

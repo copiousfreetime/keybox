@@ -13,10 +13,36 @@ module Keybox
         # then '*' is printed out for each character typed in.  If it is
         # any other character then that is output instead.
         #
-        def prompt(p,echo = true) 
-            @stdout.print("#{p} ")
+        # If validate is set to true, then it will prompt twice and make
+        # sure that the two values match
+        #
+        def prompt(p,echo = true, validate = false) 
+            validated = false
             line = ""
+            original_prompt = p
+            validation_prompt = original_prompt + " (again to validate)"
 
+            until validated do
+                line = prompt_and_return(original_prompt,echo)
+
+                # if we are validating then prompt again to validate
+                if validate then
+                    v = prompt_and_return(validation_prompt,echo)
+                    if v != line then
+                        @stdout.puts("Entries do not match, try again.")
+                    else
+                        validated = true
+                    end
+                else 
+                    validated = true
+                end
+            end
+            return line
+        end
+
+        def prompt_and_return(the_prompt,echo)
+            line = ""
+            @stdout.print("#{the_prompt} ")
             if echo != true then
 
                 echo_char = echo || '*'
@@ -27,18 +53,23 @@ module Keybox
                     begin
                         system "stty raw -echo cbreak"
                         while char = @stdin.getc
-                            break if EOL_CHARS.include? char
                             line << char
+                            break if EOL_CHARS.include? char 
                             @stdout.putc echo_char
                         end
                     ensure
                         system "stty #{stty_original}"
                     end
+                    @stdout.puts
                 end
             else
                 line = @stdin.gets
             end
-            @stdout.puts
+
+            # if we got end of file or some other input resulting in
+            # line becoming nil then set it to the empty string
+            line = line || ""
+
             return line.rstrip
         end
 
