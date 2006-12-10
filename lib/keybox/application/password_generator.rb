@@ -58,7 +58,7 @@ module Keybox
                     end
 
                     op.on("-rLIST","--require symbol,set,list", Array,
-                          "Require passwords have letters from one or more of the following symbol sets:",
+                          "Require passwords to have letters from one or more of the following symbol sets:",
                           " [#{SYMBOL_SETS.join(', ')}]") do |list|
                         list.each do |symbol_set|
                             sym = SYMBOL_SETS.find { |s| s =~ /^#{symbol_set}/ }
