@@ -53,6 +53,12 @@ module Keybox
                     op.on("-h", "--help") do
                         @options.show_help = true
                     end
+
+                   op.on("-v", "--version", "Show version information") do
+                        @stdout.puts "#{op.program_name}: version #{@options.version.join(".")}"
+                        exit 0
+                    end 
+
                 end
             end
 

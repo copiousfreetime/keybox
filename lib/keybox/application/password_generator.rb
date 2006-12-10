@@ -66,6 +66,12 @@ module Keybox
                         end
                         @options.require_symbols = options_to_symbol_sets(list)
                     end
+
+                   op.on("-v", "--version", "Show version information") do
+                        @stdout.puts "#{op.program_name}: version #{@options.version.join(".")}"
+                        exit 0
+                    end 
+
                 end
             end
             
