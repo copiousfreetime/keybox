@@ -98,11 +98,39 @@ module Keybox
                 @records << obj
             end
 
-            def find_by_url(url)
-                regexp = Regexp.new(url)
-                @records.find_all { |r| regexp.match(r.url) }
+            #
+            # Delete a record from the system
+            #
+            def delete(obj)
+                @records.delete(obj)
             end
 
+            def find_by_url(url)
+                find_matching_records(url,%w(url))
+            end
+
+            #
+            # Search all the records in the database finding any that
+            # match the search string passed in.  The Search string is
+            # converted to a Regexp before beginning.
+            #
+            # A list of restricted fields can also be passed in and the
+            # regexp will only be matched against those fields
+            #
+            def find_matching_records(search_string,restricted_to = nil)
+                regex = Regexp.new(search_string)
+                matches = []
+                @records.each do |record|
+                    restricted_to = restricted_to || ( record.fields - %w(password) )
+                    record.data_members.each_pair do |k,v|
+                        if regex.match(v) and restricted_to.include?(k.to_s) then
+                            matches << record
+                        end
+                    end
+                end
+                return matches
+            end
+ 
             private
 
             #
@@ -168,6 +196,6 @@ module Keybox
                     end
                 end
             end
-        end
+       end
     end
 end

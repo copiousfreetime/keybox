@@ -57,4 +57,9 @@ context 'a storage container' do
         recs.size.should_eql 1
         recs[0].password.should == "2f85a2e2f"
     end
+
+    specify "can find matching records" do
+        matches = @container.find_matching_records(/times/)
+        matches.size.should_be 1
+    end
 end

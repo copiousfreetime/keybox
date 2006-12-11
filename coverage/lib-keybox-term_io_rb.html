@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sun Dec 10 16:09:48 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sun Dec 10 23:20:16 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -578,21 +578,21 @@ span.run100 {
             <a href='lib-keybox-term_io_rb.html'>lib/keybox/term_io.rb</a>
           </td>
           <td class='value'>
-            <tt>80</tt>
+            <tt>91</tt>
           </td>
           <td class='value'>
-            <tt>55</tt>
+            <tt>65</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
               <tr>
                 <td>
-                  <tt>98.8%</tt>&nbsp;</td>
+                  <tt>100.0%</tt>&nbsp;</td>
                 <td>
                   <table cellspacing='0' class='percent_graph' cellpadding='0' width='100'>
                     <tr>
-                      <td class='covered' width='99' />
-                      <td class='uncovered' width='1' />
+                      <td class='covered' width='100' />
+                      <td class='uncovered' width='0' />
                     </tr>
                   </table>
                 </td>
@@ -603,12 +603,12 @@ span.run100 {
             <table cellspacing='0' cellpadding='0' align='right'>
               <tr>
                 <td>
-                  <tt>98.2%</tt>&nbsp;</td>
+                  <tt>100.0%</tt>&nbsp;</td>
                 <td>
                   <table cellspacing='0' class='percent_graph' cellpadding='0' width='100'>
                     <tr>
-                      <td class='covered' width='98' />
-                      <td class='uncovered' width='2' />
+                      <td class='covered' width='100' />
+                      <td class='uncovered' width='0' />
                     </tr>
                   </table>
                 </td>
@@ -635,68 +635,79 @@ span.run100 {
 </span><span class="inferred0"><a name="line16" />16         # If validate is set to true, then it will prompt twice and make
 </span><span class="inferred1"><a name="line17" />17         # sure that the two values match
 </span><span class="inferred0"><a name="line18" />18         #
-</span><span class="marked1"><a name="line19" />19         def prompt(p,echo = true, validate = false) 
+</span><span class="marked1"><a name="line19" />19         def prompt(p,echo = true, validate = false, width = 20) 
 </span><span class="marked0"><a name="line20" />20             validated = false
 </span><span class="marked1"><a name="line21" />21             line = &quot;&quot;
-</span><span class="marked0"><a name="line22" />22             original_prompt = p
-</span><span class="marked1"><a name="line23" />23             validation_prompt = original_prompt + &quot; (again to validate)&quot;
-</span><span class="inferred0"><a name="line24" />24 
-</span><span class="marked1"><a name="line25" />25             until validated do
-</span><span class="marked0"><a name="line26" />26                 line = prompt_and_return(original_prompt,echo)
-</span><span class="inferred1"><a name="line27" />27 
-</span><span class="inferred0"><a name="line28" />28                 # if we are validating then prompt again to validate
-</span><span class="marked1"><a name="line29" />29                 if validate then
-</span><span class="marked0"><a name="line30" />30                     v = prompt_and_return(validation_prompt,echo)
-</span><span class="marked1"><a name="line31" />31                     if v != line then
-</span><span class="uncovered0"><a name="line32" />32                         @stdout.puts(&quot;Entries do not match, try again.&quot;)
-</span><span class="inferred1"><a name="line33" />33                     else
-</span><span class="marked0"><a name="line34" />34                         validated = true
-</span><span class="inferred1"><a name="line35" />35                     end
-</span><span class="inferred0"><a name="line36" />36                 else 
-</span><span class="marked1"><a name="line37" />37                     validated = true
-</span><span class="inferred0"><a name="line38" />38                 end
-</span><span class="inferred1"><a name="line39" />39             end
-</span><span class="marked0"><a name="line40" />40             return line
-</span><span class="inferred1"><a name="line41" />41         end
-</span><span class="inferred0"><a name="line42" />42 
-</span><span class="marked1"><a name="line43" />43         def prompt_and_return(the_prompt,echo)
-</span><span class="marked0"><a name="line44" />44             line = &quot;&quot;
-</span><span class="marked1"><a name="line45" />45             @stdout.print(&quot;#{the_prompt} &quot;)
-</span><span class="marked0"><a name="line46" />46             if echo != true then
-</span><span class="inferred1"><a name="line47" />47 
-</span><span class="marked0"><a name="line48" />48                 echo_char = echo || '*'
-</span><span class="inferred1"><a name="line49" />49 
-</span><span class="marked0"><a name="line50" />50                 if has_stty? then
-</span><span class="marked1"><a name="line51" />51                     stty_original = %x{stty -g}
-</span><span class="inferred0"><a name="line52" />52 
-</span><span class="marked1"><a name="line53" />53                     begin
-</span><span class="marked0"><a name="line54" />54                         system &quot;stty raw -echo cbreak&quot;
-</span><span class="marked1"><a name="line55" />55                         while char = @stdin.getc
-</span><span class="marked0"><a name="line56" />56                             line &lt;&lt; char
-</span><span class="marked1"><a name="line57" />57                             break if EOL_CHARS.include? char 
-</span><span class="marked0"><a name="line58" />58                             @stdout.putc echo_char
-</span><span class="inferred1"><a name="line59" />59                         end
-</span><span class="inferred0"><a name="line60" />60                     ensure
-</span><span class="marked1"><a name="line61" />61                         system &quot;stty #{stty_original}&quot;
-</span><span class="inferred0"><a name="line62" />62                     end
-</span><span class="marked1"><a name="line63" />63                     @stdout.puts
-</span><span class="inferred0"><a name="line64" />64                 end
-</span><span class="inferred1"><a name="line65" />65             else
-</span><span class="marked0"><a name="line66" />66                 line = @stdin.gets
-</span><span class="inferred1"><a name="line67" />67             end
-</span><span class="inferred0"><a name="line68" />68 
-</span><span class="inferred1"><a name="line69" />69             # if we got end of file or some other input resulting in
-</span><span class="inferred0"><a name="line70" />70             # line becoming nil then set it to the empty string
-</span><span class="marked1"><a name="line71" />71             line = line || &quot;&quot;
-</span><span class="inferred0"><a name="line72" />72 
-</span><span class="marked1"><a name="line73" />73             return line.rstrip
-</span><span class="inferred0"><a name="line74" />74         end
-</span><span class="inferred1"><a name="line75" />75 
-</span><span class="marked0"><a name="line76" />76         def has_stty?
-</span><span class="marked1"><a name="line77" />77             system &quot;which stty &gt; /dev/null 2&gt;&amp;1&quot;
-</span><span class="marked0"><a name="line78" />78         end
-</span><span class="inferred1"><a name="line79" />79     end
-</span><span class="inferred0"><a name="line80" />80 end
+</span><span class="marked0"><a name="line22" />22             extra_prompt = &quot; (again)&quot;
+</span><span class="marked1"><a name="line23" />23             original_prompt = p
+</span><span class="marked0"><a name="line24" />24             validation_prompt = original_prompt + extra_prompt
+</span><span class="marked1"><a name="line25" />25             width += extra_prompt.length
+</span><span class="inferred0"><a name="line26" />26 
+</span><span class="marked1"><a name="line27" />27             until validated do
+</span><span class="marked0"><a name="line28" />28                 line = prompt_and_return(original_prompt.rjust(width),echo)
+</span><span class="inferred1"><a name="line29" />29 
+</span><span class="inferred0"><a name="line30" />30                 # if we are validating then prompt again to validate
+</span><span class="marked1"><a name="line31" />31                 if validate then
+</span><span class="marked0"><a name="line32" />32                     v = prompt_and_return(validation_prompt.rjust(width),echo)
+</span><span class="marked1"><a name="line33" />33                     if v != line then
+</span><span class="marked0"><a name="line34" />34                         @stdout.puts(&quot;Entries do not match, try again.&quot;)
+</span><span class="inferred1"><a name="line35" />35                     else
+</span><span class="marked0"><a name="line36" />36                         validated = true
+</span><span class="inferred1"><a name="line37" />37                     end
+</span><span class="inferred0"><a name="line38" />38                 else 
+</span><span class="marked1"><a name="line39" />39                     validated = true
+</span><span class="inferred0"><a name="line40" />40                 end
+</span><span class="inferred1"><a name="line41" />41             end
+</span><span class="marked0"><a name="line42" />42             return line
+</span><span class="inferred1"><a name="line43" />43         end
+</span><span class="inferred0"><a name="line44" />44 
+</span><span class="marked1"><a name="line45" />45         def prompt_y_n(p)
+</span><span class="marked0"><a name="line46" />46             response = prompt(p)
+</span><span class="marked1"><a name="line47" />47             if response.size &gt; 0 and response.downcase[0].chr == 'y' then
+</span><span class="marked0"><a name="line48" />48                 true
+</span><span class="inferred1"><a name="line49" />49             else
+</span><span class="marked0"><a name="line50" />50                 false
+</span><span class="inferred1"><a name="line51" />51             end
+</span><span class="inferred0"><a name="line52" />52         end
+</span><span class="inferred1"><a name="line53" />53 
+</span><span class="marked0"><a name="line54" />54         def prompt_and_return(the_prompt,echo)
+</span><span class="marked1"><a name="line55" />55             line = &quot;&quot;
+</span><span class="marked0"><a name="line56" />56             @stdout.print(&quot;#{the_prompt} : &quot;)
+</span><span class="marked1"><a name="line57" />57             if echo != true then
+</span><span class="inferred0"><a name="line58" />58 
+</span><span class="marked1"><a name="line59" />59                 echo_char = echo || '*'
+</span><span class="inferred0"><a name="line60" />60 
+</span><span class="marked1"><a name="line61" />61                 if has_stty? then
+</span><span class="marked0"><a name="line62" />62                     stty_original = %x{stty -g}
+</span><span class="inferred1"><a name="line63" />63 
+</span><span class="marked0"><a name="line64" />64                     begin
+</span><span class="marked1"><a name="line65" />65                         system &quot;stty raw -echo cbreak&quot;
+</span><span class="marked0"><a name="line66" />66                         while char = @stdin.getc
+</span><span class="marked1"><a name="line67" />67                             line &lt;&lt; char
+</span><span class="marked0"><a name="line68" />68                             break if EOL_CHARS.include? char 
+</span><span class="marked1"><a name="line69" />69                             @stdout.putc echo_char
+</span><span class="inferred0"><a name="line70" />70                         end
+</span><span class="inferred1"><a name="line71" />71                     ensure
+</span><span class="marked0"><a name="line72" />72                         system &quot;stty #{stty_original}&quot;
+</span><span class="inferred1"><a name="line73" />73                     end
+</span><span class="marked0"><a name="line74" />74                     @stdout.puts
+</span><span class="inferred1"><a name="line75" />75                 end
+</span><span class="inferred0"><a name="line76" />76             else
+</span><span class="marked1"><a name="line77" />77                 line = @stdin.gets
+</span><span class="inferred0"><a name="line78" />78             end
+</span><span class="inferred1"><a name="line79" />79 
+</span><span class="inferred0"><a name="line80" />80             # if we got end of file or some other input resulting in
+</span><span class="inferred1"><a name="line81" />81             # line becoming nil then set it to the empty string
+</span><span class="marked0"><a name="line82" />82             line = line || &quot;&quot;
+</span><span class="inferred1"><a name="line83" />83 
+</span><span class="marked0"><a name="line84" />84             return line.rstrip
+</span><span class="inferred1"><a name="line85" />85         end
+</span><span class="inferred0"><a name="line86" />86 
+</span><span class="marked1"><a name="line87" />87         def has_stty?
+</span><span class="marked0"><a name="line88" />88             system &quot;which stty &gt; /dev/null 2&gt;&amp;1&quot;
+</span><span class="marked1"><a name="line89" />89         end
+</span><span class="inferred0"><a name="line90" />90     end
+</span><span class="inferred1"><a name="line91" />91 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

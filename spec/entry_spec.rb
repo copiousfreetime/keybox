@@ -4,6 +4,13 @@ context "Account Entry" do
         k.username.should_eql "user"
         k.title.should_eql "a test title"
     end
+
+    specify "fields can be accessed" do
+        k = Keybox::AccountEntry.new("a test title", "user")
+        k.fields.should_include "title"
+        k.fields.should_include "username"
+        k.fields.should_include "additional_info"
+    end
 end
 
 context "Host Account" do

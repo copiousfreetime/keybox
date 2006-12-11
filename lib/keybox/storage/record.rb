@@ -51,6 +51,18 @@ module Keybox
             def to_yaml_properties
                 %w{ @creation_time @modification_time @last_access_time @data_members @uuid }
             end
+
+            def ==(other)
+                self.eql?(other)
+            end
+
+            def eql?(other)
+                if other.kind_of?(Keybox::Storage::Record) then
+                    self.uuid == other.uuid
+                else
+                    self.uuid == other
+                end
+            end
         end
     end
 end

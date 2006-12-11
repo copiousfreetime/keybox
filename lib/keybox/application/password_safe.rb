@@ -113,7 +113,7 @@ module Keybox
             end
 
             def load_database
-                password  = prompt("Password for (#{@options.db_file}): ", false)
+                password  = prompt("Password for (#{@options.db_file})", false)
                 @db = Keybox::Storage::Container.new(password,@options.db_file)
             end
 
@@ -146,14 +146,8 @@ module Keybox
                     # it is the input that the user wants to store.
                     
                     @stdout.puts "-" * 40
-                    entry.fields.each do |field|
-                        if not (field =~ /^pass/) then
-                            @stdout.puts "\t#{field.to_s.rjust(15)} : #{entry.send(field)}"
-                        end
-                    end
-
-                    response = prompt("Is this information correct (y/n) [N] ?")
-                    if response.size > 0 and response.downcase[0].chr == "y" then
+                    @stdout.puts entry
+                    if prompt_y_n("Is this information correct (y/n) [N] ?") then
                         gathered = true
                     end
                 end
@@ -162,20 +156,46 @@ module Keybox
                 @db << entry
             end
 
+            #
+            # delete an entry from the database
+            #
+            def delete(account)
+                matches = @db.find_matching_records(account)
+                count = 0
+                matches.each do |match|
+                    @stdout.puts "-" * 40
+                    @stdout.puts match
+                    if prompt_y_n("Delete this entry (y/n) [N] ?") then
+                        @db.delete(match)
+                        count += 1
+                    end
+                end
+                @stdout.puts "#{count} records matching '#{account}' deleted."
+            end
+
             def fill_entry(entry)
+
+                # calculate maximum prompt width for pretty output
+                max_length = entry.fields.collect { |f| f.length }.max
+                max_length += entry.values.collect { |v| v.length }.max
+
+                # now prompt for the entry items
                 entry.fields.each do |field|
                     echo = true
                     validate = false
                     default = entry.send(field)
-                    p = "\t#{field} [#{default}] :"
+                    p = "#{field} [#{default}]"
 
+                    # we don't echo password prompts and we validate
+                    # them
                     if field =~ /^pass/ then
                         echo = false
                         validate = true
-                        p = "\t#{field} :"
+                        p = "#{field}"
                     end
 
-                    value = prompt(p,echo,validate)
+                    value = prompt(p,echo,validate,max_length)
+
                     if value.nil? or value.size == 0 then
                         value = default
                     end

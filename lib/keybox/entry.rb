@@ -9,7 +9,11 @@ module Keybox
     class AccountEntry < Keybox::Storage::Record
 
         def fields
-            @data_members.keys.sort
+            @data_members.keys.collect { |k| k.to_s }.sort
+        end
+
+        def values
+            fields.collect { |f| self.send(f) }
         end
 
         def initialize(title = "",username = "")
@@ -21,6 +25,20 @@ module Keybox
 
         def needs_container_passphrase?
             false
+        end
+
+        def to_s
+            s = StringIO.new
+            max_length = fields.collect {|f| f.length}.max
+            fields.each do |f|
+                line = "#{f.rjust(max_length + 1)} :"
+                value = self.send(f)
+                if f =~ /^pass/ then
+                    value = " *****  Not printed ***** "
+                end
+                s.puts "#{f.rjust(max_length + 1)} : #{value}"
+            end
+            return s.string
         end
     end
 

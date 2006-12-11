@@ -16,18 +16,20 @@ module Keybox
         # If validate is set to true, then it will prompt twice and make
         # sure that the two values match
         #
-        def prompt(p,echo = true, validate = false) 
+        def prompt(p,echo = true, validate = false, width = 20) 
             validated = false
             line = ""
+            extra_prompt = " (again)"
             original_prompt = p
-            validation_prompt = original_prompt + " (again to validate)"
+            validation_prompt = original_prompt + extra_prompt
+            width += extra_prompt.length
 
             until validated do
-                line = prompt_and_return(original_prompt,echo)
+                line = prompt_and_return(original_prompt.rjust(width),echo)
 
                 # if we are validating then prompt again to validate
                 if validate then
-                    v = prompt_and_return(validation_prompt,echo)
+                    v = prompt_and_return(validation_prompt.rjust(width),echo)
                     if v != line then
                         @stdout.puts("Entries do not match, try again.")
                     else
@@ -40,9 +42,18 @@ module Keybox
             return line
         end
 
+        def prompt_y_n(p)
+            response = prompt(p)
+            if response.size > 0 and response.downcase[0].chr == 'y' then
+                true
+            else
+                false
+            end
+        end
+
         def prompt_and_return(the_prompt,echo)
             line = ""
-            @stdout.print("#{the_prompt} ")
+            @stdout.print("#{the_prompt} : ")
             if echo != true then
 
                 echo_char = echo || '*'

@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sun Dec 10 16:09:49 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sun Dec 10 23:20:17 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -578,10 +578,10 @@ span.run100 {
             <a href='spec-keybox_app_spec_rb.html'>spec/keybox_app_spec.rb</a>
           </td>
           <td class='value'>
-            <tt>107</tt>
+            <tt>144</tt>
           </td>
           <td class='value'>
-            <tt>94</tt>
+            <tt>127</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
@@ -632,7 +632,7 @@ span.run100 {
 </span><span class="marked1"><a name="line13" /> 13     end
 </span><span class="inferred0"><a name="line14" /> 14 
 </span><span class="marked1"><a name="line15" /> 15     teardown do
-</span><span class="marked0"><a name="line16" /> 16         @testing_db.unlink
+</span><span class="inferred0"><a name="line16" /> 16 #        @testing_db.unlink
 </span><span class="inferred1"><a name="line17" /> 17     end
 </span><span class="inferred0"><a name="line18" /> 18 
 </span><span class="marked1"><a name="line19" /> 19     specify &quot;nil argv should do nothing&quot; do
@@ -716,14 +716,51 @@ span.run100 {
 </span><span class="marked1"><a name="line97" /> 97     specify &quot;adding an entry to the database works&quot; do
 </span><span class="marked0"><a name="line98" /> 98         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;--add&quot;, &quot;example.com&quot;])
 </span><span class="marked1"><a name="line99" /> 99         kps.stdout = StringIO.new
-</span><span class="marked0"><a name="line100" />100         prompted_values = [@passphrase] + %w(example.con example.com someuser apassword apassword noinfo yes)
+</span><span class="marked0"><a name="line100" />100         prompted_values = [@passphrase] + %w(example.com example.com someuser apassword apassword noinfo yes)
 </span><span class="marked1"><a name="line101" />101         kps.stdin  = StringIO.new(prompted_values.join(&quot;\n&quot;))
 </span><span class="marked0"><a name="line102" />102         kps.run
 </span><span class="marked1"><a name="line103" />103         kps.db.records.size.should_eql 3
 </span><span class="marked0"><a name="line104" />104     end
 </span><span class="inferred1"><a name="line105" />105 
-</span><span class="inferred0"><a name="line106" />106 end
-</span><span class="inferred1"><a name="line107" />107 
+</span><span class="marked0"><a name="line106" />106     specify &quot;add a url entry to the database&quot; do
+</span><span class="marked1"><a name="line107" />107         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;--add&quot;, &quot;http://www.example.com&quot;])
+</span><span class="marked0"><a name="line108" />108         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line109" />109         prompted_values = [@passphrase] + %w(www.example.com http://www.example.com someuser noinfo yes)
+</span><span class="marked0"><a name="line110" />110         kps.stdin  = StringIO.new(prompted_values.join(&quot;\n&quot;))
+</span><span class="marked1"><a name="line111" />111         kps.run
+</span><span class="marked0"><a name="line112" />112         kps.db.records.size.should_eql 3
+</span><span class="marked1"><a name="line113" />113     end
+</span><span class="inferred0"><a name="line114" />114 
+</span><span class="marked1"><a name="line115" />115     specify &quot;double prompting on failed password for entry to the database works&quot; do
+</span><span class="marked0"><a name="line116" />116         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;--add&quot;, &quot;example.com&quot;])
+</span><span class="marked1"><a name="line117" />117         kps.stdout = StringIO.new
+</span><span class="marked0"><a name="line118" />118         prompted_values = [@passphrase, &quot;&quot;] + %w(example.com someuser apassword abadpassword abcdef abcdef noinfo yes)
+</span><span class="marked1"><a name="line119" />119         kps.stdin  = StringIO.new(prompted_values.join(&quot;\n&quot;))
+</span><span class="marked0"><a name="line120" />120         kps.run
+</span><span class="marked1"><a name="line121" />121         kps.db.records.size.should_eql 3
+</span><span class="marked0"><a name="line122" />122     end
+</span><span class="inferred1"><a name="line123" />123 
+</span><span class="marked0"><a name="line124" />124     specify &quot;able to delete an entry&quot; do
+</span><span class="marked1"><a name="line125" />125         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;--delete&quot;, &quot;times&quot;])
+</span><span class="marked0"><a name="line126" />126         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line127" />127         prompted_values = [@passphrase] + %w(Yes)
+</span><span class="marked0"><a name="line128" />128         kps.stdin = StringIO.new(prompted_values.join(&quot;\n&quot;))
+</span><span class="marked1"><a name="line129" />129         kps.run
+</span><span class="marked0"><a name="line130" />130         kps.db.records.size.should_eql 1
+</span><span class="marked1"><a name="line131" />131         kps.stdout.string.should_satisfy { |msg| msg =~ /times' deleted/ }
+</span><span class="marked0"><a name="line132" />132     end
+</span><span class="inferred1"><a name="line133" />133 
+</span><span class="marked0"><a name="line134" />134     specify &quot;able to cancel deletion&quot; do
+</span><span class="marked1"><a name="line135" />135         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;--delete&quot;, &quot;times&quot;])
+</span><span class="marked0"><a name="line136" />136         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line137" />137         prompted_values = [@passphrase] + %w(No)
+</span><span class="marked0"><a name="line138" />138         kps.stdin = StringIO.new(prompted_values.join(&quot;\n&quot;))
+</span><span class="marked1"><a name="line139" />139         kps.run
+</span><span class="marked0"><a name="line140" />140         kps.db.records.size.should_eql 2
+</span><span class="marked1"><a name="line141" />141         kps.stdout.string.should_satisfy { |msg| msg =~ /times' deleted/ }
+</span><span class="marked0"><a name="line142" />142     end
+</span><span class="inferred1"><a name="line143" />143 end
+</span><span class="inferred0"><a name="line144" />144 
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

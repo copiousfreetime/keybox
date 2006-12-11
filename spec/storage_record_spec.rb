@@ -53,4 +53,11 @@ context 'a storage record entry' do
         e = Keybox::Storage::Record.new
         lambda {e.stuff(1,2)}.should_raise NoMethodError
     end
+
+    specify "comparison between records is valid" do
+        e = Keybox::Storage::Record.new
+        f = e.dup
+        e.should_eql e.uuid
+        e.should_eql f
+    end
 end

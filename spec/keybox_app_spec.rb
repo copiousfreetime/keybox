@@ -13,7 +13,7 @@ context "Keybox Password Safe Application" do
     end
 
     teardown do
-        @testing_db.unlink
+#        @testing_db.unlink
     end
 
     specify "nil argv should do nothing" do
@@ -97,11 +97,48 @@ context "Keybox Password Safe Application" do
     specify "adding an entry to the database works" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--add", "example.com"])
         kps.stdout = StringIO.new
-        prompted_values = [@passphrase] + %w(example.con example.com someuser apassword apassword noinfo yes)
+        prompted_values = [@passphrase] + %w(example.com example.com someuser apassword apassword noinfo yes)
         kps.stdin  = StringIO.new(prompted_values.join("\n"))
         kps.run
         kps.db.records.size.should_eql 3
     end
 
+    specify "add a url entry to the database" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--add", "http://www.example.com"])
+        kps.stdout = StringIO.new
+        prompted_values = [@passphrase] + %w(www.example.com http://www.example.com someuser noinfo yes)
+        kps.stdin  = StringIO.new(prompted_values.join("\n"))
+        kps.run
+        kps.db.records.size.should_eql 3
+    end
+
+    specify "double prompting on failed password for entry to the database works" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--add", "example.com"])
+        kps.stdout = StringIO.new
+        prompted_values = [@passphrase, ""] + %w(example.com someuser apassword abadpassword abcdef abcdef noinfo yes)
+        kps.stdin  = StringIO.new(prompted_values.join("\n"))
+        kps.run
+        kps.db.records.size.should_eql 3
+    end
+
+    specify "able to delete an entry" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--delete", "times"])
+        kps.stdout = StringIO.new
+        prompted_values = [@passphrase] + %w(Yes)
+        kps.stdin = StringIO.new(prompted_values.join("\n"))
+        kps.run
+        kps.db.records.size.should_eql 1
+        kps.stdout.string.should_satisfy { |msg| msg =~ /times' deleted/ }
+    end
+
+    specify "able to cancel deletion" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--delete", "times"])
+        kps.stdout = StringIO.new
+        prompted_values = [@passphrase] + %w(No)
+        kps.stdin = StringIO.new(prompted_values.join("\n"))
+        kps.run
+        kps.db.records.size.should_eql 2
+        kps.stdout.string.should_satisfy { |msg| msg =~ /times' deleted/ }
+    end
 end
 
