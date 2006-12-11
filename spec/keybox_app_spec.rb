@@ -6,6 +6,7 @@ context "Keybox Password Safe Application" do
     setup do 
         @passphrase = "i love ruby"
         @testing_db = Tempfile.new("kps_db.yml")
+        @path = @testing_db.path
         container = Keybox::Storage::Container.new(@passphrase, @testing_db.path)
         container << Keybox::HostAccountEntry.new("test account","localhost","guest", "rubyrocks")
         container << Keybox::URLAccountEntry.new("the times", "http://www.nytimes.com", "rubyhacker")
@@ -13,7 +14,7 @@ context "Keybox Password Safe Application" do
     end
 
     teardown do
-#        @testing_db.unlink
+        @testing_db.unlink
     end
 
     specify "nil argv should do nothing" do
@@ -139,6 +140,22 @@ context "Keybox Password Safe Application" do
         kps.run
         kps.db.records.size.should_eql 2
         kps.stdout.string.should_satisfy { |msg| msg =~ /times' deleted/ }
+    end
+
+    specify "list all the entries" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--list"])
+        kps.stdout = StringIO.new
+        kps.stdin = StringIO.new(@passphrase)
+        kps.run
+        kps.stdout.string.should_satisfy { |msg| msg =~ /2 entries listed/m }
+    end
+
+    specify "show all the entries" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--show"])
+        kps.stdout = StringIO.new
+        kps.stdin = StringIO.new(@passphrase)
+        kps.run
+        kps.stdout.string.should_satisfy { |msg| msg =~ /2 entries shown/m }
     end
 end
 

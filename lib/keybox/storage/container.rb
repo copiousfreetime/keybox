@@ -125,6 +125,7 @@ module Keybox
                     record.data_members.each_pair do |k,v|
                         if regex.match(v) and restricted_to.include?(k.to_s) then
                             matches << record
+                            break
                         end
                     end
                 end

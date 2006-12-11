@@ -75,8 +75,9 @@ module Keybox
                         @actions << [:edit, account]
                     end
 
-                    op.on("-s", "--show ACCOUNT", "Show the given account(s)") do |account|
-                        @actions << [:show, account]
+                    op.on("-s", "--show [REGEX]", "Show the given account(s)") do |regex|
+                        regex = regex || ".*"
+                        @actions << [:show, regex]
                     end
 
                     op.on("-l", "--list [REGEX]", "List the matching accounts (no argument will list all)") do |regex|
@@ -115,10 +116,6 @@ module Keybox
             def load_database
                 password  = prompt("Password for (#{@options.db_file})", false)
                 @db = Keybox::Storage::Container.new(password,@options.db_file)
-            end
-
-            # list the entries that match the regex
-            def list(regex)
             end
 
             #
@@ -171,6 +168,45 @@ module Keybox
                     end
                 end
                 @stdout.puts "#{count} records matching '#{account}' deleted."
+            end
+
+            #
+            # list all the entries in the database.  This doesn't show
+            # the password for any of them, just lists the key
+            # information about each entry so the user can see what is
+            # in the database
+            #
+            def list(account)
+                matches = @db.find_matching_records(account)
+                if matches.size > 0 then
+                    title_length = matches.collect { |f| f.title.length }.max
+                    username_length = matches.collect { |f| f.username.length }.max
+                    add_info = "Additional Information"
+                    @stdout.puts "#{"Title".center(title_length)} #{"Username".center(username_length)} Additional Information"
+                    @stdout.puts "=" * (title_length + username_length + 2 + add_info.length)
+                    matches.each do |match|
+                        @stdout.puts [match.title.ljust(title_length), match.username.ljust(username_length), match.additional_info].join(" ")
+                    end
+                    @stdout.puts "#{matches.size} entries listed"
+                else
+                    @stdout.puts "No records matching '#{account}' were found"
+                end
+            end
+
+            #
+            # output all the information for the accounts matching
+            #
+            def show(account)
+                matches = @db.find_matching_records(account)
+                if matches.size > 0 then
+                    matches.each do |match|
+                        @stdout.puts "=" * 72
+                        @stdout.puts match
+                    end
+                    @stdout.puts "#{matches.size} entries shown"
+                else
+                    @stdout.puts "No records matching '#{account}' were found"
+                end
             end
 
             def fill_entry(entry)
