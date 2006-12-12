@@ -187,9 +187,9 @@ module Keybox
                     matches.each do |match|
                         @stdout.puts [match.title.ljust(title_length), match.username.ljust(username_length), match.additional_info].join(" ")
                     end
-                    @stdout.puts "#{matches.size} entries listed"
+                    @stdout.puts "#{matches.size} entries listed."
                 else
-                    @stdout.puts "No records matching '#{account}' were found"
+                    @stdout.puts "No matching records were found."
                 end
             end
 
@@ -203,9 +203,9 @@ module Keybox
                         @stdout.puts "=" * 72
                         @stdout.puts match
                     end
-                    @stdout.puts "#{matches.size} entries shown"
+                    @stdout.puts "#{matches.size} entries shown."
                 else
-                    @stdout.puts "No records matching '#{account}' were found"
+                    @stdout.puts "No matching records were found."
                 end
             end
 

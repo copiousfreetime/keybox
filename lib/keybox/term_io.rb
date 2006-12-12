@@ -62,7 +62,7 @@ module Keybox
                     stty_original = %x{stty -g}
 
                     begin
-                        system "stty raw -echo cbreak"
+                        system "stty raw -echo cbreak brkint"
                         while char = @stdin.getc
                             line << char
                             break if EOL_CHARS.include? char 
