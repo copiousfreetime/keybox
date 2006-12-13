@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Tue Dec 12 16:25:45 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Tue Dec 12 17:15:51 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -681,7 +681,7 @@ span.run100 {
 </span><span class="marked1"><a name="line62" />62                     stty_original = %x{stty -g}
 </span><span class="inferred0"><a name="line63" />63 
 </span><span class="marked1"><a name="line64" />64                     begin
-</span><span class="marked0"><a name="line65" />65                         system &quot;stty raw -echo cbreak&quot;
+</span><span class="marked0"><a name="line65" />65                         system &quot;stty raw -echo isig&quot;
 </span><span class="marked1"><a name="line66" />66                         while char = @stdin.getc
 </span><span class="marked0"><a name="line67" />67                             line &lt;&lt; char
 </span><span class="marked1"><a name="line68" />68                             break if EOL_CHARS.include? char 

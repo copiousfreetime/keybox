@@ -18,12 +18,12 @@ context "Keybox Password Safe Application" do
     end
 
     specify "nil argv should do nothing" do
-        kps = Keybox::Application::PasswordSafe.new(nil)
+        kps = Keybox::Application::PasswordSafe.new(["-f", @path])
         kps.error_message.should_be nil
     end
 
     specify "executing with no args should have output on stdout" do
-        kps = Keybox::Application::PasswordSafe.new(nil)
+        kps = Keybox::Application::PasswordSafe.new(["-f", @path])
         kps.stdout = StringIO.new
         kps.stdin  = StringIO.new(@passphrase)
         kps.run

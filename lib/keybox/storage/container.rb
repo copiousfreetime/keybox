@@ -11,7 +11,7 @@ module Keybox
     module Storage
         class Container < Keybox::Storage::Record
 
-            attr_reader :records
+            attr_reader     :records
 
             ITERATIONS = 2048 
             def initialize(passphrase,path)
@@ -37,6 +37,17 @@ module Keybox
                     self.records_digest_algorithm   = Keybox::Digest::DEFAULT_ALGORITHM
                     self.records_digest             = ""
                 end
+            end
+
+            #
+            # Change the master password of the container
+            #
+            def passphrase=(new_passphrase)
+                @passphrase                 = new_passphrase
+                self.key_digest_salt        = Keybox::RandomDevice.random_bytes(32)
+                self.key_digest             = calculated_key_digest(new_passphrase)
+                self.records_init_vector    = Keybox::RandomDevice.random_bytes(16)
+                self.records_digest_salt    = Keybox::RandomDevice.random_bytes(32)
             end
 
             #

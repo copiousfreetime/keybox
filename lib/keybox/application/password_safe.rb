@@ -209,6 +209,13 @@ module Keybox
                 end
             end
 
+            #
+            # Change the master password on the database
+            #
+            def master_password(new_password)
+                @db.passphrase = new_password
+            end
+
             def fill_entry(entry)
 
                 # calculate maximum prompt width for pretty output
@@ -244,11 +251,16 @@ module Keybox
                 error_version_help
                 merge_configurations
                 load_database
+
                 if @actions.size == 0 then
                     @actions << [:list, ".*"]
                 end
                 action, param = *@actions.shift
                 self.send(action, param)
+
+                if @db.modified? then 
+                    @db.save
+                end
             end
         end
     end

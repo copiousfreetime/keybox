@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Tue Dec 12 16:25:45 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Tue Dec 12 17:15:51 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -578,21 +578,21 @@ span.run100 {
             <a href='spec-storage_container_spec_rb.html'>spec/storage_container_spec.rb</a>
           </td>
           <td class='value'>
-            <tt>65</tt>
+            <tt>81</tt>
           </td>
           <td class='value'>
-            <tt>55</tt>
+            <tt>68</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
               <tr>
                 <td>
-                  <tt>100.0%</tt>&nbsp;</td>
+                  <tt>98.8%</tt>&nbsp;</td>
                 <td>
                   <table cellspacing='0' class='percent_graph' cellpadding='0' width='100'>
                     <tr>
-                      <td class='covered' width='100' />
-                      <td class='uncovered' width='0' />
+                      <td class='covered' width='99' />
+                      <td class='uncovered' width='1' />
                     </tr>
                   </table>
                 </td>
@@ -603,12 +603,12 @@ span.run100 {
             <table cellspacing='0' cellpadding='0' align='right'>
               <tr>
                 <td>
-                  <tt>100.0%</tt>&nbsp;</td>
+                  <tt>98.5%</tt>&nbsp;</td>
                 <td>
                   <table cellspacing='0' class='percent_graph' cellpadding='0' width='100'>
                     <tr>
-                      <td class='covered' width='100' />
-                      <td class='uncovered' width='0' />
+                      <td class='covered' width='99' />
+                      <td class='uncovered' width='1' />
                     </tr>
                   </table>
                 </td>
@@ -681,7 +681,23 @@ span.run100 {
 </span><span class="marked1"><a name="line62" />62         matches = @container.find_matching_records(/times/)
 </span><span class="marked0"><a name="line63" />63         matches.size.should_be 1
 </span><span class="marked1"><a name="line64" />64     end
-</span><span class="inferred0"><a name="line65" />65 end
+</span><span class="inferred0"><a name="line65" />65 
+</span><span class="marked1"><a name="line66" />66     specify &quot;chaning the password is safe&quot; do
+</span><span class="marked0"><a name="line67" />67         @container.save(@testing_file)
+</span><span class="marked1"><a name="line68" />68         copy_of_container= Keybox::Storage::Container.new(@passphrase, @testing_file)
+</span><span class="marked0"><a name="line69" />69         times_1 = copy_of_container.find_by_url(&quot;nytimes&quot;).first
+</span><span class="inferred1"><a name="line70" />70 
+</span><span class="marked0"><a name="line71" />71         @container.passphrase = &quot;I love ruby too!&quot;
+</span><span class="marked1"><a name="line72" />72         @container.save(@keybox_file)
+</span><span class="marked0"><a name="line73" />73         @container = Keybox::Storage::Container.new(&quot;I love ruby too!&quot;, @keybox_file)
+</span><span class="marked1"><a name="line74" />74         times_2 = @container.find_by_url(&quot;nytimes&quot;).first
+</span><span class="marked0"><a name="line75" />75         @container.modified?.should_eql true
+</span><span class="uncovered1"><a name="line76" />76         times_1.should_eql times_2
+</span><span class="marked0"><a name="line77" />77     end
+</span><span class="inferred1"><a name="line78" />78 
+</span><span class="marked0"><a name="line79" />79     specify &quot;a modified db can be detected&quot; do
+</span><span class="inferred1"><a name="line80" />80     end
+</span><span class="inferred0"><a name="line81" />81 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

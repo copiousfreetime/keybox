@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Tue Dec 12 16:25:45 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Tue Dec 12 17:15:51 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -637,12 +637,12 @@ span.run100 {
 </span><span class="inferred1"><a name="line18" /> 18     end
 </span><span class="inferred0"><a name="line19" /> 19 
 </span><span class="marked1"><a name="line20" /> 20     specify &quot;nil argv should do nothing&quot; do
-</span><span class="marked0"><a name="line21" /> 21         kps = Keybox::Application::PasswordSafe.new(nil)
+</span><span class="marked0"><a name="line21" /> 21         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @path])
 </span><span class="marked1"><a name="line22" /> 22         kps.error_message.should_be nil
 </span><span class="marked0"><a name="line23" /> 23     end
 </span><span class="inferred1"><a name="line24" /> 24 
 </span><span class="marked0"><a name="line25" /> 25     specify &quot;executing with no args should have output on stdout&quot; do
-</span><span class="marked1"><a name="line26" /> 26         kps = Keybox::Application::PasswordSafe.new(nil)
+</span><span class="marked1"><a name="line26" /> 26         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @path])
 </span><span class="marked0"><a name="line27" /> 27         kps.stdout = StringIO.new
 </span><span class="marked1"><a name="line28" /> 28         kps.stdin  = StringIO.new(@passphrase)
 </span><span class="marked0"><a name="line29" /> 29         kps.run
