@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Tue Dec 12 17:15:50 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Tue Dec 19 22:29:50 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -578,10 +578,10 @@ span.run100 {
             <a href='lib-keybox-storage-container_rb.html'>lib/keybox/storage/container.rb</a>
           </td>
           <td class='value'>
-            <tt>213</tt>
+            <tt>226</tt>
           </td>
           <td class='value'>
-            <tt>136</tt>
+            <tt>144</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
@@ -698,138 +698,151 @@ span.run100 {
 </span><span class="marked0"><a name="line79" /> 79                 File.open(path,&quot;w&quot;) do |f|
 </span><span class="marked1"><a name="line80" /> 80                     f.write(self.to_yaml)
 </span><span class="inferred0"><a name="line81" /> 81                 end
-</span><span class="inferred1"><a name="line82" /> 82             end
-</span><span class="inferred0"><a name="line83" /> 83 
-</span><span class="inferred1"><a name="line84" /> 84             #
-</span><span class="inferred0"><a name="line85" /> 85             # calculate the encryption key from the initial passphrase
-</span><span class="inferred1"><a name="line86" /> 86             #
-</span><span class="marked0"><a name="line87" /> 87             def calculated_key(passphrase = @passphrase)
-</span><span class="marked1"><a name="line88" /> 88                 key = self.key_digest_salt + passphrase
-</span><span class="marked0"><a name="line89" /> 89                 self.key_calc_iterations.times do 
-</span><span class="marked1"><a name="line90" /> 90                     key = Keybox::Digest::CLASSES[self.key_digest_algorithm].digest(key)
-</span><span class="inferred0"><a name="line91" /> 91                 end
-</span><span class="marked1"><a name="line92" /> 92                 return key
-</span><span class="inferred0"><a name="line93" /> 93             end
-</span><span class="inferred1"><a name="line94" /> 94 
-</span><span class="inferred0"><a name="line95" /> 95             # 
-</span><span class="inferred1"><a name="line96" /> 96             # calculate the key digest of the encryption key
-</span><span class="inferred0"><a name="line97" /> 97             #
-</span><span class="marked1"><a name="line98" /> 98             def calculated_key_digest(passphrase)
-</span><span class="marked0"><a name="line99" /> 99                 Keybox::Digest::CLASSES[self.key_digest_algorithm].hexdigest(calculated_key(passphrase))
-</span><span class="marked1"><a name="line100" />100             end
-</span><span class="inferred0"><a name="line101" />101 
-</span><span class="inferred1"><a name="line102" />102             #
-</span><span class="inferred0"><a name="line103" />103             # Add a record to the system
-</span><span class="inferred1"><a name="line104" />104             #
-</span><span class="marked0"><a name="line105" />105             def &lt;&lt;(obj)
-</span><span class="marked1"><a name="line106" />106                 if obj.respond_to?(&quot;needs_container_passphrase?&quot;) and obj.needs_container_passphrase? then
-</span><span class="marked0"><a name="line107" />107                     obj.container_passphrase = @passphrase
-</span><span class="inferred1"><a name="line108" />108                 end
-</span><span class="marked0"><a name="line109" />109                 @records &lt;&lt; obj
-</span><span class="inferred1"><a name="line110" />110             end
-</span><span class="inferred0"><a name="line111" />111 
-</span><span class="inferred1"><a name="line112" />112             #
-</span><span class="inferred0"><a name="line113" />113             # Delete a record from the system
-</span><span class="inferred1"><a name="line114" />114             #
-</span><span class="marked0"><a name="line115" />115             def delete(obj)
-</span><span class="marked1"><a name="line116" />116                 @records.delete(obj)
-</span><span class="marked0"><a name="line117" />117             end
-</span><span class="inferred1"><a name="line118" />118 
-</span><span class="marked0"><a name="line119" />119             def find_by_url(url)
-</span><span class="marked1"><a name="line120" />120                 find_matching_records(url,%w(url))
-</span><span class="marked0"><a name="line121" />121             end
-</span><span class="inferred1"><a name="line122" />122 
-</span><span class="inferred0"><a name="line123" />123             #
-</span><span class="inferred1"><a name="line124" />124             # Search all the records in the database finding any that
-</span><span class="inferred0"><a name="line125" />125             # match the search string passed in.  The Search string is
-</span><span class="inferred1"><a name="line126" />126             # converted to a Regexp before beginning.
-</span><span class="inferred0"><a name="line127" />127             #
-</span><span class="inferred1"><a name="line128" />128             # A list of restricted fields can also be passed in and the
-</span><span class="inferred0"><a name="line129" />129             # regexp will only be matched against those fields
-</span><span class="inferred1"><a name="line130" />130             #
-</span><span class="marked0"><a name="line131" />131             def find_matching_records(search_string,restricted_to = nil)
-</span><span class="marked1"><a name="line132" />132                 regex = Regexp.new(search_string)
-</span><span class="marked0"><a name="line133" />133                 matches = []
-</span><span class="marked1"><a name="line134" />134                 @records.each do |record|
-</span><span class="marked0"><a name="line135" />135                     restricted_to = restricted_to || ( record.fields - %w(password) )
-</span><span class="marked1"><a name="line136" />136                     record.data_members.each_pair do |k,v|
-</span><span class="marked0"><a name="line137" />137                         if regex.match(v) and restricted_to.include?(k.to_s) then
-</span><span class="marked1"><a name="line138" />138                             matches &lt;&lt; record
-</span><span class="marked0"><a name="line139" />139                             break
-</span><span class="inferred1"><a name="line140" />140                         end
-</span><span class="inferred0"><a name="line141" />141                     end
-</span><span class="inferred1"><a name="line142" />142                 end
-</span><span class="marked0"><a name="line143" />143                 return matches
-</span><span class="inferred1"><a name="line144" />144             end
-</span><span class="inferred0"><a name="line145" />145  
-</span><span class="marked1"><a name="line146" />146             private
-</span><span class="inferred0"><a name="line147" />147 
-</span><span class="inferred1"><a name="line148" />148             #
-</span><span class="inferred0"><a name="line149" />149             # calculate the key digest of the input pass phrase and
-</span><span class="inferred1"><a name="line150" />150             # compare that to the digest in the data file.  If they are
-</span><span class="inferred0"><a name="line151" />151             # the same, then the pass phrase should be the correct one
-</span><span class="inferred1"><a name="line152" />152             # for the data.
-</span><span class="inferred0"><a name="line153" />153             #
-</span><span class="marked1"><a name="line154" />154             def validate_passphrase
-</span><span class="marked0"><a name="line155" />155                 raise Keybox::ValidationError, &quot;Passphrase digests do not match.  The passphrase given does not decrypt the data in this file&quot; unless key_digest == calculated_key_digest(@passphrase)
-</span><span class="marked1"><a name="line156" />156             end
-</span><span class="inferred0"><a name="line157" />157 
-</span><span class="inferred1"><a name="line158" />158             #
-</span><span class="inferred0"><a name="line159" />159             # encrypt the data in the records and store it in
-</span><span class="inferred1"><a name="line160" />160             # records_encrypted_data
+</span><span class="marked1"><a name="line82" /> 82                 @modified = false
+</span><span class="inferred0"><a name="line83" /> 83             end
+</span><span class="inferred1"><a name="line84" /> 84 
+</span><span class="inferred0"><a name="line85" /> 85             #
+</span><span class="inferred1"><a name="line86" /> 86             # calculate the encryption key from the initial passphrase
+</span><span class="inferred0"><a name="line87" /> 87             #
+</span><span class="marked1"><a name="line88" /> 88             def calculated_key(passphrase = @passphrase)
+</span><span class="marked0"><a name="line89" /> 89                 key = self.key_digest_salt + passphrase
+</span><span class="marked1"><a name="line90" /> 90                 self.key_calc_iterations.times do 
+</span><span class="marked0"><a name="line91" /> 91                     key = Keybox::Digest::CLASSES[self.key_digest_algorithm].digest(key)
+</span><span class="inferred1"><a name="line92" /> 92                 end
+</span><span class="marked0"><a name="line93" /> 93                 return key
+</span><span class="inferred1"><a name="line94" /> 94             end
+</span><span class="inferred0"><a name="line95" /> 95 
+</span><span class="inferred1"><a name="line96" /> 96             # 
+</span><span class="inferred0"><a name="line97" /> 97             # calculate the key digest of the encryption key
+</span><span class="inferred1"><a name="line98" /> 98             #
+</span><span class="marked0"><a name="line99" /> 99             def calculated_key_digest(passphrase)
+</span><span class="marked1"><a name="line100" />100                 Keybox::Digest::CLASSES[self.key_digest_algorithm].hexdigest(calculated_key(passphrase))
+</span><span class="marked0"><a name="line101" />101             end
+</span><span class="inferred1"><a name="line102" />102 
+</span><span class="inferred0"><a name="line103" />103             #
+</span><span class="inferred1"><a name="line104" />104             # Add a record to the system
+</span><span class="inferred0"><a name="line105" />105             #
+</span><span class="marked1"><a name="line106" />106             def &lt;&lt;(obj)
+</span><span class="marked0"><a name="line107" />107                 if obj.respond_to?(&quot;needs_container_passphrase?&quot;) and obj.needs_container_passphrase? then
+</span><span class="marked1"><a name="line108" />108                     obj.container_passphrase = @passphrase
+</span><span class="inferred0"><a name="line109" />109                 end
+</span><span class="marked1"><a name="line110" />110                 @records &lt;&lt; obj
+</span><span class="inferred0"><a name="line111" />111             end
+</span><span class="inferred1"><a name="line112" />112 
+</span><span class="inferred0"><a name="line113" />113             #
+</span><span class="inferred1"><a name="line114" />114             # Delete a record from the system
+</span><span class="inferred0"><a name="line115" />115             #
+</span><span class="marked1"><a name="line116" />116             def delete(obj)
+</span><span class="marked0"><a name="line117" />117                 @records.delete(obj)
+</span><span class="marked1"><a name="line118" />118             end
+</span><span class="inferred0"><a name="line119" />119 
+</span><span class="marked1"><a name="line120" />120             def find_by_url(url)
+</span><span class="marked0"><a name="line121" />121                 find(url,%w(url))
+</span><span class="marked1"><a name="line122" />122             end
+</span><span class="inferred0"><a name="line123" />123 
+</span><span class="inferred1"><a name="line124" />124             #
+</span><span class="inferred0"><a name="line125" />125             # Search all the records in the database finding any that
+</span><span class="inferred1"><a name="line126" />126             # match the search string passed in.  The Search string is
+</span><span class="inferred0"><a name="line127" />127             # converted to a Regexp before beginning.
+</span><span class="inferred1"><a name="line128" />128             #
+</span><span class="inferred0"><a name="line129" />129             # A list of restricted fields can also be passed in and the
+</span><span class="inferred1"><a name="line130" />130             # regexp will only be matched against those fields
+</span><span class="inferred0"><a name="line131" />131             #
+</span><span class="marked1"><a name="line132" />132             def find(search_string,restricted_to = nil)
+</span><span class="marked0"><a name="line133" />133                 regex = Regexp.new(search_string)
+</span><span class="marked1"><a name="line134" />134                 matches = []
+</span><span class="marked0"><a name="line135" />135                 @records.each do |record|
+</span><span class="marked1"><a name="line136" />136                     restricted_to = restricted_to || ( record.fields - %w(password) )
+</span><span class="marked0"><a name="line137" />137                     record.data_members.each_pair do |k,v|
+</span><span class="marked1"><a name="line138" />138                         if regex.match(v) and restricted_to.include?(k.to_s) then
+</span><span class="marked0"><a name="line139" />139                             matches &lt;&lt; record
+</span><span class="marked1"><a name="line140" />140                             break
+</span><span class="inferred0"><a name="line141" />141                         end
+</span><span class="inferred1"><a name="line142" />142                     end
+</span><span class="inferred0"><a name="line143" />143                 end
+</span><span class="marked1"><a name="line144" />144                 return matches
+</span><span class="inferred0"><a name="line145" />145             end
+</span><span class="inferred1"><a name="line146" />146 
+</span><span class="inferred0"><a name="line147" />147             #
+</span><span class="inferred1"><a name="line148" />148             # See if we are modified, or if any of the records are
+</span><span class="inferred0"><a name="line149" />149             # modified
+</span><span class="inferred1"><a name="line150" />150             #
+</span><span class="marked0"><a name="line151" />151             def modified?
+</span><span class="marked1"><a name="line152" />152                 return true if @modified
+</span><span class="marked0"><a name="line153" />153                 @records.each do |record|
+</span><span class="marked1"><a name="line154" />154                     return true if record.modified?
+</span><span class="inferred0"><a name="line155" />155                 end
+</span><span class="marked1"><a name="line156" />156                 return false
+</span><span class="inferred0"><a name="line157" />157             end
+</span><span class="inferred1"><a name="line158" />158  
+</span><span class="marked0"><a name="line159" />159             private
+</span><span class="inferred1"><a name="line160" />160 
 </span><span class="inferred0"><a name="line161" />161             #
-</span><span class="marked1"><a name="line162" />162             def encrypt_records
-</span><span class="marked0"><a name="line163" />163                 cipher     = OpenSSL::Cipher::Cipher.new(self.records_cipher_algorithm)
-</span><span class="marked1"><a name="line164" />164                 cipher.encrypt
-</span><span class="marked0"><a name="line165" />165                 cipher.key = calculated_key
-</span><span class="marked1"><a name="line166" />166                 cipher.iv  = self.records_init_vector
-</span><span class="marked0"><a name="line167" />167                 self.records_encrypted_data  = cipher.update(@records.to_yaml) 
-</span><span class="marked1"><a name="line168" />168                 self.records_encrypted_data &lt;&lt; cipher.final
-</span><span class="inferred0"><a name="line169" />169             end
+</span><span class="inferred1"><a name="line162" />162             # calculate the key digest of the input pass phrase and
+</span><span class="inferred0"><a name="line163" />163             # compare that to the digest in the data file.  If they are
+</span><span class="inferred1"><a name="line164" />164             # the same, then the pass phrase should be the correct one
+</span><span class="inferred0"><a name="line165" />165             # for the data.
+</span><span class="inferred1"><a name="line166" />166             #
+</span><span class="marked0"><a name="line167" />167             def validate_passphrase
+</span><span class="marked1"><a name="line168" />168                 raise Keybox::ValidationError, &quot;Passphrase digests do not match.  The passphrase given does not decrypt the data in this file&quot; unless key_digest == calculated_key_digest(@passphrase)
+</span><span class="marked0"><a name="line169" />169             end
 </span><span class="inferred1"><a name="line170" />170 
 </span><span class="inferred0"><a name="line171" />171             #
-</span><span class="inferred1"><a name="line172" />172             # decrypt the data in the record_data and store it in
-</span><span class="inferred0"><a name="line173" />173             # records
+</span><span class="inferred1"><a name="line172" />172             # encrypt the data in the records and store it in
+</span><span class="inferred0"><a name="line173" />173             # records_encrypted_data
 </span><span class="inferred1"><a name="line174" />174             #
-</span><span class="marked0"><a name="line175" />175             def decrypt_records
+</span><span class="marked0"><a name="line175" />175             def encrypt_records
 </span><span class="marked1"><a name="line176" />176                 cipher     = OpenSSL::Cipher::Cipher.new(self.records_cipher_algorithm)
-</span><span class="marked0"><a name="line177" />177                 cipher.decrypt
+</span><span class="marked0"><a name="line177" />177                 cipher.encrypt
 </span><span class="marked1"><a name="line178" />178                 cipher.key = calculated_key
 </span><span class="marked0"><a name="line179" />179                 cipher.iv  = self.records_init_vector
-</span><span class="marked1"><a name="line180" />180                 @decrypted_yaml  = cipher.update(self.records_encrypted_data)
-</span><span class="marked0"><a name="line181" />181                 @decrypted_yaml &lt;&lt; cipher.final
+</span><span class="marked1"><a name="line180" />180                 self.records_encrypted_data  = cipher.update(@records.to_yaml) 
+</span><span class="marked0"><a name="line181" />181                 self.records_encrypted_data &lt;&lt; cipher.final
 </span><span class="inferred1"><a name="line182" />182             end
 </span><span class="inferred0"><a name="line183" />183 
 </span><span class="inferred1"><a name="line184" />184             #
-</span><span class="inferred0"><a name="line185" />185             # make sure that the decrypted data is validated against its
-</span><span class="inferred1"><a name="line186" />186             # hash
+</span><span class="inferred0"><a name="line185" />185             # decrypt the data in the record_data and store it in
+</span><span class="inferred1"><a name="line186" />186             # records
 </span><span class="inferred0"><a name="line187" />187             #
-</span><span class="marked1"><a name="line188" />188             def validate_decryption
-</span><span class="marked0"><a name="line189" />189                 digest = Keybox::Digest::CLASSES[self.records_digest_algorithm]
-</span><span class="marked1"><a name="line190" />190                 hexdigest = digest.hexdigest(self.records_digest_salt + @decrypted_yaml)
-</span><span class="marked0"><a name="line191" />191                 raise Keybox::ValidationError, &quot;Record digests do not match. The given passphrase does not decrypt the data.&quot; unless hexdigest == self.records_digest
-</span><span class="inferred1"><a name="line192" />192             end
-</span><span class="inferred0"><a name="line193" />193 
-</span><span class="inferred1"><a name="line194" />194 
-</span><span class="marked0"><a name="line195" />195             def calculate_records_digest
-</span><span class="marked1"><a name="line196" />196                 digest = Keybox::Digest::CLASSES[self.records_digest_algorithm]
-</span><span class="marked0"><a name="line197" />197                 self.records_digest = digest.hexdigest(self.records_digest_salt + @records.to_yaml)
-</span><span class="inferred1"><a name="line198" />198             end
-</span><span class="inferred0"><a name="line199" />199 
-</span><span class="marked1"><a name="line200" />200             def load_records
-</span><span class="marked0"><a name="line201" />201                 @records = YAML.load(@decrypted_yaml)
-</span><span class="inferred1"><a name="line202" />202 
-</span><span class="inferred0"><a name="line203" />203                 # if a record wants, it can have a reference to the
-</span><span class="inferred1"><a name="line204" />204                 # container
-</span><span class="marked0"><a name="line205" />205                 @records.each do |record|
-</span><span class="marked1"><a name="line206" />206                     if record.respond_to?(&quot;needs_container_passphrase?&quot;) and record.needs_container_passphrase? then
-</span><span class="marked0"><a name="line207" />207                         record.container_passphrase = @passphrase
-</span><span class="inferred1"><a name="line208" />208                     end
-</span><span class="inferred0"><a name="line209" />209                 end
-</span><span class="inferred1"><a name="line210" />210             end
-</span><span class="inferred0"><a name="line211" />211        end
-</span><span class="inferred1"><a name="line212" />212     end
-</span><span class="inferred0"><a name="line213" />213 end
+</span><span class="marked1"><a name="line188" />188             def decrypt_records
+</span><span class="marked0"><a name="line189" />189                 cipher     = OpenSSL::Cipher::Cipher.new(self.records_cipher_algorithm)
+</span><span class="marked1"><a name="line190" />190                 cipher.decrypt
+</span><span class="marked0"><a name="line191" />191                 cipher.key = calculated_key
+</span><span class="marked1"><a name="line192" />192                 cipher.iv  = self.records_init_vector
+</span><span class="marked0"><a name="line193" />193                 @decrypted_yaml  = cipher.update(self.records_encrypted_data)
+</span><span class="marked1"><a name="line194" />194                 @decrypted_yaml &lt;&lt; cipher.final
+</span><span class="inferred0"><a name="line195" />195             end
+</span><span class="inferred1"><a name="line196" />196 
+</span><span class="inferred0"><a name="line197" />197             #
+</span><span class="inferred1"><a name="line198" />198             # make sure that the decrypted data is validated against its
+</span><span class="inferred0"><a name="line199" />199             # hash
+</span><span class="inferred1"><a name="line200" />200             #
+</span><span class="marked0"><a name="line201" />201             def validate_decryption
+</span><span class="marked1"><a name="line202" />202                 digest = Keybox::Digest::CLASSES[self.records_digest_algorithm]
+</span><span class="marked0"><a name="line203" />203                 hexdigest = digest.hexdigest(self.records_digest_salt + @decrypted_yaml)
+</span><span class="marked1"><a name="line204" />204                 raise Keybox::ValidationError, &quot;Record digests do not match. The given passphrase does not decrypt the data.&quot; unless hexdigest == self.records_digest
+</span><span class="inferred0"><a name="line205" />205             end
+</span><span class="inferred1"><a name="line206" />206 
+</span><span class="inferred0"><a name="line207" />207 
+</span><span class="marked1"><a name="line208" />208             def calculate_records_digest
+</span><span class="marked0"><a name="line209" />209                 digest = Keybox::Digest::CLASSES[self.records_digest_algorithm]
+</span><span class="marked1"><a name="line210" />210                 self.records_digest = digest.hexdigest(self.records_digest_salt + @records.to_yaml)
+</span><span class="inferred0"><a name="line211" />211             end
+</span><span class="inferred1"><a name="line212" />212 
+</span><span class="marked0"><a name="line213" />213             def load_records
+</span><span class="marked1"><a name="line214" />214                 @records = YAML.load(@decrypted_yaml)
+</span><span class="inferred0"><a name="line215" />215 
+</span><span class="inferred1"><a name="line216" />216                 # if a record wants, it can have a reference to the
+</span><span class="inferred0"><a name="line217" />217                 # container
+</span><span class="marked1"><a name="line218" />218                 @records.each do |record|
+</span><span class="marked0"><a name="line219" />219                     if record.respond_to?(&quot;needs_container_passphrase?&quot;) and record.needs_container_passphrase? then
+</span><span class="marked1"><a name="line220" />220                         record.container_passphrase = @passphrase
+</span><span class="inferred0"><a name="line221" />221                     end
+</span><span class="inferred1"><a name="line222" />222                 end
+</span><span class="inferred0"><a name="line223" />223             end
+</span><span class="inferred1"><a name="line224" />224        end
+</span><span class="inferred0"><a name="line225" />225     end
+</span><span class="inferred1"><a name="line226" />226 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

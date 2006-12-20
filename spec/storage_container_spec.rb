@@ -59,11 +59,11 @@ context 'a storage container' do
     end
 
     specify "can find matching records" do
-        matches = @container.find_matching_records(/times/)
+        matches = @container.find(/times/)
         matches.size.should_be 1
     end
 
-    specify "chaning the password is safe" do
+    specify "changing the password is safe" do
         @container.save(@testing_file)
         copy_of_container= Keybox::Storage::Container.new(@passphrase, @testing_file)
         times_1 = copy_of_container.find_by_url("nytimes").first
@@ -72,10 +72,17 @@ context 'a storage container' do
         @container.save(@keybox_file)
         @container = Keybox::Storage::Container.new("I love ruby too!", @keybox_file)
         times_2 = @container.find_by_url("nytimes").first
-        @container.modified?.should_eql true
+        @container.modified?.should_eql false
         times_1.should_eql times_2
     end
 
+    specify "a freshly loaded db has not been modified" do
+        @container.modified?.should_eql false
+    end
+
     specify "a modified db can be detected" do
+        l1 = @container.find("localhost").first
+        l1.username = "new username"
+        @container.modified?.should_eql true
     end
 end

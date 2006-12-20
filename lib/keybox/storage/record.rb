@@ -26,6 +26,12 @@ module Keybox
             end
 
             def modified?
+                # since this class can be loaded from a YAML file and
+                # modified is not stored in the serialized format, if
+                # @modified is not initialized, initialize it.
+                if not instance_variables.include?("@modified") then
+                    @modified = false
+                end
                 @modified
             end
 

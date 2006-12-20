@@ -157,7 +157,7 @@ module Keybox
             # delete an entry from the database
             #
             def delete(account)
-                matches = @db.find_matching_records(account)
+                matches = @db.find(account)
                 count = 0
                 matches.each do |match|
                     @stdout.puts "-" * 40
@@ -177,7 +177,7 @@ module Keybox
             # in the database
             #
             def list(account)
-                matches = @db.find_matching_records(account)
+                matches = @db.find(account)
                 if matches.size > 0 then
                     title_length = matches.collect { |f| f.title.length }.max
                     username_length = matches.collect { |f| f.username.length }.max
@@ -197,7 +197,7 @@ module Keybox
             # output all the information for the accounts matching
             #
             def show(account)
-                matches = @db.find_matching_records(account)
+                matches = @db.find(account)
                 if matches.size > 0 then
                     matches.each do |match|
                         @stdout.puts "=" * 72

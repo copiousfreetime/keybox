@@ -79,6 +79,7 @@ module Keybox
                 File.open(path,"w") do |f|
                     f.write(self.to_yaml)
                 end
+                @modified = false
             end
 
             #
@@ -117,7 +118,7 @@ module Keybox
             end
 
             def find_by_url(url)
-                find_matching_records(url,%w(url))
+                find(url,%w(url))
             end
 
             #
@@ -128,7 +129,7 @@ module Keybox
             # A list of restricted fields can also be passed in and the
             # regexp will only be matched against those fields
             #
-            def find_matching_records(search_string,restricted_to = nil)
+            def find(search_string,restricted_to = nil)
                 regex = Regexp.new(search_string)
                 matches = []
                 @records.each do |record|
@@ -141,6 +142,18 @@ module Keybox
                     end
                 end
                 return matches
+            end
+
+            #
+            # See if we are modified, or if any of the records are
+            # modified
+            #
+            def modified?
+                return true if @modified
+                @records.each do |record|
+                    return true if record.modified?
+                end
+                return false
             end
  
             private
