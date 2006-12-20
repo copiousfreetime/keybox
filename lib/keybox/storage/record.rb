@@ -14,8 +14,7 @@ module Keybox
             attr_reader :data_members
 
             PROTECTED_METHODS = [ :creation_time=, :modification_time=, :last_access_time=, 
-                                  :uuid=, :data_members=, :modified,
-                                  :modified= ]
+                                  :uuid=, :data_members=, :modified  ]
             def initialize
                 @creation_time     = Time.now
                 @modification_time = @creation_time.dup
@@ -33,6 +32,10 @@ module Keybox
                     @modified = false
                 end
                 @modified
+            end
+
+            def modified=(m)
+                @modified = m
             end
 
             def method_missing(method_id, *args)
@@ -55,7 +58,6 @@ module Keybox
                     @data_members[member_sym] = args[0]
                     @modified                 = true
                 elsif args.size == 0 then
-
                     @last_access_time = Time.now
                     @data_members[member_sym]
                 else

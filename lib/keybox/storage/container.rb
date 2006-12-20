@@ -79,7 +79,7 @@ module Keybox
                 File.open(path,"w") do |f|
                     f.write(self.to_yaml)
                 end
-                @modified = false
+                self.modified = false
             end
 
             #
@@ -154,6 +154,14 @@ module Keybox
                     return true if record.modified?
                 end
                 return false
+            end
+
+            def modified=(m)
+                @modified = m
+                @records.each do |record|
+                    record.modified = m
+                end
+                modified?
             end
  
             private
