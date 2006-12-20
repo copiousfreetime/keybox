@@ -212,8 +212,10 @@ module Keybox
             #
             # Change the master password on the database
             #
-            def master_password(new_password)
+            def master_password(ignore_this)
+                new_password = prompt("Enter new master password", false, true, 30)
                 @db.passphrase = new_password
+                @stdout.puts "New master password set."
             end
 
             def fill_entry(entry)

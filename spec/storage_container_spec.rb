@@ -19,6 +19,7 @@ context 'a storage container' do
 
     teardown do
         File.unlink(@testing_file) if File.exists?(@testing_file)
+        File.unlink(@keybox_file) if File.exists?(@keybox_file)
     end
 
     specify 'should have a uuid' do

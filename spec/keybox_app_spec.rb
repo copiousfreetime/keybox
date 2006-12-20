@@ -11,6 +11,7 @@ context "Keybox Password Safe Application" do
         container << Keybox::HostAccountEntry.new("test account","localhost","guest", "rubyrocks")
         container << Keybox::URLAccountEntry.new("the times", "http://www.nytimes.com", "rubyhacker")
         container.save
+        container.save("/tmp/kps_db-jjh.yml")
     end
 
     teardown do
@@ -150,6 +151,23 @@ context "Keybox Password Safe Application" do
         kps.stdout.string.should_satisfy { |msg| msg =~ /2 entries listed/m }
     end
 
+    specify "listing no entries found" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--list", "nothing"])
+        kps.stdout = StringIO.new
+        kps.stdin = StringIO.new(@passphrase)
+        kps.run
+        kps.stdout.string.should_satisfy { |msg| msg =~ /No matching records were found./ }
+    end
+
+    specify "showing no entries found" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--show", "nothing"])
+        kps.stdout = StringIO.new
+        kps.stdin = StringIO.new(@passphrase)
+        kps.run
+        kps.stdout.string.should_satisfy { |msg| msg =~ /No matching records were found./ }
+    end
+
+
     specify "show all the entries" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--show"])
         kps.stdout = StringIO.new
@@ -157,5 +175,14 @@ context "Keybox Password Safe Application" do
         kps.run
         kps.stdout.string.should_satisfy { |msg| msg =~ /2 entries shown/m }
     end
+
+    specify "changing master password works" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--master-password"])
+        kps.stdout = StringIO.new
+        kps.stdin  = StringIO.new([@passphrase, "I really love ruby.", "I really love ruby."].join("\n"))
+        kps.run
+        kps.stdout.string.should_satisfy { |msg| msg =~ /New master password set/m }
+    end
+
 end
 
