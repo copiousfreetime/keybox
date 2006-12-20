@@ -1,0 +1,4 @@
+h1. Things to do
+
+  * Implement terminal based password showing using the terminal
+    chacters to wipe the screen when done.
