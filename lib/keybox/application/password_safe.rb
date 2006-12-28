@@ -202,6 +202,13 @@ module Keybox
                     matches.each do |match|
                         @stdout.puts "=" * 72
                         @stdout.puts match
+                        3.downto(1) do |i|
+                            @stdout.print "Password for this account =====> #{match.password} <===== (visible for #{i} seconds).\r"
+                            @stdout.flush
+                            sleep 1
+                        end
+                        # clear the line
+                        @stdout.puts "Password for this account =====> ********** <===== (not visible).\e[K"
                     end
                     @stdout.puts "#{matches.size} entries shown."
                 else

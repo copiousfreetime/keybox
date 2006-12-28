@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Tue Dec 19 23:24:06 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Wed Dec 27 19:33:38 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -800,7 +800,7 @@ span.run100 {
 </span><span class="marked1"><a name="line181" />181         kps.stdout = StringIO.new
 </span><span class="marked0"><a name="line182" />182         kps.stdin  = StringIO.new([@passphrase, &quot;I really love ruby.&quot;, &quot;I really love ruby.&quot;].join(&quot;\n&quot;))
 </span><span class="marked1"><a name="line183" />183         kps.run
-</span><span class="marked0"><a name="line184" />184         kps.stdout.string.should_satisfy { |msg| msg =~ /New master password set./m }
+</span><span class="marked0"><a name="line184" />184         kps.stdout.string.should_satisfy { |msg| msg =~ /New master password set/m }
 </span><span class="marked1"><a name="line185" />185     end
 </span><span class="inferred0"><a name="line186" />186 
 </span><span class="inferred1"><a name="line187" />187 end

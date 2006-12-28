@@ -35,6 +35,7 @@ module Keybox
                 value = self.send(f)
                 if f =~ /^pass/ then
                     value = " *****  Not printed ***** "
+                    next
                 end
                 s.puts "#{f.rjust(max_length + 1)} : #{value}"
             end

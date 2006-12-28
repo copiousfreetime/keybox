@@ -87,5 +87,7 @@ module Keybox
         def has_stty?
             system "which stty > /dev/null 2>&1"
         end
+
+
     end
 end
