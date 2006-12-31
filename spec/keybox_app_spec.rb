@@ -20,18 +20,18 @@ context "Keybox Password Safe Application" do
         @testing_cfg.unlink
     end
 
-    #specify "nil argv should do nothing" do
-    #    kps = Keybox::Application::PasswordSafe.new
-    #    kps.error_message.should_be nil
-    #end
+    specify "nil argv should do nothing" do
+        kps = Keybox::Application::PasswordSafe.new
+        kps.error_message.should_be nil
+    end
 
-    #specify "executing with no args should have output on stdout" do
-    #    kps = Keybox::Application::PasswordSafe.new(["-f", @path])
-    #    kps.stdout = StringIO.new
-    #    kps.stdin  = StringIO.new(@passphrase)
-    #    kps.run
-    #    kps.stdout.string.size.should_be > 0
-    #end
+    specify "executing with no args should have output on stdout" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path])
+        kps.stdout = StringIO.new
+        kps.stdin  = StringIO.new(@passphrase)
+        kps.run
+        kps.stdout.string.size.should_be > 0
+    end
 
     specify "general options get set correctly" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--debug", "--no-use-hash-for-url"])
