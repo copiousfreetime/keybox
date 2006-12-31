@@ -173,7 +173,7 @@ module Keybox
             # for the data.
             #
             def validate_passphrase
-                raise Keybox::ValidationError, "Passphrase digests do not match.  The passphrase given does not decrypt the data in this file" unless key_digest == calculated_key_digest(@passphrase)
+                raise Keybox::ValidationError, "Passphrase digests do not match.  The passphrase given does not decrypt the data in this file." unless key_digest == calculated_key_digest(@passphrase)
             end
 
             #

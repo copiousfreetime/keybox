@@ -130,7 +130,13 @@ module Keybox
             end
 
             def load_database
-                password  = prompt("Password for (#{@options.db_file})", false)
+                password = nil
+                if not File.exists?(@options.db_file) then
+                    color_puts "Creating initial database.", :yellow
+                    password  = prompt("Initial Password for (#{@options.db_file})", false, true)
+                else
+                    password  = prompt("Password for (#{@options.db_file})", false)
+                end
                 @db = Keybox::Storage::Container.new(password,@options.db_file)
             end
 
@@ -307,11 +313,16 @@ module Keybox
                     if @db.modified? then 
                         @db.save
                     end
-                rescue Interrupt => i
+                rescue SignalException => se
                     @stdout.puts
-                    color_puts "Keyboard Interrupt", :red
+                    color_puts "Interrupted", :red
                     color_puts "There may be private information on your screen.", :red
                     color_puts "Please close this terminal.", :red
+                    exit 1
+                rescue StandardError => e
+                    @stdout.puts
+                    color_puts "#{e.message}", :red
+                    exit 1
                 end
             end
         end

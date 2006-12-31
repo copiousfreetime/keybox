@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sat Dec 30 18:47:09 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sat Dec 30 19:07:53 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -617,62 +617,62 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked1"><a name="line1" /> 1 require 'keybox'
-</span><span class="marked0"><a name="line2" /> 2 require 'keybox/application/base'
-</span><span class="inferred1"><a name="line3" /> 3 
-</span><span class="marked0"><a name="line4" /> 4 context &quot;Keybox Base Application&quot; do
-</span><span class="inferred1"><a name="line5" /> 5 
-</span><span class="marked0"><a name="line6" /> 6     specify &quot;nil argv should do nothing&quot; do
-</span><span class="marked1"><a name="line7" /> 7         kba = Keybox::Application::Base.new(nil)
-</span><span class="marked0"><a name="line8" /> 8         kba.error_message.should_be nil
-</span><span class="marked1"><a name="line9" /> 9     end
-</span><span class="inferred0"><a name="line10" />10 
-</span><span class="marked1"><a name="line11" />11     specify &quot;executing with no args should have output on stdout&quot; do
-</span><span class="marked0"><a name="line12" />12         kba = Keybox::Application::Base.new(nil)
-</span><span class="marked1"><a name="line13" />13         kba.stdout = StringIO.new
-</span><span class="marked0"><a name="line14" />14         kba.run
-</span><span class="marked1"><a name="line15" />15         kba.stdout.string.size.should_be &gt; 0
-</span><span class="marked0"><a name="line16" />16     end
-</span><span class="inferred1"><a name="line17" />17 
-</span><span class="inferred0"><a name="line18" />18 
-</span><span class="marked1"><a name="line19" />19     specify &quot;invalid options set the error message, exit 1 and have output on stderr&quot; do
-</span><span class="marked0"><a name="line20" />20         kba = Keybox::Application::Base.new([&quot;--invalid-option&quot;])
-</span><span class="marked1"><a name="line21" />21         kba.stderr = StringIO.new
-</span><span class="marked0"><a name="line22" />22         kba.stdout = StringIO.new
-</span><span class="marked1"><a name="line23" />23         begin
-</span><span class="marked0"><a name="line24" />24             kba.run
-</span><span class="inferred1"><a name="line25" />25         rescue SystemExit =&gt; se
-</span><span class="marked0"><a name="line26" />26             kba.error_message.should_satisfy { |msg| msg =~ /Try.*--help/m }
-</span><span class="marked1"><a name="line27" />27             kba.stderr.string.should_satisfy { |msg| msg =~ /Try.*--help/m }
-</span><span class="marked0"><a name="line28" />28             kba.stdout.string.size.should_eql 0
-</span><span class="marked1"><a name="line29" />29             se.status.should == 1
-</span><span class="inferred0"><a name="line30" />30         end
-</span><span class="marked1"><a name="line31" />31     end
-</span><span class="inferred0"><a name="line32" />32 
-</span><span class="marked1"><a name="line33" />33     specify &quot;help has output on stdout and exits 0&quot; do
-</span><span class="marked0"><a name="line34" />34         kba = Keybox::Application::Base.new([&quot;--h&quot;]) 
-</span><span class="marked1"><a name="line35" />35         kba.stdout = StringIO.new
-</span><span class="marked0"><a name="line36" />36         begin
-</span><span class="marked1"><a name="line37" />37             kba.run
-</span><span class="inferred0"><a name="line38" />38         rescue SystemExit =&gt; se
-</span><span class="marked1"><a name="line39" />39             se.status.should_eql 0
-</span><span class="marked0"><a name="line40" />40             kba.stdout.string.length.should_be &gt; 0
-</span><span class="inferred1"><a name="line41" />41         end
-</span><span class="marked0"><a name="line42" />42     end
-</span><span class="inferred1"><a name="line43" />43 
-</span><span class="marked0"><a name="line44" />44     specify &quot;version has output on stdout and exits 0&quot; do
-</span><span class="marked1"><a name="line45" />45         kba = Keybox::Application::Base.new([&quot;--ver&quot;]) 
-</span><span class="marked0"><a name="line46" />46         kba.stdout = StringIO.new
-</span><span class="marked1"><a name="line47" />47         begin
-</span><span class="marked0"><a name="line48" />48             kba.run
-</span><span class="inferred1"><a name="line49" />49         rescue SystemExit =&gt; se
-</span><span class="marked0"><a name="line50" />50             se.status.should_eql 0
-</span><span class="marked1"><a name="line51" />51             kba.stdout.string.length.should_be &gt; 0
-</span><span class="inferred0"><a name="line52" />52         end
-</span><span class="marked1"><a name="line53" />53     end
-</span><span class="inferred0"><a name="line54" />54  
-</span><span class="inferred1"><a name="line55" />55 end
-</span><span class="inferred0"><a name="line56" />56 
+    </table><pre><span class="marked0"><a name="line1" /> 1 require 'keybox'
+</span><span class="marked1"><a name="line2" /> 2 require 'keybox/application/base'
+</span><span class="inferred0"><a name="line3" /> 3 
+</span><span class="marked1"><a name="line4" /> 4 context &quot;Keybox Base Application&quot; do
+</span><span class="inferred0"><a name="line5" /> 5 
+</span><span class="marked1"><a name="line6" /> 6     specify &quot;nil argv should do nothing&quot; do
+</span><span class="marked0"><a name="line7" /> 7         kba = Keybox::Application::Base.new(nil)
+</span><span class="marked1"><a name="line8" /> 8         kba.error_message.should_be nil
+</span><span class="marked0"><a name="line9" /> 9     end
+</span><span class="inferred1"><a name="line10" />10 
+</span><span class="marked0"><a name="line11" />11     specify &quot;executing with no args should have output on stdout&quot; do
+</span><span class="marked1"><a name="line12" />12         kba = Keybox::Application::Base.new(nil)
+</span><span class="marked0"><a name="line13" />13         kba.stdout = StringIO.new
+</span><span class="marked1"><a name="line14" />14         kba.run
+</span><span class="marked0"><a name="line15" />15         kba.stdout.string.size.should_be &gt; 0
+</span><span class="marked1"><a name="line16" />16     end
+</span><span class="inferred0"><a name="line17" />17 
+</span><span class="inferred1"><a name="line18" />18 
+</span><span class="marked0"><a name="line19" />19     specify &quot;invalid options set the error message, exit 1 and have output on stderr&quot; do
+</span><span class="marked1"><a name="line20" />20         kba = Keybox::Application::Base.new([&quot;--invalid-option&quot;])
+</span><span class="marked0"><a name="line21" />21         kba.stderr = StringIO.new
+</span><span class="marked1"><a name="line22" />22         kba.stdout = StringIO.new
+</span><span class="marked0"><a name="line23" />23         begin
+</span><span class="marked1"><a name="line24" />24             kba.run
+</span><span class="inferred0"><a name="line25" />25         rescue SystemExit =&gt; se
+</span><span class="marked1"><a name="line26" />26             kba.error_message.should_satisfy { |msg| msg =~ /Try.*--help/m }
+</span><span class="marked0"><a name="line27" />27             kba.stderr.string.should_satisfy { |msg| msg =~ /Try.*--help/m }
+</span><span class="marked1"><a name="line28" />28             kba.stdout.string.size.should_eql 0
+</span><span class="marked0"><a name="line29" />29             se.status.should == 1
+</span><span class="inferred1"><a name="line30" />30         end
+</span><span class="marked0"><a name="line31" />31     end
+</span><span class="inferred1"><a name="line32" />32 
+</span><span class="marked0"><a name="line33" />33     specify &quot;help has output on stdout and exits 0&quot; do
+</span><span class="marked1"><a name="line34" />34         kba = Keybox::Application::Base.new([&quot;--h&quot;]) 
+</span><span class="marked0"><a name="line35" />35         kba.stdout = StringIO.new
+</span><span class="marked1"><a name="line36" />36         begin
+</span><span class="marked0"><a name="line37" />37             kba.run
+</span><span class="inferred1"><a name="line38" />38         rescue SystemExit =&gt; se
+</span><span class="marked0"><a name="line39" />39             se.status.should_eql 0
+</span><span class="marked1"><a name="line40" />40             kba.stdout.string.length.should_be &gt; 0
+</span><span class="inferred0"><a name="line41" />41         end
+</span><span class="marked1"><a name="line42" />42     end
+</span><span class="inferred0"><a name="line43" />43 
+</span><span class="marked1"><a name="line44" />44     specify &quot;version has output on stdout and exits 0&quot; do
+</span><span class="marked0"><a name="line45" />45         kba = Keybox::Application::Base.new([&quot;--ver&quot;]) 
+</span><span class="marked1"><a name="line46" />46         kba.stdout = StringIO.new
+</span><span class="marked0"><a name="line47" />47         begin
+</span><span class="marked1"><a name="line48" />48             kba.run
+</span><span class="inferred0"><a name="line49" />49         rescue SystemExit =&gt; se
+</span><span class="marked1"><a name="line50" />50             se.status.should_eql 0
+</span><span class="marked0"><a name="line51" />51             kba.stdout.string.length.should_be &gt; 0
+</span><span class="inferred1"><a name="line52" />52         end
+</span><span class="marked0"><a name="line53" />53     end
+</span><span class="inferred1"><a name="line54" />54  
+</span><span class="inferred0"><a name="line55" />55 end
+</span><span class="inferred1"><a name="line56" />56 
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

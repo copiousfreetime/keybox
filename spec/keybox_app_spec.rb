@@ -90,6 +90,17 @@ context "Keybox Password Safe Application" do
             kps.stdout.string.length.should_be > 0
         end
     end
+    
+    specify "prompted for password twice to create database initially" do
+        File.unlink(@testing_db.path)
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path])
+        kps.stdout = StringIO.new
+        kps.stdin  = StringIO.new([@passphrase,@passphrase].join("\n"))
+        kps.run
+        kps.db.records.size.should_eql 0
+        kps.stdout.string.should_satisfy { |msg| msg =~ /Creating initial database./m }
+        kps.stdout.string.should_satisfy { |msg| msg =~ /Initial Password for/m }
+    end
 
     specify "file can be opened with password" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path])
