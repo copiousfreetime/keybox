@@ -293,18 +293,25 @@ module Keybox
             end
 
             def run
-                error_version_help
-                merge_options
-                load_database
+                begin
+                    error_version_help
+                    merge_options
+                    load_database
 
-                if @actions.size == 0 then
-                    @actions << [:list, ".*"]
-                end
-                action, param = *@actions.shift
-                self.send(action, param)
+                    if @actions.size == 0 then
+                        @actions << [:list, ".*"]
+                    end
+                    action, param = *@actions.shift
+                    self.send(action, param)
 
-                if @db.modified? then 
-                    @db.save
+                    if @db.modified? then 
+                        @db.save
+                    end
+                rescue Interrupt => i
+                    @stdout.puts
+                    color_puts "Keyboard Interrupt", :red
+                    color_puts "There may be private information on your screen.", :red
+                    color_puts "Please close this terminal.", :red
                 end
             end
         end
