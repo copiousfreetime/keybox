@@ -24,26 +24,26 @@ module Keybox
                           "Select the algorithm for password generation",
                           " #{ALGORITHMS.keys.join(', ')}") do |alg|
                            key = ALGORITHMS.keys.find { |x| x =~ /^#{alg}/ }
-                            @options.algorithm = ALGORITHMS[key]
+                            @parsed_options.algorithm = ALGORITHMS[key]
                     end
 
                     op.on("-h", "--help") do 
-                        @options.show_help = true
+                        @parsed_options.show_help = true
                     end
 
                     op.on("-mLENGTH ", "--min-length LENGTH", Integer,
                            "Minimum LENGTH of the new password in letters") do |len|
-                        @options.min_length = len
+                        @parsed_options.min_length = len
                     end
                     
                     op.on("-xLENGTH ", "--max-length LENGTH", Integer,
                            "Maximum LENGTH of the new password in letters") do |len|
-                        @options.max_length = len
+                        @parsed_options.max_length = len
                     end
                     
                     op.on("-nNUMER", "--number NUMBER", Integer,
                           "Generate NUMBER of passwords (default 6)") do |n|
-                        @options.number_to_generate = n
+                        @parsed_options.number_to_generate = n
                     end
 
                     op.on("-uLIST", "--use symbol,set,list", Array,
@@ -54,7 +54,7 @@ module Keybox
                             raise OptionParser::InvalidArgument, ": #{symbol_set} does not match any of #{SYMBOL_SETS.join(', ')}" if sym.nil?
                         end
                         
-                        @options.use_symbols = options_to_symbol_sets(list)
+                        @parsed_options.use_symbols = options_to_symbol_sets(list)
                     end
 
                     op.on("-rLIST","--require symbol,set,list", Array,
@@ -64,11 +64,11 @@ module Keybox
                             sym = SYMBOL_SETS.find { |s| s =~ /^#{symbol_set}/ }
                             raise OptionParser::InvalidArgument, ": #{symbol_set} does not match any of #{SYMBOL_SETS.join(', ')}" if sym.nil?
                         end
-                        @options.require_symbols = options_to_symbol_sets(list)
+                        @parsed_options.require_symbols = options_to_symbol_sets(list)
                     end
 
                     op.on("-v", "--version", "Show version information") do
-                        @options.show_version = true
+                        @parsed_options.show_version = true
                     end 
 
                 end
@@ -120,6 +120,7 @@ module Keybox
 
             def run
                 error_version_help
+                merge_options
                 generator = create_generator
                 @options.number_to_generate.times do 
                     @stdout.puts generator.generate

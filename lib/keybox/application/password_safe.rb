@@ -3,6 +3,7 @@ require 'keybox/application/base'
 require 'optparse'
 require 'ostruct'
 require 'uri'
+require 'fileutils'
 
 #-----------------------------------------------------------------------
 # The Password Safe application
@@ -16,8 +17,8 @@ module Keybox
             attr_reader   :db
 
             DEFAULT_DIRECTORY = File.join(ENV["HOME"],'.keybox')
-            DEFUALT_DB        = File.join(DEFAULT_DIRECTORY,"database.yaml")
-            DEFUALT_CONFIG    = File.join(DEFAULT_DIRECTORY,"config.yaml")
+            DEFAULT_DB        = File.join(DEFAULT_DIRECTORY,"database.yaml")
+            DEFAULT_CONFIG    = File.join(DEFAULT_DIRECTORY,"config.yaml")
 
             ACTION_LIST       = %w(add delete edit show list master-password)
 
@@ -40,19 +41,19 @@ module Keybox
                     op.separator "General Options:"
                     
                     op.on("-f", "--file DATABASE_FILE", "The Database File to use") do |db_file|
-                        @options.db_file = db_file
+                        @parsed_options.db_file = db_file
                     end
 
                     op.on("-c", "--config CONFIG_FILE", "The Configuration file to use") do |cfile|
-                        @options.config_file = cfile
+                        @parsed_options.config_file = cfile
                     end
 
                     op.on("-D", "--debug", "Ouput debug information to STDERR") do 
-                        @options.debug = true
+                        @parsed_options.debug = true
                     end
 
                     op.on("--[no-]use-hash-for-url", "Use the password hash algorithm for URL accounts") do |r|
-                        @options.use_password_hash_for_url = r
+                        @parsed_options.use_password_hash_for_url = r
                     end
 
 
@@ -60,7 +61,7 @@ module Keybox
                     op.separator "Commands, one and only one of these is required:"
                     
                     op.on("-h", "--help") do
-                        @options.show_help = true
+                        @parsed_options.show_help = true
                     end
 
                     op.on("-a", "--add ACCOUNT", "Create a new account in keybox") do |account|
@@ -90,7 +91,7 @@ module Keybox
                     end
 
                     op.on("-v", "--version", "Show version information") do
-                        @options.show_version = true
+                        @parsed_options.show_version = true
                     end
 
                 end
@@ -101,16 +102,31 @@ module Keybox
                 options.debug                       = 0
                 options.show_help                   = false
                 options.show_version                = false
-                options.config_file                 = Keybox::Application::PasswordSafe::DEFUALT_CONFIG
-                options.db_file                     = Keybox::Application::PasswordSafe::DEFUALT_DB
+                options.config_file                 = Keybox::Application::PasswordSafe::DEFAULT_CONFIG
+                options.db_file                     = Keybox::Application::PasswordSafe::DEFAULT_DB
                 options.use_password_hash_for_url   = true
                 return options
             end
 
-            def merge_configurations
-                # get defaults
-                # layer on config files
-                # then add commandline overrides
+            # load options from the configuration file, if the file
+            # doesn't exist, create it and dump the default options to
+            # it.
+            #
+            # we use the default unless the parsed_options contain a
+            # configuration file then we use that one
+            def configuration_file_options
+
+                file_path = @parsed_options.config_file || DEFAULT_CONFIG
+
+                # if the file is 0 bytes, then this is illegal and needs
+                # to be overwritten.
+                if not File.exists?(file_path) or File.size(file_path) == 0 then
+                    FileUtils.mkdir_p(File.dirname(file_path))
+                    File.open(file_path,"w") do |f|
+                        YAML.dump(default_options.marshal_dump,f)
+                    end
+                end
+                options = YAML.load_file(file_path) || Hash.new
             end
 
             def load_database
@@ -278,7 +294,7 @@ module Keybox
 
             def run
                 error_version_help
-                merge_configurations
+                merge_options
                 load_database
 
                 if @actions.size == 0 then

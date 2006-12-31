@@ -6,41 +6,44 @@ context "Keybox Password Safe Application" do
     setup do 
         @passphrase = "i love ruby"
         @testing_db = Tempfile.new("kps_db.yml")
+        @testing_cfg = Tempfile.new("kps_cfg.yml")
         @path = @testing_db.path
         container = Keybox::Storage::Container.new(@passphrase, @testing_db.path)
         container << Keybox::HostAccountEntry.new("test account","localhost","guest", "rubyrocks")
-        container << Keybox::URLAccountEntry.new("the times", "http://www.nytimes.com", "rubyhacker")
+        container << Keybox::URLAccountEntry.new("example site", "http://www.example.com", "rubyhacker")
         container.save
         container.save("/tmp/kps_db-jjh.yml")
     end
 
     teardown do
         @testing_db.unlink
+        @testing_cfg.unlink
     end
 
-    specify "nil argv should do nothing" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @path])
-        kps.error_message.should_be nil
-    end
+    #specify "nil argv should do nothing" do
+    #    kps = Keybox::Application::PasswordSafe.new
+    #    kps.error_message.should_be nil
+    #end
 
-    specify "executing with no args should have output on stdout" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @path])
-        kps.stdout = StringIO.new
-        kps.stdin  = StringIO.new(@passphrase)
-        kps.run
-        kps.stdout.string.size.should_be > 0
-    end
+    #specify "executing with no args should have output on stdout" do
+    #    kps = Keybox::Application::PasswordSafe.new(["-f", @path])
+    #    kps.stdout = StringIO.new
+    #    kps.stdin  = StringIO.new(@passphrase)
+    #    kps.run
+    #    kps.stdout.string.size.should_be > 0
+    #end
 
     specify "general options get set correctly" do
-        kps = Keybox::Application::PasswordSafe.new(%w(--file /tmp/kps_db.yaml --config /tmp/kps_cfg.yaml --debug --no-use-hash-for-url))
-        kps.options.db_file.should_eql "/tmp/kps_db.yaml"
-        kps.options.config_file.should_eql "/tmp/kps_cfg.yaml"
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--debug", "--no-use-hash-for-url"])
+        kps.merge_options
+        kps.options.db_file.should_eql @testing_db.path
+        kps.options.config_file.should_eql @testing_cfg.path
         kps.options.debug.should_eql true
         kps.options.use_password_hash_for_url.should_eql false
     end
 
     specify "more than one command options is an error" do
-        kps = Keybox::Application::PasswordSafe.new(%w(--add account --edit account ))
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--add", "accont", "--edit", "account"])
         kps.stderr = StringIO.new
         kps.stdout = StringIO.new
         begin
@@ -53,7 +56,7 @@ context "Keybox Password Safe Application" do
     end
 
     specify "invalid options set the error message, exit 1 and have output on stderr" do
-        kps = Keybox::Application::PasswordSafe.new(["--invalid-option"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"--invalid-option"])
         kps.stderr = StringIO.new
         kps.stdout = StringIO.new
         begin
@@ -89,7 +92,7 @@ context "Keybox Password Safe Application" do
     end
 
     specify "file can be opened with password" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path])
         kps.stdout = StringIO.new
         kps.stdin  = StringIO.new(@passphrase + "\n")
         kps.run
@@ -97,7 +100,7 @@ context "Keybox Password Safe Application" do
     end
 
     specify "adding an entry to the database works" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--add", "example.com"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--add", "example.com"])
         kps.stdout = StringIO.new
         prompted_values = [@passphrase] + %w(example.com example.com someuser apassword apassword noinfo yes)
         kps.stdin  = StringIO.new(prompted_values.join("\n"))
@@ -106,7 +109,7 @@ context "Keybox Password Safe Application" do
     end
 
     specify "add a url entry to the database" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--add", "http://www.example.com"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--add", "http://www.example.com"])
         kps.stdout = StringIO.new
         prompted_values = [@passphrase] + %w(www.example.com http://www.example.com someuser noinfo yes)
         kps.stdin  = StringIO.new(prompted_values.join("\n"))
@@ -115,7 +118,7 @@ context "Keybox Password Safe Application" do
     end
 
     specify "double prompting on failed password for entry to the database works" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--add", "example.com"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--add", "example.com"])
         kps.stdout = StringIO.new
         prompted_values = [@passphrase, ""] + %w(example.com someuser apassword abadpassword abcdef abcdef noinfo yes)
         kps.stdin  = StringIO.new(prompted_values.join("\n"))
@@ -124,27 +127,27 @@ context "Keybox Password Safe Application" do
     end
 
     specify "able to delete an entry" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--delete", "times"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--delete", "example"])
         kps.stdout = StringIO.new
         prompted_values = [@passphrase] + %w(Yes)
         kps.stdin = StringIO.new(prompted_values.join("\n"))
         kps.run
         kps.db.records.size.should_eql 1
-        kps.stdout.string.should_satisfy { |msg| msg =~ /times' deleted/ }
+        kps.stdout.string.should_satisfy { |msg| msg =~ /example' deleted/ }
     end
 
     specify "able to cancel deletion" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--delete", "times"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--delete", "example"])
         kps.stdout = StringIO.new
         prompted_values = [@passphrase] + %w(No)
         kps.stdin = StringIO.new(prompted_values.join("\n"))
         kps.run
         kps.db.records.size.should_eql 2
-        kps.stdout.string.should_satisfy { |msg| msg =~ /times' deleted/ }
+        kps.stdout.string.should_satisfy { |msg| msg =~ /example' deleted/ }
     end
 
     specify "list all the entries" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--list"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--list"])
         kps.stdout = StringIO.new
         kps.stdin = StringIO.new(@passphrase)
         kps.run
@@ -152,7 +155,7 @@ context "Keybox Password Safe Application" do
     end
 
     specify "listing no entries found" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--list", "nothing"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--list", "nothing"])
         kps.stdout = StringIO.new
         kps.stdin = StringIO.new(@passphrase)
         kps.run
@@ -160,7 +163,7 @@ context "Keybox Password Safe Application" do
     end
 
     specify "showing no entries found" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--show", "nothing"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--show", "nothing"])
         kps.stdout = StringIO.new
         kps.stdin = StringIO.new(@passphrase)
         kps.run
@@ -169,7 +172,7 @@ context "Keybox Password Safe Application" do
 
 
     specify "show all the entries" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--show"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--show"])
         kps.stdout = StringIO.new
         kps.stdin = StringIO.new(@passphrase)
         kps.run
@@ -177,7 +180,7 @@ context "Keybox Password Safe Application" do
     end
 
     specify "changing master password works" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "--master-password"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--master-password"])
         kps.stdout = StringIO.new
         kps.stdin  = StringIO.new([@passphrase, "I really love ruby.", "I really love ruby."].join("\n"))
         kps.run
