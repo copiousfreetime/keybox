@@ -5,6 +5,39 @@ module Keybox
     # This module also assumes that stty is available
     module TermIO
 
+        # http://pueblo.sourceforge.net/doc/manual/ansi_color_codes.html
+        #
+        ESCAPE      = "\e"
+        BOLD_ON     = "[1m"
+        RESET       = "[0m"
+
+        FG_BLACK   = "[30m"
+        FG_RED     = "[31m"
+        FG_GREEN   = "[32m"
+        FG_YELLOW  = "[33m"
+        FG_BLUE    = "[34m"
+        FG_MAGENTA = "[35m"
+        FG_CYAN    = "[36m"
+        FG_WHITE   = "[37m"
+
+        COLORS = { 
+            :black     => FG_BLACK,
+            :red       => FG_RED,
+            :green     => FG_GREEN,
+            :yellow    => FG_YELLOW,
+            :blue      => FG_BLUE,
+            :magenta   => FG_MAGENTA,
+            :cyan      => FG_CYAN,
+            :white     => FG_WHITE,
+            }   
+
+        VALID_COLORS = COLORS.keys()
+
+
+        STTY            = "stty"
+        STTY_SAVE_CMD   = "#{STTY} -g"
+        STTY_RAW_CMD    = "#{STTY} raw -echo isig"
+
         EOL_CHARS = [10, # '\n'
                      13, # '\r'
         ]
@@ -31,7 +64,7 @@ module Keybox
                 if validate then
                     v = prompt_and_return(validation_prompt.rjust(width),echo)
                     if v != line then
-                        @stdout.puts("Entries do not match, try again.")
+                        color_puts "Entries do not match, try again.", :red
                     else
                         validated = true
                     end
@@ -51,25 +84,38 @@ module Keybox
             end
         end
 
+        def get_one_char
+            stty_original = %x{#{STTY_SAVE_CMD}}
+            char = nil
+            begin
+                system STTY_RAW_CMD
+                char = @stdin.getc
+            ensure
+                system "#{STTY} #{stty_original}"
+            end
+
+            return char
+        end
+
         def prompt_and_return(the_prompt,echo)
             line = ""
-            @stdout.print("#{the_prompt} : ")
+            color_print "#{the_prompt} : ", :white
             if echo != true then
 
                 echo_char = echo || '*'
 
                 if has_stty? then
-                    stty_original = %x{stty -g}
+                    stty_original = %x{#{STTY_SAVE_CMD}}
 
                     begin
-                        system "stty raw -echo isig"
+                        system STTY_RAW_CMD
                         while char = @stdin.getc
                             line << char
                             break if EOL_CHARS.include? char 
                             @stdout.putc echo_char
                         end
                     ensure
-                        system "stty #{stty_original}"
+                        system "#{STTY} #{stty_original}"
                     end
                     @stdout.puts
                 end
@@ -88,6 +134,30 @@ module Keybox
             system "which stty > /dev/null 2>&1"
         end
 
+        def colorize(text,color,bold=true)
+            before = ""
+            after  = ""
+            if VALID_COLORS.include?(color) then
+                before = ESCAPE + COLORS[color]
+                before = ESCAPE + BOLD_ON + before if bold
+                after  = ESCAPE + RESET
+            end
+            "#{before}#{text}#{after}"
+        end
 
+        def colorize_if_io_isatty(io,text,color,bold)
+            if io.tty? then
+                text = colorize(text,color,bold)
+            end
+            text
+        end
+
+        def color_puts(text, color, bold = true)
+            @stdout.puts colorize_if_io_isatty(@stdout,text,color,bold)
+        end
+
+        def color_print(text,color, bold = true)
+            @stdout.print colorize_if_io_isatty(@stdout,text,color,bold)
+        end
     end
 end

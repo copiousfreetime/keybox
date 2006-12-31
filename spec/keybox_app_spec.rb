@@ -148,7 +148,7 @@ context "Keybox Password Safe Application" do
         kps.stdout = StringIO.new
         kps.stdin = StringIO.new(@passphrase)
         kps.run
-        kps.stdout.string.should_satisfy { |msg| msg =~ /2 entries listed/m }
+        kps.stdout.string.should_satisfy { |msg| msg =~ /2./m }
     end
 
     specify "listing no entries found" do
@@ -173,7 +173,7 @@ context "Keybox Password Safe Application" do
         kps.stdout = StringIO.new
         kps.stdin = StringIO.new(@passphrase)
         kps.run
-        kps.stdout.string.should_satisfy { |msg| msg =~ /2 entries shown/m }
+        kps.stdout.string.should_satisfy { |msg| msg =~ /2./m }
     end
 
     specify "changing master password works" do

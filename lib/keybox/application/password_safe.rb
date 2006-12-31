@@ -135,21 +135,22 @@ module Keybox
 
                 gathered = false
                 while not gathered do
-                    @stdout.puts "Gathering information for entry '#{account}'"
+                    color_puts "Gathering information for entry '#{account}'", :yellow
 
                     entry = fill_entry(entry)
 
                     # dump the info we have gathered and make sure that
                     # it is the input that the user wants to store.
-                    
-                    @stdout.puts "-" * 40
+                   
+                    color_puts "-" * 40, :blue
                     @stdout.puts entry
+                    color_puts "-" * 40, :blue
                     if prompt_y_n("Is this information correct (y/n) [N] ?") then
                         gathered = true
                     end
                 end
 
-                @stdout.puts "Adding #{entry.title} to database"
+                color_puts "Adding #{entry.title} to database", :green
                 @db << entry
             end
 
@@ -160,14 +161,17 @@ module Keybox
                 matches = @db.find(account)
                 count = 0
                 matches.each do |match|
-                    @stdout.puts "-" * 40
+
+                    color_puts "-" * 40, :blue
                     @stdout.puts match
+                    color_puts "-" * 40, :blue
+
                     if prompt_y_n("Delete this entry (y/n) [N] ?") then
                         @db.delete(match)
                         count += 1
                     end
                 end
-                @stdout.puts "#{count} records matching '#{account}' deleted."
+                color_puts "#{count} records matching '#{account}' deleted.", :green
             end
 
             #
@@ -179,17 +183,21 @@ module Keybox
             def list(account)
                 matches = @db.find(account)
                 if matches.size > 0 then
-                    title_length = matches.collect { |f| f.title.length }.max
+                    title_length    = matches.collect { |f| f.title.length }.max
                     username_length = matches.collect { |f| f.username.length }.max
-                    add_info = "Additional Information"
-                    @stdout.puts "#{"Title".center(title_length)} #{"Username".center(username_length)} Additional Information"
-                    @stdout.puts "=" * (title_length + username_length + 2 + add_info.length)
-                    matches.each do |match|
-                        @stdout.puts [match.title.ljust(title_length), match.username.ljust(username_length), match.additional_info].join(" ")
+                    add_info        = "Additional Information"
+
+                    color_puts "  # #{"Title".ljust(title_length)} #{"Username".ljust(username_length)} #{add_info}", :yellow
+                    color_puts "=" * (4 + title_length + username_length + 2 + add_info.length), :blue, false
+
+                    matches.each_with_index do |match,i|
+                        color_print sprintf("%3d ", i + 1), :white
+                        # toggle colors
+                        color = [:cyan, :magenta][i % 2]
+                        color_puts [match.title.ljust(title_length), match.username.ljust(username_length), match.additional_info].join(" "), color
                     end
-                    @stdout.puts "#{matches.size} entries listed."
                 else
-                    @stdout.puts "No matching records were found."
+                    color_puts "No matching records were found.", :green
                 end
             end
 
@@ -199,20 +207,32 @@ module Keybox
             def show(account)
                 matches = @db.find(account)
                 if matches.size > 0 then
-                    matches.each do |match|
-                        @stdout.puts "=" * 72
-                        @stdout.puts match
-                        3.downto(1) do |i|
-                            @stdout.print "Password for this account =====> #{match.password} <===== (visible for #{i} seconds).\r"
-                            @stdout.flush
-                            sleep 1
+                    matches.each_with_index do |match,i|
+                        color_puts "#{sprintf("%3d",i + 1)}. #{match.title}", :yellow
+                        max_name_length = match.max_field_length + 1
+                        match.each do |name,value|
+                            next if name == "title"
+                            next if value.length == 0
+
+                            name_out = name.rjust(max_name_length)
+                            color_print name_out, :blue
+                            color_print " : ", :white
+
+                            if match.private_field?(name) then
+                                color_print value, :red
+                                color_print " (press any key).", :white
+                                junk = get_one_char
+                                color_print "\r#{name_out}", :blue
+                                color_print " : ", :white
+                                color_puts "#{"*" * 20}\e[K", :red
+                            else
+                                color_puts value, :cyan
+                            end
                         end
-                        # clear the line
-                        @stdout.puts "Password for this account =====> ********** <===== (not visible).\e[K"
+                        @stdout.puts
                     end
-                    @stdout.puts "#{matches.size} entries shown."
                 else
-                    @stdout.puts "No matching records were found."
+                    color_puts "No matching records were found.", :green
                 end
             end
 

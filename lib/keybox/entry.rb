@@ -8,8 +8,36 @@ module Keybox
     #
     class AccountEntry < Keybox::Storage::Record
 
+        def each
+            fields.each do |f|
+                yield [f,self.send(f)]
+            end
+        end
+
+        # fields that are actually stored in the entry
         def fields
             @data_members.keys.collect { |k| k.to_s }.sort
+        end
+
+        # fields that can be displayed, some could be calculated
+        def display_fields
+            (visible_fields + private_fields).uniq
+        end
+        
+        def private_fields
+            []
+        end
+
+        def visible_fields
+            fields - private_fields
+        end
+
+        def visible_field?(field_name)
+            visible_fields.include?(field_name)
+        end
+
+        def private_field?(field_name)
+            private_fields.include?(field_name)
         end
 
         def values
@@ -29,18 +57,23 @@ module Keybox
 
         def to_s
             s = StringIO.new
-            max_length = fields.collect {|f| f.length}.max
+            max_length = self.max_field_length
             fields.each do |f|
                 line = "#{f.rjust(max_length + 1)} :"
                 value = self.send(f)
-                if f =~ /^pass/ then
-                    value = " *****  Not printed ***** "
-                    next
+                if private_field?(f) then
+                    # if its private field, then blank out value just to
+                    value = " ***** private ***** "
                 end
                 s.puts "#{f.rjust(max_length + 1)} : #{value}"
             end
             return s.string
         end
+
+        def max_field_length
+            fields.collect { |f| f.length }.max
+        end
+
     end
 
     #
@@ -50,6 +83,10 @@ module Keybox
 
         def fields
             %w(title hostname username password additional_info)
+        end
+
+        def private_fields
+            %w(password)
         end
 
         def initialize(title = "",hostname = "",username = "",password = "")
@@ -69,6 +106,10 @@ module Keybox
     class URLAccountEntry < Keybox::AccountEntry
         def fields
             %w(title url username additional_info)
+        end
+        
+        def private_fields
+            %w(password)
         end
 
         def initialize(title = "",url = "",username = "")

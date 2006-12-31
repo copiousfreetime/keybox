@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Wed Dec 27 19:33:38 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sat Dec 30 17:02:31 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -578,10 +578,10 @@ span.run100 {
             <a href='lib-keybox-entry_rb.html'>lib/keybox/entry.rb</a>
           </td>
           <td class='value'>
-            <tt>99</tt>
+            <tt>141</tt>
           </td>
           <td class='value'>
-            <tt>67</tt>
+            <tt>96</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
@@ -617,105 +617,147 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked1"><a name="line1" /> 1 require 'keybox/storage/record'
-</span><span class="inferred0"><a name="line2" /> 2 
-</span><span class="marked1"><a name="line3" /> 3 module Keybox
-</span><span class="inferred0"><a name="line4" /> 4 
-</span><span class="inferred1"><a name="line5" /> 5     # 
-</span><span class="inferred0"><a name="line6" /> 6     # Base class for Accounts.  Generally this is not instantiated
-</span><span class="inferred1"><a name="line7" /> 7     # directly, but it can be if you want.
-</span><span class="inferred0"><a name="line8" /> 8     #
-</span><span class="marked1"><a name="line9" /> 9     class AccountEntry &lt; Keybox::Storage::Record
-</span><span class="inferred0"><a name="line10" />10 
-</span><span class="marked1"><a name="line11" />11         def fields
-</span><span class="marked0"><a name="line12" />12             @data_members.keys.collect { |k| k.to_s }.sort
-</span><span class="marked1"><a name="line13" />13         end
-</span><span class="inferred0"><a name="line14" />14 
-</span><span class="marked1"><a name="line15" />15         def values
-</span><span class="marked0"><a name="line16" />16             fields.collect { |f| self.send(f) }
-</span><span class="marked1"><a name="line17" />17         end
-</span><span class="inferred0"><a name="line18" />18 
-</span><span class="marked1"><a name="line19" />19         def initialize(title = &quot;&quot;,username = &quot;&quot;)
-</span><span class="marked0"><a name="line20" />20             super()
-</span><span class="marked1"><a name="line21" />21             self.title              = title
-</span><span class="marked0"><a name="line22" />22             self.username           = username
-</span><span class="marked1"><a name="line23" />23             self.additional_info    = &quot;&quot;
-</span><span class="inferred0"><a name="line24" />24         end
-</span><span class="inferred1"><a name="line25" />25 
-</span><span class="marked0"><a name="line26" />26         def needs_container_passphrase?
-</span><span class="marked1"><a name="line27" />27             false
-</span><span class="marked0"><a name="line28" />28         end
-</span><span class="inferred1"><a name="line29" />29 
-</span><span class="marked0"><a name="line30" />30         def to_s
-</span><span class="marked1"><a name="line31" />31             s = StringIO.new
-</span><span class="marked0"><a name="line32" />32             max_length = fields.collect {|f| f.length}.max
-</span><span class="marked1"><a name="line33" />33             fields.each do |f|
-</span><span class="marked0"><a name="line34" />34                 line = &quot;#{f.rjust(max_length + 1)} :&quot;
-</span><span class="marked1"><a name="line35" />35                 value = self.send(f)
-</span><span class="marked0"><a name="line36" />36                 if f =~ /^pass/ then
-</span><span class="marked1"><a name="line37" />37                     value = &quot; *****  Not printed ***** &quot;
-</span><span class="inferred0"><a name="line38" />38                 end
-</span><span class="marked1"><a name="line39" />39                 s.puts &quot;#{f.rjust(max_length + 1)} : #{value}&quot;
-</span><span class="inferred0"><a name="line40" />40             end
-</span><span class="marked1"><a name="line41" />41             return s.string
-</span><span class="inferred0"><a name="line42" />42         end
-</span><span class="inferred1"><a name="line43" />43     end
-</span><span class="inferred0"><a name="line44" />44 
-</span><span class="inferred1"><a name="line45" />45     #
-</span><span class="inferred0"><a name="line46" />46     # Host Accounts are those typical login accounts on machines
-</span><span class="inferred1"><a name="line47" />47     #
-</span><span class="marked0"><a name="line48" />48     class HostAccountEntry &lt; Keybox::AccountEntry
-</span><span class="inferred1"><a name="line49" />49 
-</span><span class="marked0"><a name="line50" />50         def fields
-</span><span class="marked1"><a name="line51" />51             %w(title hostname username password additional_info)
-</span><span class="marked0"><a name="line52" />52         end
-</span><span class="inferred1"><a name="line53" />53 
-</span><span class="marked0"><a name="line54" />54         def initialize(title = &quot;&quot;,hostname = &quot;&quot;,username = &quot;&quot;,password = &quot;&quot;)
-</span><span class="marked1"><a name="line55" />55             super(title,username)
-</span><span class="marked0"><a name="line56" />56             self.hostname = hostname
-</span><span class="marked1"><a name="line57" />57             self.password = password
-</span><span class="inferred0"><a name="line58" />58         end
-</span><span class="inferred1"><a name="line59" />59     end
-</span><span class="inferred0"><a name="line60" />60 
-</span><span class="inferred1"><a name="line61" />61     #
-</span><span class="inferred0"><a name="line62" />62     # URLAccounts do not have a password.  It is calculated based upon
-</span><span class="inferred1"><a name="line63" />63     # the URL and the master password for the database.
-</span><span class="inferred0"><a name="line64" />64     #
-</span><span class="inferred1"><a name="line65" />65     # This class requires a handle to the container so that it can
-</span><span class="inferred0"><a name="line66" />66     # calculate the password for the account.
-</span><span class="inferred1"><a name="line67" />67     #
-</span><span class="marked0"><a name="line68" />68     class URLAccountEntry &lt; Keybox::AccountEntry
-</span><span class="marked1"><a name="line69" />69         def fields
-</span><span class="marked0"><a name="line70" />70             %w(title url username additional_info)
-</span><span class="marked1"><a name="line71" />71         end
-</span><span class="inferred0"><a name="line72" />72 
-</span><span class="marked1"><a name="line73" />73         def initialize(title = &quot;&quot;,url = &quot;&quot;,username = &quot;&quot;)
-</span><span class="marked0"><a name="line74" />74             super(title,username)
-</span><span class="marked1"><a name="line75" />75             self.url = url
-</span><span class="inferred0"><a name="line76" />76         end
-</span><span class="inferred1"><a name="line77" />77 
-</span><span class="marked0"><a name="line78" />78         def password_hash_alg
-</span><span class="marked1"><a name="line79" />79             if not instance_variables.include?(&quot;@password_hash_alg&quot;) then
-</span><span class="marked0"><a name="line80" />80                 @password_hash_alg = Keybox::PasswordHash.new
-</span><span class="inferred1"><a name="line81" />81             end
-</span><span class="marked0"><a name="line82" />82             @password_hash_alg
-</span><span class="inferred1"><a name="line83" />83         end
-</span><span class="inferred0"><a name="line84" />84 
-</span><span class="marked1"><a name="line85" />85         def needs_container_passphrase?
-</span><span class="marked0"><a name="line86" />86             true
-</span><span class="marked1"><a name="line87" />87         end
-</span><span class="inferred0"><a name="line88" />88 
-</span><span class="marked1"><a name="line89" />89         def container_passphrase=(p)
-</span><span class="marked0"><a name="line90" />90             password_hash_alg.master_password = p.dup
-</span><span class="marked1"><a name="line91" />91         end
-</span><span class="inferred0"><a name="line92" />92 
-</span><span class="marked1"><a name="line93" />93         def password
-</span><span class="marked0"><a name="line94" />94             password_hash_alg.password_for_url(self.url)
-</span><span class="marked1"><a name="line95" />95         end
-</span><span class="inferred0"><a name="line96" />96 
-</span><span class="inferred1"><a name="line97" />97     end
-</span><span class="inferred0"><a name="line98" />98 
-</span><span class="inferred1"><a name="line99" />99 end
+    </table><pre><span class="marked0"><a name="line1" />  1 require 'keybox/storage/record'
+</span><span class="inferred1"><a name="line2" />  2 
+</span><span class="marked0"><a name="line3" />  3 module Keybox
+</span><span class="inferred1"><a name="line4" />  4 
+</span><span class="inferred0"><a name="line5" />  5     # 
+</span><span class="inferred1"><a name="line6" />  6     # Base class for Accounts.  Generally this is not instantiated
+</span><span class="inferred0"><a name="line7" />  7     # directly, but it can be if you want.
+</span><span class="inferred1"><a name="line8" />  8     #
+</span><span class="marked0"><a name="line9" />  9     class AccountEntry &lt; Keybox::Storage::Record
+</span><span class="inferred1"><a name="line10" /> 10 
+</span><span class="marked0"><a name="line11" /> 11         def each
+</span><span class="marked1"><a name="line12" /> 12             fields.each do |f|
+</span><span class="marked0"><a name="line13" /> 13                 yield [f,self.send(f)]
+</span><span class="inferred1"><a name="line14" /> 14             end
+</span><span class="marked0"><a name="line15" /> 15         end
+</span><span class="inferred1"><a name="line16" /> 16 
+</span><span class="inferred0"><a name="line17" /> 17         # fields that are actually stored in the entry
+</span><span class="marked1"><a name="line18" /> 18         def fields
+</span><span class="marked0"><a name="line19" /> 19             @data_members.keys.collect { |k| k.to_s }.sort
+</span><span class="marked1"><a name="line20" /> 20         end
+</span><span class="inferred0"><a name="line21" /> 21 
+</span><span class="inferred1"><a name="line22" /> 22         # fields that can be displayed, some could be calculated
+</span><span class="marked0"><a name="line23" /> 23         def display_fields
+</span><span class="marked1"><a name="line24" /> 24             (visible_fields + private_fields).uniq
+</span><span class="marked0"><a name="line25" /> 25         end
+</span><span class="inferred1"><a name="line26" /> 26         
+</span><span class="marked0"><a name="line27" /> 27         def private_fields
+</span><span class="marked1"><a name="line28" /> 28             []
+</span><span class="marked0"><a name="line29" /> 29         end
+</span><span class="inferred1"><a name="line30" /> 30 
+</span><span class="marked0"><a name="line31" /> 31         def visible_fields
+</span><span class="marked1"><a name="line32" /> 32             fields - private_fields
+</span><span class="marked0"><a name="line33" /> 33         end
+</span><span class="inferred1"><a name="line34" /> 34 
+</span><span class="marked0"><a name="line35" /> 35         def visible_field?(field_name)
+</span><span class="marked1"><a name="line36" /> 36             visible_fields.include?(field_name)
+</span><span class="marked0"><a name="line37" /> 37         end
+</span><span class="inferred1"><a name="line38" /> 38 
+</span><span class="marked0"><a name="line39" /> 39         def private_field?(field_name)
+</span><span class="marked1"><a name="line40" /> 40             private_fields.include?(field_name)
+</span><span class="marked0"><a name="line41" /> 41         end
+</span><span class="inferred1"><a name="line42" /> 42 
+</span><span class="marked0"><a name="line43" /> 43         def values
+</span><span class="marked1"><a name="line44" /> 44             fields.collect { |f| self.send(f) }
+</span><span class="marked0"><a name="line45" /> 45         end
+</span><span class="inferred1"><a name="line46" /> 46 
+</span><span class="marked0"><a name="line47" /> 47         def initialize(title = &quot;&quot;,username = &quot;&quot;)
+</span><span class="marked1"><a name="line48" /> 48             super()
+</span><span class="marked0"><a name="line49" /> 49             self.title              = title
+</span><span class="marked1"><a name="line50" /> 50             self.username           = username
+</span><span class="marked0"><a name="line51" /> 51             self.additional_info    = &quot;&quot;
+</span><span class="inferred1"><a name="line52" /> 52         end
+</span><span class="inferred0"><a name="line53" /> 53 
+</span><span class="marked1"><a name="line54" /> 54         def needs_container_passphrase?
+</span><span class="marked0"><a name="line55" /> 55             false
+</span><span class="marked1"><a name="line56" /> 56         end
+</span><span class="inferred0"><a name="line57" /> 57 
+</span><span class="marked1"><a name="line58" /> 58         def to_s
+</span><span class="marked0"><a name="line59" /> 59             s = StringIO.new
+</span><span class="marked1"><a name="line60" /> 60             max_length = self.max_field_length
+</span><span class="marked0"><a name="line61" /> 61             fields.each do |f|
+</span><span class="marked1"><a name="line62" /> 62                 line = &quot;#{f.rjust(max_length + 1)} :&quot;
+</span><span class="marked0"><a name="line63" /> 63                 value = self.send(f)
+</span><span class="marked1"><a name="line64" /> 64                 if private_field?(f) then
+</span><span class="inferred0"><a name="line65" /> 65                     # if its private field, then blank out value just to
+</span><span class="marked1"><a name="line66" /> 66                     value = &quot; ***** private ***** &quot;
+</span><span class="inferred0"><a name="line67" /> 67                 end
+</span><span class="marked1"><a name="line68" /> 68                 s.puts &quot;#{f.rjust(max_length + 1)} : #{value}&quot;
+</span><span class="inferred0"><a name="line69" /> 69             end
+</span><span class="marked1"><a name="line70" /> 70             return s.string
+</span><span class="inferred0"><a name="line71" /> 71         end
+</span><span class="inferred1"><a name="line72" /> 72 
+</span><span class="marked0"><a name="line73" /> 73         def max_field_length
+</span><span class="marked1"><a name="line74" /> 74             fields.collect { |f| f.length }.max
+</span><span class="marked0"><a name="line75" /> 75         end
+</span><span class="inferred1"><a name="line76" /> 76 
+</span><span class="inferred0"><a name="line77" /> 77     end
+</span><span class="inferred1"><a name="line78" /> 78 
+</span><span class="inferred0"><a name="line79" /> 79     #
+</span><span class="inferred1"><a name="line80" /> 80     # Host Accounts are those typical login accounts on machines
+</span><span class="inferred0"><a name="line81" /> 81     #
+</span><span class="marked1"><a name="line82" /> 82     class HostAccountEntry &lt; Keybox::AccountEntry
+</span><span class="inferred0"><a name="line83" /> 83 
+</span><span class="marked1"><a name="line84" /> 84         def fields
+</span><span class="marked0"><a name="line85" /> 85             %w(title hostname username password additional_info)
+</span><span class="marked1"><a name="line86" /> 86         end
+</span><span class="inferred0"><a name="line87" /> 87 
+</span><span class="marked1"><a name="line88" /> 88         def private_fields
+</span><span class="marked0"><a name="line89" /> 89             %w(password)
+</span><span class="marked1"><a name="line90" /> 90         end
+</span><span class="inferred0"><a name="line91" /> 91 
+</span><span class="marked1"><a name="line92" /> 92         def initialize(title = &quot;&quot;,hostname = &quot;&quot;,username = &quot;&quot;,password = &quot;&quot;)
+</span><span class="marked0"><a name="line93" /> 93             super(title,username)
+</span><span class="marked1"><a name="line94" /> 94             self.hostname = hostname
+</span><span class="marked0"><a name="line95" /> 95             self.password = password
+</span><span class="inferred1"><a name="line96" /> 96         end
+</span><span class="inferred0"><a name="line97" /> 97     end
+</span><span class="inferred1"><a name="line98" /> 98 
+</span><span class="inferred0"><a name="line99" /> 99     #
+</span><span class="inferred1"><a name="line100" />100     # URLAccounts do not have a password.  It is calculated based upon
+</span><span class="inferred0"><a name="line101" />101     # the URL and the master password for the database.
+</span><span class="inferred1"><a name="line102" />102     #
+</span><span class="inferred0"><a name="line103" />103     # This class requires a handle to the container so that it can
+</span><span class="inferred1"><a name="line104" />104     # calculate the password for the account.
+</span><span class="inferred0"><a name="line105" />105     #
+</span><span class="marked1"><a name="line106" />106     class URLAccountEntry &lt; Keybox::AccountEntry
+</span><span class="marked0"><a name="line107" />107         def fields
+</span><span class="marked1"><a name="line108" />108             %w(title url username additional_info)
+</span><span class="marked0"><a name="line109" />109         end
+</span><span class="inferred1"><a name="line110" />110         
+</span><span class="marked0"><a name="line111" />111         def private_fields
+</span><span class="marked1"><a name="line112" />112             %w(password)
+</span><span class="marked0"><a name="line113" />113         end
+</span><span class="inferred1"><a name="line114" />114 
+</span><span class="marked0"><a name="line115" />115         def initialize(title = &quot;&quot;,url = &quot;&quot;,username = &quot;&quot;)
+</span><span class="marked1"><a name="line116" />116             super(title,username)
+</span><span class="marked0"><a name="line117" />117             self.url = url
+</span><span class="inferred1"><a name="line118" />118         end
+</span><span class="inferred0"><a name="line119" />119 
+</span><span class="marked1"><a name="line120" />120         def password_hash_alg
+</span><span class="marked0"><a name="line121" />121             if not instance_variables.include?(&quot;@password_hash_alg&quot;) then
+</span><span class="marked1"><a name="line122" />122                 @password_hash_alg = Keybox::PasswordHash.new
+</span><span class="inferred0"><a name="line123" />123             end
+</span><span class="marked1"><a name="line124" />124             @password_hash_alg
+</span><span class="inferred0"><a name="line125" />125         end
+</span><span class="inferred1"><a name="line126" />126 
+</span><span class="marked0"><a name="line127" />127         def needs_container_passphrase?
+</span><span class="marked1"><a name="line128" />128             true
+</span><span class="marked0"><a name="line129" />129         end
+</span><span class="inferred1"><a name="line130" />130 
+</span><span class="marked0"><a name="line131" />131         def container_passphrase=(p)
+</span><span class="marked1"><a name="line132" />132             password_hash_alg.master_password = p.dup
+</span><span class="marked0"><a name="line133" />133         end
+</span><span class="inferred1"><a name="line134" />134 
+</span><span class="marked0"><a name="line135" />135         def password
+</span><span class="marked1"><a name="line136" />136             password_hash_alg.password_for_url(self.url)
+</span><span class="marked0"><a name="line137" />137         end
+</span><span class="inferred1"><a name="line138" />138 
+</span><span class="inferred0"><a name="line139" />139     end
+</span><span class="inferred1"><a name="line140" />140 
+</span><span class="inferred0"><a name="line141" />141 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

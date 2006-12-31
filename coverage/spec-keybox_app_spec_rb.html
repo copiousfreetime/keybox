@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Wed Dec 27 19:33:38 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sat Dec 30 17:02:32 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -767,7 +767,7 @@ span.run100 {
 </span><span class="marked0"><a name="line148" />148         kps.stdout = StringIO.new
 </span><span class="marked1"><a name="line149" />149         kps.stdin = StringIO.new(@passphrase)
 </span><span class="marked0"><a name="line150" />150         kps.run
-</span><span class="marked1"><a name="line151" />151         kps.stdout.string.should_satisfy { |msg| msg =~ /2 entries listed/m }
+</span><span class="marked1"><a name="line151" />151         kps.stdout.string.should_satisfy { |msg| msg =~ /2./m }
 </span><span class="marked0"><a name="line152" />152     end
 </span><span class="inferred1"><a name="line153" />153 
 </span><span class="marked0"><a name="line154" />154     specify &quot;listing no entries found&quot; do
@@ -792,7 +792,7 @@ span.run100 {
 </span><span class="marked1"><a name="line173" />173         kps.stdout = StringIO.new
 </span><span class="marked0"><a name="line174" />174         kps.stdin = StringIO.new(@passphrase)
 </span><span class="marked1"><a name="line175" />175         kps.run
-</span><span class="marked0"><a name="line176" />176         kps.stdout.string.should_satisfy { |msg| msg =~ /2 entries shown/m }
+</span><span class="marked0"><a name="line176" />176         kps.stdout.string.should_satisfy { |msg| msg =~ /2./m }
 </span><span class="marked1"><a name="line177" />177     end
 </span><span class="inferred0"><a name="line178" />178 
 </span><span class="marked1"><a name="line179" />179     specify &quot;changing master password works&quot; do
