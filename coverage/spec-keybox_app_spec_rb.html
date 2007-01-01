@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sun Dec 31 21:01:37 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sun Dec 31 21:42:53 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -578,10 +578,10 @@ span.run100 {
             <a href='spec-keybox_app_spec_rb.html'>spec/keybox_app_spec.rb</a>
           </td>
           <td class='value'>
-            <tt>202</tt>
+            <tt>247</tt>
           </td>
           <td class='value'>
-            <tt>178</tt>
+            <tt>215</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
@@ -617,208 +617,253 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked1"><a name="line1" />  1 require 'tempfile'
-</span><span class="marked0"><a name="line2" />  2 require 'keybox'
-</span><span class="marked1"><a name="line3" />  3 require 'keybox/application/password_safe'
-</span><span class="inferred0"><a name="line4" />  4 
-</span><span class="marked1"><a name="line5" />  5 context &quot;Keybox Password Safe Application&quot; do
-</span><span class="marked0"><a name="line6" />  6     setup do 
-</span><span class="marked1"><a name="line7" />  7         @passphrase = &quot;i love ruby&quot;
-</span><span class="marked0"><a name="line8" />  8         @testing_db = Tempfile.new(&quot;kps_db.yml&quot;)
-</span><span class="marked1"><a name="line9" />  9         @testing_cfg = Tempfile.new(&quot;kps_cfg.yml&quot;)
-</span><span class="marked0"><a name="line10" /> 10         @path = @testing_db.path
-</span><span class="marked1"><a name="line11" /> 11         container = Keybox::Storage::Container.new(@passphrase, @testing_db.path)
-</span><span class="marked0"><a name="line12" /> 12         container &lt;&lt; Keybox::HostAccountEntry.new(&quot;test account&quot;,&quot;localhost&quot;,&quot;guest&quot;, &quot;rubyrocks&quot;)
-</span><span class="marked1"><a name="line13" /> 13         container &lt;&lt; Keybox::URLAccountEntry.new(&quot;example site&quot;, &quot;http://www.example.com&quot;, &quot;rubyhacker&quot;)
-</span><span class="marked0"><a name="line14" /> 14         container.save
-</span><span class="marked1"><a name="line15" /> 15         container.save(&quot;/tmp/kps_db-jjh.yml&quot;)
-</span><span class="marked0"><a name="line16" /> 16     end
-</span><span class="inferred1"><a name="line17" /> 17 
-</span><span class="marked0"><a name="line18" /> 18     teardown do
-</span><span class="marked1"><a name="line19" /> 19         @testing_db.unlink
-</span><span class="marked0"><a name="line20" /> 20         @testing_cfg.unlink
-</span><span class="inferred1"><a name="line21" /> 21     end
-</span><span class="inferred0"><a name="line22" /> 22 
-</span><span class="marked1"><a name="line23" /> 23     specify &quot;nil argv should do nothing&quot; do
-</span><span class="marked0"><a name="line24" /> 24         kps = Keybox::Application::PasswordSafe.new
-</span><span class="marked1"><a name="line25" /> 25         kps.error_message.should_be nil
-</span><span class="marked0"><a name="line26" /> 26     end
-</span><span class="inferred1"><a name="line27" /> 27 
-</span><span class="marked0"><a name="line28" /> 28     specify &quot;executing with no args should have output on stdout&quot; do
-</span><span class="marked1"><a name="line29" /> 29         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path])
-</span><span class="marked0"><a name="line30" /> 30         kps.stdout = StringIO.new
-</span><span class="marked1"><a name="line31" /> 31         kps.stdin  = StringIO.new(@passphrase)
-</span><span class="marked0"><a name="line32" /> 32         kps.run
-</span><span class="marked1"><a name="line33" /> 33         kps.stdout.string.size.should_be &gt; 0
-</span><span class="marked0"><a name="line34" /> 34     end
-</span><span class="inferred1"><a name="line35" /> 35 
-</span><span class="marked0"><a name="line36" /> 36     specify &quot;general options get set correctly&quot; do
-</span><span class="marked1"><a name="line37" /> 37         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--debug&quot;, &quot;--no-use-hash-for-url&quot;])
-</span><span class="marked0"><a name="line38" /> 38         kps.merge_options
-</span><span class="marked1"><a name="line39" /> 39         kps.options.db_file.should_eql @testing_db.path
-</span><span class="marked0"><a name="line40" /> 40         kps.options.config_file.should_eql @testing_cfg.path
-</span><span class="marked1"><a name="line41" /> 41         kps.options.debug.should_eql true
-</span><span class="marked0"><a name="line42" /> 42         kps.options.use_password_hash_for_url.should_eql false
-</span><span class="marked1"><a name="line43" /> 43     end
-</span><span class="inferred0"><a name="line44" /> 44 
-</span><span class="marked1"><a name="line45" /> 45     specify &quot;more than one command options is an error&quot; do
-</span><span class="marked0"><a name="line46" /> 46         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--add&quot;, &quot;accont&quot;, &quot;--edit&quot;, &quot;account&quot;])
-</span><span class="marked1"><a name="line47" /> 47         kps.stderr = StringIO.new
-</span><span class="marked0"><a name="line48" /> 48         kps.stdout = StringIO.new
-</span><span class="marked1"><a name="line49" /> 49         begin
-</span><span class="marked0"><a name="line50" /> 50             kps.run
-</span><span class="inferred1"><a name="line51" /> 51         rescue SystemExit =&gt; se
-</span><span class="marked0"><a name="line52" /> 52             kps.error_message.should_satisfy { |msg| msg =~ /Only one of/m }
-</span><span class="marked1"><a name="line53" /> 53             kps.stderr.string.should_satisfy { |msg| msg =~ /Only one of/m }
-</span><span class="marked0"><a name="line54" /> 54             se.status.should_eql 1
-</span><span class="inferred1"><a name="line55" /> 55         end
-</span><span class="marked0"><a name="line56" /> 56     end
-</span><span class="inferred1"><a name="line57" /> 57 
-</span><span class="marked0"><a name="line58" /> 58     specify &quot;invalid options set the error message, exit 1 and have output on stderr&quot; do
-</span><span class="marked1"><a name="line59" /> 59         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path,&quot;--invalid-option&quot;])
-</span><span class="marked0"><a name="line60" /> 60         kps.stderr = StringIO.new
-</span><span class="marked1"><a name="line61" /> 61         kps.stdout = StringIO.new
-</span><span class="marked0"><a name="line62" /> 62         begin
-</span><span class="marked1"><a name="line63" /> 63             kps.run
-</span><span class="inferred0"><a name="line64" /> 64         rescue SystemExit =&gt; se
-</span><span class="marked1"><a name="line65" /> 65             kps.error_message.should_satisfy { |msg| msg =~ /Try.*--help/m }
-</span><span class="marked0"><a name="line66" /> 66             kps.stderr.string.should_satisfy { |msg| msg =~ /Try.*--help/m }
-</span><span class="marked1"><a name="line67" /> 67             kps.stdout.string.size.should_eql 0
-</span><span class="marked0"><a name="line68" /> 68             se.status.should == 1
-</span><span class="inferred1"><a name="line69" /> 69         end
-</span><span class="marked0"><a name="line70" /> 70     end
-</span><span class="inferred1"><a name="line71" /> 71 
-</span><span class="marked0"><a name="line72" /> 72     specify &quot;help has output on stdout and exits 0&quot; do
-</span><span class="marked1"><a name="line73" /> 73         kps = Keybox::Application::PasswordSafe.new([&quot;--h&quot;]) 
-</span><span class="marked0"><a name="line74" /> 74         kps.stdout = StringIO.new
-</span><span class="marked1"><a name="line75" /> 75         begin
-</span><span class="marked0"><a name="line76" /> 76             kps.run
-</span><span class="inferred1"><a name="line77" /> 77         rescue SystemExit =&gt; se
-</span><span class="marked0"><a name="line78" /> 78             se.status.should_eql 0
-</span><span class="marked1"><a name="line79" /> 79             kps.stdout.string.length.should_be &gt; 0
-</span><span class="inferred0"><a name="line80" /> 80         end
-</span><span class="marked1"><a name="line81" /> 81     end
-</span><span class="inferred0"><a name="line82" /> 82 
-</span><span class="marked1"><a name="line83" /> 83     specify &quot;version has output on stdout and exits 0&quot; do
-</span><span class="marked0"><a name="line84" /> 84         kps = Keybox::Application::PasswordSafe.new([&quot;--ver&quot;]) 
-</span><span class="marked1"><a name="line85" /> 85         kps.stdout = StringIO.new
-</span><span class="marked0"><a name="line86" /> 86         begin
-</span><span class="marked1"><a name="line87" /> 87             kps.run
-</span><span class="inferred0"><a name="line88" /> 88         rescue SystemExit =&gt; se
-</span><span class="marked1"><a name="line89" /> 89             se.status.should_eql 0
-</span><span class="marked0"><a name="line90" /> 90             kps.stdout.string.length.should_be &gt; 0
-</span><span class="inferred1"><a name="line91" /> 91         end
-</span><span class="marked0"><a name="line92" /> 92     end
-</span><span class="inferred1"><a name="line93" /> 93     
-</span><span class="marked0"><a name="line94" /> 94     specify &quot;prompted for password twice to create database initially&quot; do
-</span><span class="marked1"><a name="line95" /> 95         File.unlink(@testing_db.path)
-</span><span class="marked0"><a name="line96" /> 96         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path])
-</span><span class="marked1"><a name="line97" /> 97         kps.stdout = StringIO.new
-</span><span class="marked0"><a name="line98" /> 98         kps.stdin  = StringIO.new([@passphrase,@passphrase].join(&quot;\n&quot;))
-</span><span class="marked1"><a name="line99" /> 99         kps.run
-</span><span class="marked0"><a name="line100" />100         kps.db.records.size.should_eql 0
-</span><span class="marked1"><a name="line101" />101         kps.stdout.string.should_satisfy { |msg| msg =~ /Creating initial database./m }
-</span><span class="marked0"><a name="line102" />102         kps.stdout.string.should_satisfy { |msg| msg =~ /Initial Password for/m }
-</span><span class="marked1"><a name="line103" />103     end
-</span><span class="inferred0"><a name="line104" />104 
-</span><span class="marked1"><a name="line105" />105     specify &quot;file can be opened with password&quot; do
-</span><span class="marked0"><a name="line106" />106         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path])
-</span><span class="marked1"><a name="line107" />107         kps.stdout = StringIO.new
-</span><span class="marked0"><a name="line108" />108         kps.stdin  = StringIO.new(@passphrase + &quot;\n&quot;)
-</span><span class="marked1"><a name="line109" />109         kps.run
-</span><span class="marked0"><a name="line110" />110         kps.db.records.size.should_eql 2
-</span><span class="marked1"><a name="line111" />111     end
-</span><span class="inferred0"><a name="line112" />112 
-</span><span class="marked1"><a name="line113" />113     specify &quot;adding an entry to the database works&quot; do
-</span><span class="marked0"><a name="line114" />114         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--add&quot;, &quot;example.com&quot;])
-</span><span class="marked1"><a name="line115" />115         kps.stdout = StringIO.new
-</span><span class="marked0"><a name="line116" />116         prompted_values = [@passphrase] + %w(example.com example.com someuser apassword apassword noinfo yes)
-</span><span class="marked1"><a name="line117" />117         kps.stdin  = StringIO.new(prompted_values.join(&quot;\n&quot;))
-</span><span class="marked0"><a name="line118" />118         kps.run
-</span><span class="marked1"><a name="line119" />119         kps.db.records.size.should_eql 3
-</span><span class="marked0"><a name="line120" />120     end
-</span><span class="inferred1"><a name="line121" />121 
-</span><span class="marked0"><a name="line122" />122     specify &quot;add a url entry to the database&quot; do
-</span><span class="marked1"><a name="line123" />123         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--add&quot;, &quot;http://www.example.com&quot;])
-</span><span class="marked0"><a name="line124" />124         kps.stdout = StringIO.new
-</span><span class="marked1"><a name="line125" />125         prompted_values = [@passphrase] + %w(www.example.com http://www.example.com someuser noinfo yes)
-</span><span class="marked0"><a name="line126" />126         kps.stdin  = StringIO.new(prompted_values.join(&quot;\n&quot;))
-</span><span class="marked1"><a name="line127" />127         kps.run
-</span><span class="marked0"><a name="line128" />128         kps.db.records.size.should_eql 3
-</span><span class="marked1"><a name="line129" />129     end
-</span><span class="inferred0"><a name="line130" />130 
-</span><span class="marked1"><a name="line131" />131     specify &quot;double prompting on failed password for entry to the database works&quot; do
-</span><span class="marked0"><a name="line132" />132         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--add&quot;, &quot;example.com&quot;])
-</span><span class="marked1"><a name="line133" />133         kps.stdout = StringIO.new
-</span><span class="marked0"><a name="line134" />134         prompted_values = [@passphrase, &quot;&quot;] + %w(example.com someuser apassword abadpassword abcdef abcdef noinfo yes)
-</span><span class="marked1"><a name="line135" />135         kps.stdin  = StringIO.new(prompted_values.join(&quot;\n&quot;))
-</span><span class="marked0"><a name="line136" />136         kps.run
-</span><span class="marked1"><a name="line137" />137         kps.db.records.size.should_eql 3
-</span><span class="marked0"><a name="line138" />138     end
-</span><span class="inferred1"><a name="line139" />139 
-</span><span class="marked0"><a name="line140" />140     specify &quot;able to delete an entry&quot; do
-</span><span class="marked1"><a name="line141" />141         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--delete&quot;, &quot;example&quot;])
-</span><span class="marked0"><a name="line142" />142         kps.stdout = StringIO.new
-</span><span class="marked1"><a name="line143" />143         prompted_values = [@passphrase] + %w(Yes)
-</span><span class="marked0"><a name="line144" />144         kps.stdin = StringIO.new(prompted_values.join(&quot;\n&quot;))
-</span><span class="marked1"><a name="line145" />145         kps.run
-</span><span class="marked0"><a name="line146" />146         kps.db.records.size.should_eql 1
-</span><span class="marked1"><a name="line147" />147         kps.stdout.string.should_satisfy { |msg| msg =~ /example' deleted/ }
-</span><span class="marked0"><a name="line148" />148     end
-</span><span class="inferred1"><a name="line149" />149 
-</span><span class="marked0"><a name="line150" />150     specify &quot;able to cancel deletion&quot; do
-</span><span class="marked1"><a name="line151" />151         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--delete&quot;, &quot;example&quot;])
-</span><span class="marked0"><a name="line152" />152         kps.stdout = StringIO.new
-</span><span class="marked1"><a name="line153" />153         prompted_values = [@passphrase] + %w(No)
-</span><span class="marked0"><a name="line154" />154         kps.stdin = StringIO.new(prompted_values.join(&quot;\n&quot;))
-</span><span class="marked1"><a name="line155" />155         kps.run
-</span><span class="marked0"><a name="line156" />156         kps.db.records.size.should_eql 2
-</span><span class="marked1"><a name="line157" />157         kps.stdout.string.should_satisfy { |msg| msg =~ /example' deleted/ }
-</span><span class="marked0"><a name="line158" />158     end
-</span><span class="inferred1"><a name="line159" />159 
-</span><span class="marked0"><a name="line160" />160     specify &quot;list all the entries&quot; do
-</span><span class="marked1"><a name="line161" />161         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--list&quot;])
-</span><span class="marked0"><a name="line162" />162         kps.stdout = StringIO.new
-</span><span class="marked1"><a name="line163" />163         kps.stdin = StringIO.new(@passphrase)
-</span><span class="marked0"><a name="line164" />164         kps.run
-</span><span class="marked1"><a name="line165" />165         kps.stdout.string.should_satisfy { |msg| msg =~ /2./m }
-</span><span class="marked0"><a name="line166" />166     end
-</span><span class="inferred1"><a name="line167" />167 
-</span><span class="marked0"><a name="line168" />168     specify &quot;listing no entries found&quot; do
-</span><span class="marked1"><a name="line169" />169         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--list&quot;, &quot;nothing&quot;])
-</span><span class="marked0"><a name="line170" />170         kps.stdout = StringIO.new
-</span><span class="marked1"><a name="line171" />171         kps.stdin = StringIO.new(@passphrase)
-</span><span class="marked0"><a name="line172" />172         kps.run
-</span><span class="marked1"><a name="line173" />173         kps.stdout.string.should_satisfy { |msg| msg =~ /No matching records were found./ }
-</span><span class="marked0"><a name="line174" />174     end
-</span><span class="inferred1"><a name="line175" />175 
-</span><span class="marked0"><a name="line176" />176     specify &quot;showing no entries found&quot; do
-</span><span class="marked1"><a name="line177" />177         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--show&quot;, &quot;nothing&quot;])
-</span><span class="marked0"><a name="line178" />178         kps.stdout = StringIO.new
-</span><span class="marked1"><a name="line179" />179         kps.stdin = StringIO.new(@passphrase)
-</span><span class="marked0"><a name="line180" />180         kps.run
-</span><span class="marked1"><a name="line181" />181         kps.stdout.string.should_satisfy { |msg| msg =~ /No matching records were found./ }
-</span><span class="marked0"><a name="line182" />182     end
-</span><span class="inferred1"><a name="line183" />183 
-</span><span class="inferred0"><a name="line184" />184 
-</span><span class="marked1"><a name="line185" />185     specify &quot;show all the entries&quot; do
-</span><span class="marked0"><a name="line186" />186         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--show&quot;])
-</span><span class="marked1"><a name="line187" />187         kps.stdout = StringIO.new
-</span><span class="marked0"><a name="line188" />188         kps.stdin = StringIO.new(@passphrase)
-</span><span class="marked1"><a name="line189" />189         kps.run
-</span><span class="marked0"><a name="line190" />190         kps.stdout.string.should_satisfy { |msg| msg =~ /2./m }
-</span><span class="marked1"><a name="line191" />191     end
-</span><span class="inferred0"><a name="line192" />192 
-</span><span class="marked1"><a name="line193" />193     specify &quot;changing master password works&quot; do
-</span><span class="marked0"><a name="line194" />194         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--master-password&quot;])
-</span><span class="marked1"><a name="line195" />195         kps.stdout = StringIO.new
-</span><span class="marked0"><a name="line196" />196         kps.stdin  = StringIO.new([@passphrase, &quot;I really love ruby.&quot;, &quot;I really love ruby.&quot;].join(&quot;\n&quot;))
-</span><span class="marked1"><a name="line197" />197         kps.run
-</span><span class="marked0"><a name="line198" />198         kps.stdout.string.should_satisfy { |msg| msg =~ /New master password set/m }
-</span><span class="marked1"><a name="line199" />199     end
-</span><span class="inferred0"><a name="line200" />200 
-</span><span class="inferred1"><a name="line201" />201 end
-</span><span class="inferred0"><a name="line202" />202 
+    </table><pre><span class="marked0"><a name="line1" />  1 require 'tempfile'
+</span><span class="marked1"><a name="line2" />  2 require 'keybox'
+</span><span class="marked0"><a name="line3" />  3 require 'keybox/application/password_safe'
+</span><span class="inferred1"><a name="line4" />  4 
+</span><span class="marked0"><a name="line5" />  5 context &quot;Keybox Password Safe Application&quot; do
+</span><span class="marked1"><a name="line6" />  6     setup do 
+</span><span class="inferred0"><a name="line7" />  7 
+</span><span class="marked1"><a name="line8" />  8         @passphrase = &quot;i love ruby&quot;
+</span><span class="marked0"><a name="line9" />  9         @testing_db = Tempfile.new(&quot;kps_db.yml&quot;)
+</span><span class="marked1"><a name="line10" /> 10         @testing_cfg = Tempfile.new(&quot;kps_cfg.yml&quot;)
+</span><span class="marked0"><a name="line11" /> 11         @path = @testing_db.path
+</span><span class="marked1"><a name="line12" /> 12         container = Keybox::Storage::Container.new(@passphrase, @testing_db.path)
+</span><span class="marked0"><a name="line13" /> 13         container &lt;&lt; Keybox::HostAccountEntry.new(&quot;test account&quot;,&quot;localhost&quot;,&quot;guest&quot;, &quot;rubyrocks&quot;)
+</span><span class="marked1"><a name="line14" /> 14         container &lt;&lt; Keybox::URLAccountEntry.new(&quot;example site&quot;, &quot;http://www.example.com&quot;, &quot;rubyhacker&quot;)
+</span><span class="marked0"><a name="line15" /> 15         container.save
+</span><span class="inferred1"><a name="line16" /> 16 
+</span><span class="marked0"><a name="line17" /> 17         @import_csv = Tempfile.new(&quot;keybox_import.csv&quot;)
+</span><span class="marked1"><a name="line18" /> 18         @import_csv.puts &quot;title,hostname,username,password,additional_info&quot;
+</span><span class="marked0"><a name="line19" /> 19         @import_csv.puts &quot;example host,host.example.com,guest,mysecretpassword,use this account only for honeybots&quot;
+</span><span class="marked1"><a name="line20" /> 20         @import_csv.puts &quot;example site,http://www.example.com,guest,mywebpassword,web forum login&quot;
+</span><span class="marked0"><a name="line21" /> 21         @import_csv.close
+</span><span class="inferred1"><a name="line22" /> 22 
+</span><span class="marked0"><a name="line23" /> 23         @bad_import_csv = Tempfile.new(&quot;keybox_bad_header.csv&quot;)
+</span><span class="inferred1"><a name="line24" /> 24         # missing a valid header
+</span><span class="marked0"><a name="line25" /> 25         @bad_import_csv.puts &quot;title,host,username,password,additional_info&quot;
+</span><span class="marked1"><a name="line26" /> 26         @bad_import_csv.puts &quot;example host,host.example.com,guest,mysecretpassword,use this account only for honeybots&quot;
+</span><span class="marked0"><a name="line27" /> 27         @bad_import_csv.puts &quot;example site,http://www.example.com,guest,mywebpassword,web forum login&quot;
+</span><span class="inferred1"><a name="line28" /> 28 
+</span><span class="marked0"><a name="line29" /> 29         @export_csv = Tempfile.new(&quot;keybox_export.csv&quot;)
+</span><span class="inferred1"><a name="line30" /> 30 
+</span><span class="marked0"><a name="line31" /> 31     end
+</span><span class="inferred1"><a name="line32" /> 32 
+</span><span class="marked0"><a name="line33" /> 33     teardown do
+</span><span class="marked1"><a name="line34" /> 34         @testing_db.unlink
+</span><span class="marked0"><a name="line35" /> 35         @testing_cfg.unlink
+</span><span class="marked1"><a name="line36" /> 36         @import_csv.unlink
+</span><span class="marked0"><a name="line37" /> 37         @bad_import_csv.unlink
+</span><span class="marked1"><a name="line38" /> 38         @export_csv.unlink
+</span><span class="inferred0"><a name="line39" /> 39     end
+</span><span class="inferred1"><a name="line40" /> 40 
+</span><span class="marked0"><a name="line41" /> 41     specify &quot;nil argv should do nothing&quot; do
+</span><span class="marked1"><a name="line42" /> 42         kps = Keybox::Application::PasswordSafe.new
+</span><span class="marked0"><a name="line43" /> 43         kps.error_message.should_be nil
+</span><span class="marked1"><a name="line44" /> 44     end
+</span><span class="inferred0"><a name="line45" /> 45 
+</span><span class="marked1"><a name="line46" /> 46     specify &quot;executing with no args should have output on stdout&quot; do
+</span><span class="marked0"><a name="line47" /> 47         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path])
+</span><span class="marked1"><a name="line48" /> 48         kps.stdout = StringIO.new
+</span><span class="marked0"><a name="line49" /> 49         kps.stdin  = StringIO.new(@passphrase)
+</span><span class="marked1"><a name="line50" /> 50         kps.run
+</span><span class="marked0"><a name="line51" /> 51         kps.stdout.string.size.should_be &gt; 0
+</span><span class="marked1"><a name="line52" /> 52     end
+</span><span class="inferred0"><a name="line53" /> 53 
+</span><span class="marked1"><a name="line54" /> 54     specify &quot;general options get set correctly&quot; do
+</span><span class="marked0"><a name="line55" /> 55         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--debug&quot;, &quot;--no-use-hash-for-url&quot;])
+</span><span class="marked1"><a name="line56" /> 56         kps.merge_options
+</span><span class="marked0"><a name="line57" /> 57         kps.options.db_file.should_eql @testing_db.path
+</span><span class="marked1"><a name="line58" /> 58         kps.options.config_file.should_eql @testing_cfg.path
+</span><span class="marked0"><a name="line59" /> 59         kps.options.debug.should_eql true
+</span><span class="marked1"><a name="line60" /> 60         kps.options.use_password_hash_for_url.should_eql false
+</span><span class="marked0"><a name="line61" /> 61     end
+</span><span class="inferred1"><a name="line62" /> 62 
+</span><span class="marked0"><a name="line63" /> 63     specify &quot;more than one command options is an error&quot; do
+</span><span class="marked1"><a name="line64" /> 64         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--add&quot;, &quot;accont&quot;, &quot;--edit&quot;, &quot;account&quot;])
+</span><span class="marked0"><a name="line65" /> 65         kps.stderr = StringIO.new
+</span><span class="marked1"><a name="line66" /> 66         kps.stdout = StringIO.new
+</span><span class="marked0"><a name="line67" /> 67         begin
+</span><span class="marked1"><a name="line68" /> 68             kps.run
+</span><span class="inferred0"><a name="line69" /> 69         rescue SystemExit =&gt; se
+</span><span class="marked1"><a name="line70" /> 70             kps.error_message.should_satisfy { |msg| msg =~ /Only one of/m }
+</span><span class="marked0"><a name="line71" /> 71             kps.stderr.string.should_satisfy { |msg| msg =~ /Only one of/m }
+</span><span class="marked1"><a name="line72" /> 72             se.status.should_eql 1
+</span><span class="inferred0"><a name="line73" /> 73         end
+</span><span class="marked1"><a name="line74" /> 74     end
+</span><span class="inferred0"><a name="line75" /> 75 
+</span><span class="marked1"><a name="line76" /> 76     specify &quot;invalid options set the error message, exit 1 and have output on stderr&quot; do
+</span><span class="marked0"><a name="line77" /> 77         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path,&quot;--invalid-option&quot;])
+</span><span class="marked1"><a name="line78" /> 78         kps.stderr = StringIO.new
+</span><span class="marked0"><a name="line79" /> 79         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line80" /> 80         begin
+</span><span class="marked0"><a name="line81" /> 81             kps.run
+</span><span class="inferred1"><a name="line82" /> 82         rescue SystemExit =&gt; se
+</span><span class="marked0"><a name="line83" /> 83             kps.error_message.should_satisfy { |msg| msg =~ /Try.*--help/m }
+</span><span class="marked1"><a name="line84" /> 84             kps.stderr.string.should_satisfy { |msg| msg =~ /Try.*--help/m }
+</span><span class="marked0"><a name="line85" /> 85             kps.stdout.string.size.should_eql 0
+</span><span class="marked1"><a name="line86" /> 86             se.status.should == 1
+</span><span class="inferred0"><a name="line87" /> 87         end
+</span><span class="marked1"><a name="line88" /> 88     end
+</span><span class="inferred0"><a name="line89" /> 89 
+</span><span class="marked1"><a name="line90" /> 90     specify &quot;help has output on stdout and exits 0&quot; do
+</span><span class="marked0"><a name="line91" /> 91         kps = Keybox::Application::PasswordSafe.new([&quot;--h&quot;]) 
+</span><span class="marked1"><a name="line92" /> 92         kps.stdout = StringIO.new
+</span><span class="marked0"><a name="line93" /> 93         begin
+</span><span class="marked1"><a name="line94" /> 94             kps.run
+</span><span class="inferred0"><a name="line95" /> 95         rescue SystemExit =&gt; se
+</span><span class="marked1"><a name="line96" /> 96             se.status.should_eql 0
+</span><span class="marked0"><a name="line97" /> 97             kps.stdout.string.length.should_be &gt; 0
+</span><span class="inferred1"><a name="line98" /> 98         end
+</span><span class="marked0"><a name="line99" /> 99     end
+</span><span class="inferred1"><a name="line100" />100 
+</span><span class="marked0"><a name="line101" />101     specify &quot;version has output on stdout and exits 0&quot; do
+</span><span class="marked1"><a name="line102" />102         kps = Keybox::Application::PasswordSafe.new([&quot;--ver&quot;]) 
+</span><span class="marked0"><a name="line103" />103         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line104" />104         begin
+</span><span class="marked0"><a name="line105" />105             kps.run
+</span><span class="inferred1"><a name="line106" />106         rescue SystemExit =&gt; se
+</span><span class="marked0"><a name="line107" />107             se.status.should_eql 0
+</span><span class="marked1"><a name="line108" />108             kps.stdout.string.length.should_be &gt; 0
+</span><span class="inferred0"><a name="line109" />109         end
+</span><span class="marked1"><a name="line110" />110     end
+</span><span class="inferred0"><a name="line111" />111     
+</span><span class="marked1"><a name="line112" />112     specify &quot;prompted for password twice to create database initially&quot; do
+</span><span class="marked0"><a name="line113" />113         File.unlink(@testing_db.path)
+</span><span class="marked1"><a name="line114" />114         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path])
+</span><span class="marked0"><a name="line115" />115         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line116" />116         kps.stdin  = StringIO.new([@passphrase,@passphrase].join(&quot;\n&quot;))
+</span><span class="marked0"><a name="line117" />117         kps.run
+</span><span class="marked1"><a name="line118" />118         kps.db.records.size.should_eql 0
+</span><span class="marked0"><a name="line119" />119         kps.stdout.string.should_satisfy { |msg| msg =~ /Creating initial database./m }
+</span><span class="marked1"><a name="line120" />120         kps.stdout.string.should_satisfy { |msg| msg =~ /Initial Password for/m }
+</span><span class="marked0"><a name="line121" />121     end
+</span><span class="inferred1"><a name="line122" />122 
+</span><span class="marked0"><a name="line123" />123     specify &quot;file can be opened with password&quot; do
+</span><span class="marked1"><a name="line124" />124         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path])
+</span><span class="marked0"><a name="line125" />125         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line126" />126         kps.stdin  = StringIO.new(@passphrase + &quot;\n&quot;)
+</span><span class="marked0"><a name="line127" />127         kps.run
+</span><span class="marked1"><a name="line128" />128         kps.db.records.size.should_eql 2
+</span><span class="marked0"><a name="line129" />129     end
+</span><span class="inferred1"><a name="line130" />130 
+</span><span class="marked0"><a name="line131" />131     specify &quot;adding an entry to the database works&quot; do
+</span><span class="marked1"><a name="line132" />132         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--add&quot;, &quot;example.com&quot;])
+</span><span class="marked0"><a name="line133" />133         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line134" />134         prompted_values = [@passphrase] + %w(example.com example.com someuser apassword apassword noinfo yes)
+</span><span class="marked0"><a name="line135" />135         kps.stdin  = StringIO.new(prompted_values.join(&quot;\n&quot;))
+</span><span class="marked1"><a name="line136" />136         kps.run
+</span><span class="marked0"><a name="line137" />137         kps.db.records.size.should_eql 3
+</span><span class="marked1"><a name="line138" />138     end
+</span><span class="inferred0"><a name="line139" />139 
+</span><span class="marked1"><a name="line140" />140     specify &quot;add a url entry to the database&quot; do
+</span><span class="marked0"><a name="line141" />141         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--add&quot;, &quot;http://www.example.com&quot;])
+</span><span class="marked1"><a name="line142" />142         kps.stdout = StringIO.new
+</span><span class="marked0"><a name="line143" />143         prompted_values = [@passphrase] + %w(www.example.com http://www.example.com someuser noinfo yes)
+</span><span class="marked1"><a name="line144" />144         kps.stdin  = StringIO.new(prompted_values.join(&quot;\n&quot;))
+</span><span class="marked0"><a name="line145" />145         kps.run
+</span><span class="marked1"><a name="line146" />146         kps.db.records.size.should_eql 3
+</span><span class="marked0"><a name="line147" />147     end
+</span><span class="inferred1"><a name="line148" />148 
+</span><span class="marked0"><a name="line149" />149     specify &quot;double prompting on failed password for entry to the database works&quot; do
+</span><span class="marked1"><a name="line150" />150         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--add&quot;, &quot;example.com&quot;])
+</span><span class="marked0"><a name="line151" />151         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line152" />152         prompted_values = [@passphrase, &quot;&quot;] + %w(example.com someuser apassword abadpassword abcdef abcdef noinfo yes)
+</span><span class="marked0"><a name="line153" />153         kps.stdin  = StringIO.new(prompted_values.join(&quot;\n&quot;))
+</span><span class="marked1"><a name="line154" />154         kps.run
+</span><span class="marked0"><a name="line155" />155         kps.db.records.size.should_eql 3
+</span><span class="marked1"><a name="line156" />156     end
+</span><span class="inferred0"><a name="line157" />157 
+</span><span class="marked1"><a name="line158" />158     specify &quot;able to delete an entry&quot; do
+</span><span class="marked0"><a name="line159" />159         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--delete&quot;, &quot;example&quot;])
+</span><span class="marked1"><a name="line160" />160         kps.stdout = StringIO.new
+</span><span class="marked0"><a name="line161" />161         prompted_values = [@passphrase] + %w(Yes)
+</span><span class="marked1"><a name="line162" />162         kps.stdin = StringIO.new(prompted_values.join(&quot;\n&quot;))
+</span><span class="marked0"><a name="line163" />163         kps.run
+</span><span class="marked1"><a name="line164" />164         kps.db.records.size.should_eql 1
+</span><span class="marked0"><a name="line165" />165         kps.stdout.string.should_satisfy { |msg| msg =~ /example' deleted/ }
+</span><span class="marked1"><a name="line166" />166     end
+</span><span class="inferred0"><a name="line167" />167 
+</span><span class="marked1"><a name="line168" />168     specify &quot;able to cancel deletion&quot; do
+</span><span class="marked0"><a name="line169" />169         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--delete&quot;, &quot;example&quot;])
+</span><span class="marked1"><a name="line170" />170         kps.stdout = StringIO.new
+</span><span class="marked0"><a name="line171" />171         prompted_values = [@passphrase] + %w(No)
+</span><span class="marked1"><a name="line172" />172         kps.stdin = StringIO.new(prompted_values.join(&quot;\n&quot;))
+</span><span class="marked0"><a name="line173" />173         kps.run
+</span><span class="marked1"><a name="line174" />174         kps.db.records.size.should_eql 2
+</span><span class="marked0"><a name="line175" />175         kps.stdout.string.should_satisfy { |msg| msg =~ /example' deleted/ }
+</span><span class="marked1"><a name="line176" />176     end
+</span><span class="inferred0"><a name="line177" />177 
+</span><span class="marked1"><a name="line178" />178     specify &quot;list all the entries&quot; do
+</span><span class="marked0"><a name="line179" />179         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--list&quot;])
+</span><span class="marked1"><a name="line180" />180         kps.stdout = StringIO.new
+</span><span class="marked0"><a name="line181" />181         kps.stdin = StringIO.new(@passphrase)
+</span><span class="marked1"><a name="line182" />182         kps.run
+</span><span class="marked0"><a name="line183" />183         kps.stdout.string.should_satisfy { |msg| msg =~ /2./m }
+</span><span class="marked1"><a name="line184" />184     end
+</span><span class="inferred0"><a name="line185" />185 
+</span><span class="marked1"><a name="line186" />186     specify &quot;listing no entries found&quot; do
+</span><span class="marked0"><a name="line187" />187         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--list&quot;, &quot;nothing&quot;])
+</span><span class="marked1"><a name="line188" />188         kps.stdout = StringIO.new
+</span><span class="marked0"><a name="line189" />189         kps.stdin = StringIO.new(@passphrase)
+</span><span class="marked1"><a name="line190" />190         kps.run
+</span><span class="marked0"><a name="line191" />191         kps.stdout.string.should_satisfy { |msg| msg =~ /No matching records were found./ }
+</span><span class="marked1"><a name="line192" />192     end
+</span><span class="inferred0"><a name="line193" />193 
+</span><span class="marked1"><a name="line194" />194     specify &quot;showing no entries found&quot; do
+</span><span class="marked0"><a name="line195" />195         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--show&quot;, &quot;nothing&quot;])
+</span><span class="marked1"><a name="line196" />196         kps.stdout = StringIO.new
+</span><span class="marked0"><a name="line197" />197         kps.stdin = StringIO.new(@passphrase)
+</span><span class="marked1"><a name="line198" />198         kps.run
+</span><span class="marked0"><a name="line199" />199         kps.stdout.string.should_satisfy { |msg| msg =~ /No matching records were found./ }
+</span><span class="marked1"><a name="line200" />200     end
+</span><span class="inferred0"><a name="line201" />201 
+</span><span class="inferred1"><a name="line202" />202 
+</span><span class="marked0"><a name="line203" />203     specify &quot;show all the entries&quot; do
+</span><span class="marked1"><a name="line204" />204         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--show&quot;])
+</span><span class="marked0"><a name="line205" />205         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line206" />206         kps.stdin = StringIO.new(@passphrase)
+</span><span class="marked0"><a name="line207" />207         kps.run
+</span><span class="marked1"><a name="line208" />208         kps.stdout.string.should_satisfy { |msg| msg =~ /2./m }
+</span><span class="marked0"><a name="line209" />209     end
+</span><span class="inferred1"><a name="line210" />210 
+</span><span class="marked0"><a name="line211" />211     specify &quot;changing master password works&quot; do
+</span><span class="marked1"><a name="line212" />212         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path, &quot;--master-password&quot;])
+</span><span class="marked0"><a name="line213" />213         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line214" />214         kps.stdin  = StringIO.new([@passphrase, &quot;I really love ruby.&quot;, &quot;I really love ruby.&quot;].join(&quot;\n&quot;))
+</span><span class="marked0"><a name="line215" />215         kps.run
+</span><span class="marked1"><a name="line216" />216         kps.stdout.string.should_satisfy { |msg| msg =~ /New master password set/m }
+</span><span class="marked0"><a name="line217" />217     end
+</span><span class="inferred1"><a name="line218" />218 
+</span><span class="marked0"><a name="line219" />219     specify &quot;importing from a valid csv file&quot; do
+</span><span class="marked1"><a name="line220" />220         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path,&quot;-i&quot;, @import_csv.path])
+</span><span class="marked0"><a name="line221" />221         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line222" />222         kps.stdin  = StringIO.new([@passphrase, @passphrase].join(&quot;\n&quot;))
+</span><span class="marked0"><a name="line223" />223         kps.run
+</span><span class="marked1"><a name="line224" />224         kps.stdout.string.should_satisfy { |msg| msg =~ /Imported \d* records from/m }
+</span><span class="marked0"><a name="line225" />225     end
+</span><span class="inferred1"><a name="line226" />226 
+</span><span class="marked0"><a name="line227" />227     specify &quot;Error message give on invalid imported csv&quot; do
+</span><span class="marked1"><a name="line228" />228         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path,&quot;-i&quot;, @bad_import_csv.path])
+</span><span class="marked0"><a name="line229" />229         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line230" />230         kps.stdin  = StringIO.new([@passphrase, @passphrase].join(&quot;\n&quot;))
+</span><span class="marked0"><a name="line231" />231         begin
+</span><span class="marked1"><a name="line232" />232             kps.run
+</span><span class="inferred0"><a name="line233" />233         rescue SystemExit =&gt; se
+</span><span class="marked1"><a name="line234" />234             kps.stdout.string.should_satisfy { |msg| msg =~ /Error: There must be a header on the CSV /m }
+</span><span class="marked0"><a name="line235" />235             se.status.should_eql 1
+</span><span class="inferred1"><a name="line236" />236         end
+</span><span class="marked0"><a name="line237" />237     end
+</span><span class="inferred1"><a name="line238" />238 
+</span><span class="marked0"><a name="line239" />239     specify &quot;able to export to a csv&quot; do
+</span><span class="marked1"><a name="line240" />240         kps = Keybox::Application::PasswordSafe.new([&quot;-f&quot;, @testing_db.path, &quot;-c&quot;, @testing_cfg.path,&quot;-x&quot;, @export_csv.path])
+</span><span class="marked0"><a name="line241" />241         kps.stdout = StringIO.new
+</span><span class="marked1"><a name="line242" />242         kps.stdin  = StringIO.new([@passphrase, @passphrase].join(&quot;\n&quot;))
+</span><span class="marked0"><a name="line243" />243         kps.run
+</span><span class="marked1"><a name="line244" />244         kps.stdout.string.should_satisfy { |msg| msg =~ /Exported \d* records to/m }
+</span><span class="marked0"><a name="line245" />245     end
+</span><span class="inferred1"><a name="line246" />246 end
+</span><span class="inferred0"><a name="line247" />247 
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

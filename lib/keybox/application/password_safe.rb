@@ -94,12 +94,15 @@ module Keybox
                         @parsed_options.show_version = true
                     end
 
+                    op.separator ""
+                    op.separator "Import / Export from other data formats:"
+                    
                     op.on("-i", "--import-from-csv FILE", "Import from a CSV file") do |file|
-                        @actions << [:import_csv, file]
+                        @actions << [:import_from_csv, file]
                     end
 
                     op.on("-x", "--export-to-csv FILE", "Export contents to a CSV file") do |file|
-                        @actions << [:export_csv, file]
+                        @actions << [:export_to_csv, file]
                     end
 
                 end
@@ -284,7 +287,25 @@ module Keybox
             def master_password(ignore_this)
                 new_password = prompt("Enter new master password", false, true, 30)
                 @db.passphrase = new_password
-                @stdout.puts "New master password set."
+                color_puts "New master password set.", :green
+            end
+
+            #
+            # Import data into the database from a CSV file
+            #
+            def import_from_csv(file)
+                entries = Keybox::Convert::CSV.from_file(file)
+                entries.each do |entry|
+                    @db << entry
+                end
+                color_puts "Imported #{entries.size} records from #{file}.", :green
+            end
+
+            #
+            # Export data from the database into a CSV file
+            def export_to_csv(file)
+                Keybox::Convert::CSV.to_file(@db.records, file)
+                color_puts "Exported #{@db.records.size} records to #{file}.", :green
             end
 
             def fill_entry(entry)
@@ -341,7 +362,7 @@ module Keybox
                     exit 1
                 rescue StandardError => e
                     @stdout.puts
-                    color_puts "#{e.message}", :red
+                    color_puts "Error: #{e.message}", :red
                     exit 1
                 end
             end

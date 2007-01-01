@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sun Dec 31 21:01:37 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sun Dec 31 21:42:53 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -617,69 +617,69 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked0"><a name="line1" /> 1 require 'keybox'
-</span><span class="marked1"><a name="line2" /> 2 context &quot;Account Entry&quot; do
-</span><span class="marked0"><a name="line3" /> 3     specify &quot;fields get set correctly&quot; do
-</span><span class="marked1"><a name="line4" /> 4         k = Keybox::AccountEntry.new(&quot;a test title&quot;, &quot;user&quot;)
-</span><span class="marked0"><a name="line5" /> 5         k.username.should_eql &quot;user&quot;
-</span><span class="marked1"><a name="line6" /> 6         k.title.should_eql &quot;a test title&quot;
-</span><span class="marked0"><a name="line7" /> 7     end
-</span><span class="inferred1"><a name="line8" /> 8 
-</span><span class="marked0"><a name="line9" /> 9     specify &quot;fields can be accessed&quot; do
-</span><span class="marked1"><a name="line10" />10         k = Keybox::AccountEntry.new(&quot;a test title&quot;, &quot;user&quot;)
-</span><span class="marked0"><a name="line11" />11         k.fields.should_include &quot;title&quot;
-</span><span class="marked1"><a name="line12" />12         k.fields.should_include &quot;username&quot;
-</span><span class="marked0"><a name="line13" />13         k.fields.should_include &quot;additional_info&quot;
-</span><span class="marked1"><a name="line14" />14     end
-</span><span class="inferred0"><a name="line15" />15 
-</span><span class="marked1"><a name="line16" />16     specify &quot;fields can be private or visible&quot; do
-</span><span class="marked0"><a name="line17" />17         k = Keybox::AccountEntry.new(&quot;a test title&quot;, &quot;user&quot;)
-</span><span class="marked1"><a name="line18" />18         k.private_fields.size.should_eql 0
-</span><span class="marked0"><a name="line19" />19         k.visible_field?(&quot;title&quot;).should_eql true
-</span><span class="marked1"><a name="line20" />20     end
-</span><span class="inferred0"><a name="line21" />21 end
-</span><span class="inferred1"><a name="line22" />22 
-</span><span class="marked0"><a name="line23" />23 context &quot;Host Account&quot; do
-</span><span class="marked1"><a name="line24" />24     specify &quot;fields get set correctly&quot; do
-</span><span class="marked0"><a name="line25" />25         ha = Keybox::HostAccountEntry.new(&quot;a title&quot;, &quot;host&quot;, &quot;user&quot;, &quot;password&quot;)
-</span><span class="marked1"><a name="line26" />26         ha.title.should_eql &quot;a title&quot;
-</span><span class="marked0"><a name="line27" />27         ha.username.should_eql &quot;user&quot;
-</span><span class="marked1"><a name="line28" />28         ha.hostname.should_eql &quot;host&quot;
-</span><span class="marked0"><a name="line29" />29         ha.password.should_eql &quot;password&quot;
-</span><span class="marked1"><a name="line30" />30     end
-</span><span class="inferred0"><a name="line31" />31 
-</span><span class="marked1"><a name="line32" />32     specify &quot;password is displayable, private and non-visible&quot; do
-</span><span class="marked0"><a name="line33" />33         ha = Keybox::HostAccountEntry.new(&quot;a title&quot;, &quot;host&quot;, &quot;user&quot;, &quot;password&quot;)
-</span><span class="marked1"><a name="line34" />34         ha.display_fields.should_include &quot;password&quot;
-</span><span class="marked0"><a name="line35" />35         ha.private_fields.should_include &quot;password&quot;
-</span><span class="marked1"><a name="line36" />36         ha.visible_fields.should_not_include &quot;password&quot;
-</span><span class="marked0"><a name="line37" />37     end
-</span><span class="inferred1"><a name="line38" />38 end
-</span><span class="inferred0"><a name="line39" />39 
-</span><span class="marked1"><a name="line40" />40 context &quot;URL Account&quot; do
-</span><span class="marked0"><a name="line41" />41     specify &quot;fields get set correctly&quot; do
-</span><span class="marked1"><a name="line42" />42         urla = Keybox::URLAccountEntry.new(&quot;url title&quot;, &quot;http://www.example.com&quot;, &quot;someuser&quot;)
-</span><span class="marked0"><a name="line43" />43         urla.title.should_eql &quot;url title&quot;
-</span><span class="marked1"><a name="line44" />44         urla.url.should_eql &quot;http://www.example.com&quot;
-</span><span class="marked0"><a name="line45" />45         urla.username.should_eql &quot;someuser&quot;
-</span><span class="marked1"><a name="line46" />46     end
-</span><span class="inferred0"><a name="line47" />47 
-</span><span class="marked1"><a name="line48" />48     specify &quot;password hash is used&quot; do
-</span><span class="marked0"><a name="line49" />49         container = Keybox::Storage::Container.new(&quot;i love ruby&quot;, &quot;/tmp/junk.yml&quot;)
-</span><span class="marked1"><a name="line50" />50         urla = Keybox::URLAccountEntry.new(&quot;url title&quot;, &quot;http://www.example.com&quot;, &quot;someuser&quot;)
-</span><span class="marked0"><a name="line51" />51         container &lt;&lt; urla
-</span><span class="marked1"><a name="line52" />52         urla.password.should_eql &quot;589c0d91d&quot;
-</span><span class="marked0"><a name="line53" />53     end
-</span><span class="inferred1"><a name="line54" />54 
-</span><span class="marked0"><a name="line55" />55     specify &quot;there is no password storage field, but there a private password field&quot; do
-</span><span class="marked1"><a name="line56" />56         urla = Keybox::URLAccountEntry.new(&quot;url title&quot;, &quot;http://www.example.com&quot;, &quot;someuser&quot;)
-</span><span class="marked0"><a name="line57" />57         urla.fields.should_not_include &quot;password&quot;
-</span><span class="marked1"><a name="line58" />58         urla.private_fields.should_include &quot;password&quot;
-</span><span class="marked0"><a name="line59" />59         urla.private_field?(&quot;password&quot;).should_eql true
-</span><span class="marked1"><a name="line60" />60     end
-</span><span class="inferred0"><a name="line61" />61 
-</span><span class="inferred1"><a name="line62" />62 end
-</span><span class="inferred0"><a name="line63" />63                                           
+    </table><pre><span class="marked1"><a name="line1" /> 1 require 'keybox'
+</span><span class="marked0"><a name="line2" /> 2 context &quot;Account Entry&quot; do
+</span><span class="marked1"><a name="line3" /> 3     specify &quot;fields get set correctly&quot; do
+</span><span class="marked0"><a name="line4" /> 4         k = Keybox::AccountEntry.new(&quot;a test title&quot;, &quot;user&quot;)
+</span><span class="marked1"><a name="line5" /> 5         k.username.should_eql &quot;user&quot;
+</span><span class="marked0"><a name="line6" /> 6         k.title.should_eql &quot;a test title&quot;
+</span><span class="marked1"><a name="line7" /> 7     end
+</span><span class="inferred0"><a name="line8" /> 8 
+</span><span class="marked1"><a name="line9" /> 9     specify &quot;fields can be accessed&quot; do
+</span><span class="marked0"><a name="line10" />10         k = Keybox::AccountEntry.new(&quot;a test title&quot;, &quot;user&quot;)
+</span><span class="marked1"><a name="line11" />11         k.fields.should_include &quot;title&quot;
+</span><span class="marked0"><a name="line12" />12         k.fields.should_include &quot;username&quot;
+</span><span class="marked1"><a name="line13" />13         k.fields.should_include &quot;additional_info&quot;
+</span><span class="marked0"><a name="line14" />14     end
+</span><span class="inferred1"><a name="line15" />15 
+</span><span class="marked0"><a name="line16" />16     specify &quot;fields can be private or visible&quot; do
+</span><span class="marked1"><a name="line17" />17         k = Keybox::AccountEntry.new(&quot;a test title&quot;, &quot;user&quot;)
+</span><span class="marked0"><a name="line18" />18         k.private_fields.size.should_eql 0
+</span><span class="marked1"><a name="line19" />19         k.visible_field?(&quot;title&quot;).should_eql true
+</span><span class="marked0"><a name="line20" />20     end
+</span><span class="inferred1"><a name="line21" />21 end
+</span><span class="inferred0"><a name="line22" />22 
+</span><span class="marked1"><a name="line23" />23 context &quot;Host Account&quot; do
+</span><span class="marked0"><a name="line24" />24     specify &quot;fields get set correctly&quot; do
+</span><span class="marked1"><a name="line25" />25         ha = Keybox::HostAccountEntry.new(&quot;a title&quot;, &quot;host&quot;, &quot;user&quot;, &quot;password&quot;)
+</span><span class="marked0"><a name="line26" />26         ha.title.should_eql &quot;a title&quot;
+</span><span class="marked1"><a name="line27" />27         ha.username.should_eql &quot;user&quot;
+</span><span class="marked0"><a name="line28" />28         ha.hostname.should_eql &quot;host&quot;
+</span><span class="marked1"><a name="line29" />29         ha.password.should_eql &quot;password&quot;
+</span><span class="marked0"><a name="line30" />30     end
+</span><span class="inferred1"><a name="line31" />31 
+</span><span class="marked0"><a name="line32" />32     specify &quot;password is displayable, private and non-visible&quot; do
+</span><span class="marked1"><a name="line33" />33         ha = Keybox::HostAccountEntry.new(&quot;a title&quot;, &quot;host&quot;, &quot;user&quot;, &quot;password&quot;)
+</span><span class="marked0"><a name="line34" />34         ha.display_fields.should_include &quot;password&quot;
+</span><span class="marked1"><a name="line35" />35         ha.private_fields.should_include &quot;password&quot;
+</span><span class="marked0"><a name="line36" />36         ha.visible_fields.should_not_include &quot;password&quot;
+</span><span class="marked1"><a name="line37" />37     end
+</span><span class="inferred0"><a name="line38" />38 end
+</span><span class="inferred1"><a name="line39" />39 
+</span><span class="marked0"><a name="line40" />40 context &quot;URL Account&quot; do
+</span><span class="marked1"><a name="line41" />41     specify &quot;fields get set correctly&quot; do
+</span><span class="marked0"><a name="line42" />42         urla = Keybox::URLAccountEntry.new(&quot;url title&quot;, &quot;http://www.example.com&quot;, &quot;someuser&quot;)
+</span><span class="marked1"><a name="line43" />43         urla.title.should_eql &quot;url title&quot;
+</span><span class="marked0"><a name="line44" />44         urla.url.should_eql &quot;http://www.example.com&quot;
+</span><span class="marked1"><a name="line45" />45         urla.username.should_eql &quot;someuser&quot;
+</span><span class="marked0"><a name="line46" />46     end
+</span><span class="inferred1"><a name="line47" />47 
+</span><span class="marked0"><a name="line48" />48     specify &quot;password hash is used&quot; do
+</span><span class="marked1"><a name="line49" />49         container = Keybox::Storage::Container.new(&quot;i love ruby&quot;, &quot;/tmp/junk.yml&quot;)
+</span><span class="marked0"><a name="line50" />50         urla = Keybox::URLAccountEntry.new(&quot;url title&quot;, &quot;http://www.example.com&quot;, &quot;someuser&quot;)
+</span><span class="marked1"><a name="line51" />51         container &lt;&lt; urla
+</span><span class="marked0"><a name="line52" />52         urla.password.should_eql &quot;589c0d91d&quot;
+</span><span class="marked1"><a name="line53" />53     end
+</span><span class="inferred0"><a name="line54" />54 
+</span><span class="marked1"><a name="line55" />55     specify &quot;there is no password storage field, but there a private password field&quot; do
+</span><span class="marked0"><a name="line56" />56         urla = Keybox::URLAccountEntry.new(&quot;url title&quot;, &quot;http://www.example.com&quot;, &quot;someuser&quot;)
+</span><span class="marked1"><a name="line57" />57         urla.fields.should_not_include &quot;password&quot;
+</span><span class="marked0"><a name="line58" />58         urla.private_fields.should_include &quot;password&quot;
+</span><span class="marked1"><a name="line59" />59         urla.private_field?(&quot;password&quot;).should_eql true
+</span><span class="marked0"><a name="line60" />60     end
+</span><span class="inferred1"><a name="line61" />61 
+</span><span class="inferred0"><a name="line62" />62 end
+</span><span class="inferred1"><a name="line63" />63                                           
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sun Dec 31 21:01:37 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sun Dec 31 21:42:53 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -617,54 +617,54 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked0"><a name="line1" /> 1 require 'tempfile'
-</span><span class="marked1"><a name="line2" /> 2 require 'keybox'
-</span><span class="marked0"><a name="line3" /> 3 require 'keybox/convert/csv'
-</span><span class="marked1"><a name="line4" /> 4 context &quot;CSV Convert class&quot; do
-</span><span class="marked0"><a name="line5" /> 5     setup do 
-</span><span class="marked1"><a name="line6" /> 6         @import_csv = Tempfile.new(&quot;keybox_import.csv&quot;)
-</span><span class="marked0"><a name="line7" /> 7         @import_csv.puts &quot;title,hostname,username,password,additional_info&quot;
-</span><span class="marked1"><a name="line8" /> 8         @import_csv.puts &quot;example host,host.example.com,guest,mysecretpassword,use this account only for honeybots&quot;
-</span><span class="marked0"><a name="line9" /> 9         @import_csv.puts &quot;example site,http://www.example.com,guest,mywebpassword,web forum login&quot;
-</span><span class="marked1"><a name="line10" />10         @import_csv.close
-</span><span class="inferred0"><a name="line11" />11 
-</span><span class="marked1"><a name="line12" />12         @bad_import_csv = Tempfile.new(&quot;keybox_bad_header.csv&quot;)
-</span><span class="inferred0"><a name="line13" />13         # missing a valid header
-</span><span class="marked1"><a name="line14" />14         @bad_import_csv.puts &quot;title,host,username,password,additional_info&quot;
-</span><span class="marked0"><a name="line15" />15         @bad_import_csv.puts &quot;example host,host.example.com,guest,mysecretpassword,use this account only for honeybots&quot;
-</span><span class="marked1"><a name="line16" />16         @bad_import_csv.puts &quot;example site,http://www.example.com,guest,mywebpassword,web forum login&quot;
-</span><span class="inferred0"><a name="line17" />17 
-</span><span class="marked1"><a name="line18" />18         @export_csv = Tempfile.new(&quot;keybox_export.csv&quot;)
-</span><span class="inferred0"><a name="line19" />19 
-</span><span class="inferred1"><a name="line20" />20     end
-</span><span class="inferred0"><a name="line21" />21 
-</span><span class="marked1"><a name="line22" />22     teardown do
-</span><span class="marked0"><a name="line23" />23         @import_csv.unlink
-</span><span class="marked1"><a name="line24" />24         @bad_import_csv.unlink
-</span><span class="marked0"><a name="line25" />25         @export_csv.unlink
-</span><span class="inferred1"><a name="line26" />26     end
-</span><span class="inferred0"><a name="line27" />27 
-</span><span class="marked1"><a name="line28" />28     specify &quot;able to load records from a file&quot; do
-</span><span class="marked0"><a name="line29" />29         entries = Keybox::Convert::CSV.from_file(@import_csv.path)
-</span><span class="marked1"><a name="line30" />30         entries.size.should_eql 2
-</span><span class="marked0"><a name="line31" />31         entries[0].hostname.should_eql &quot;host.example.com&quot;
-</span><span class="marked1"><a name="line32" />32         entries[1].password.should_eql &quot;mywebpassword&quot;
-</span><span class="marked0"><a name="line33" />33     end
-</span><span class="inferred1"><a name="line34" />34 
-</span><span class="marked0"><a name="line35" />35     specify &quot;throws error if the header is bad&quot; do
-</span><span class="marked1"><a name="line36" />36         lambda {
-</span><span class="marked0"><a name="line37" />37             Keybox::Convert::CSV.from_file(@bad_import_csv.path)
-</span><span class="uncovered1"><a name="line38" />38         }.should_raise Keybox::ValidationError
-</span><span class="uncovered0"><a name="line39" />39     end
-</span><span class="inferred1"><a name="line40" />40 
-</span><span class="marked0"><a name="line41" />41     specify &quot;able to write to a csv file&quot; do
-</span><span class="marked1"><a name="line42" />42         entries = Keybox::Convert::CSV.from_file(@import_csv.path)
-</span><span class="marked0"><a name="line43" />43         Keybox::Convert::CSV.to_file(entries,@export_csv.path)
-</span><span class="marked1"><a name="line44" />44         @export_csv.open
-</span><span class="marked0"><a name="line45" />45         data = @export_csv.read
-</span><span class="marked1"><a name="line46" />46         data.size.should_be &gt; 0
-</span><span class="marked0"><a name="line47" />47     end
-</span><span class="inferred1"><a name="line48" />48 end
+    </table><pre><span class="marked1"><a name="line1" /> 1 require 'tempfile'
+</span><span class="marked0"><a name="line2" /> 2 require 'keybox'
+</span><span class="marked1"><a name="line3" /> 3 require 'keybox/convert/csv'
+</span><span class="marked0"><a name="line4" /> 4 context &quot;CSV Convert class&quot; do
+</span><span class="marked1"><a name="line5" /> 5     setup do 
+</span><span class="marked0"><a name="line6" /> 6         @import_csv = Tempfile.new(&quot;keybox_import.csv&quot;)
+</span><span class="marked1"><a name="line7" /> 7         @import_csv.puts &quot;title,hostname,username,password,additional_info&quot;
+</span><span class="marked0"><a name="line8" /> 8         @import_csv.puts &quot;example host,host.example.com,guest,mysecretpassword,use this account only for honeybots&quot;
+</span><span class="marked1"><a name="line9" /> 9         @import_csv.puts &quot;example site,http://www.example.com,guest,mywebpassword,web forum login&quot;
+</span><span class="marked0"><a name="line10" />10         @import_csv.close
+</span><span class="inferred1"><a name="line11" />11 
+</span><span class="marked0"><a name="line12" />12         @bad_import_csv = Tempfile.new(&quot;keybox_bad_header.csv&quot;)
+</span><span class="inferred1"><a name="line13" />13         # missing a valid header
+</span><span class="marked0"><a name="line14" />14         @bad_import_csv.puts &quot;title,host,username,password,additional_info&quot;
+</span><span class="marked1"><a name="line15" />15         @bad_import_csv.puts &quot;example host,host.example.com,guest,mysecretpassword,use this account only for honeybots&quot;
+</span><span class="marked0"><a name="line16" />16         @bad_import_csv.puts &quot;example site,http://www.example.com,guest,mywebpassword,web forum login&quot;
+</span><span class="inferred1"><a name="line17" />17 
+</span><span class="marked0"><a name="line18" />18         @export_csv = Tempfile.new(&quot;keybox_export.csv&quot;)
+</span><span class="inferred1"><a name="line19" />19 
+</span><span class="inferred0"><a name="line20" />20     end
+</span><span class="inferred1"><a name="line21" />21 
+</span><span class="marked0"><a name="line22" />22     teardown do
+</span><span class="marked1"><a name="line23" />23         @import_csv.unlink
+</span><span class="marked0"><a name="line24" />24         @bad_import_csv.unlink
+</span><span class="marked1"><a name="line25" />25         @export_csv.unlink
+</span><span class="inferred0"><a name="line26" />26     end
+</span><span class="inferred1"><a name="line27" />27 
+</span><span class="marked0"><a name="line28" />28     specify &quot;able to load records from a file&quot; do
+</span><span class="marked1"><a name="line29" />29         entries = Keybox::Convert::CSV.from_file(@import_csv.path)
+</span><span class="marked0"><a name="line30" />30         entries.size.should_eql 2
+</span><span class="marked1"><a name="line31" />31         entries[0].hostname.should_eql &quot;host.example.com&quot;
+</span><span class="marked0"><a name="line32" />32         entries[1].password.should_eql &quot;mywebpassword&quot;
+</span><span class="marked1"><a name="line33" />33     end
+</span><span class="inferred0"><a name="line34" />34 
+</span><span class="marked1"><a name="line35" />35     specify &quot;throws error if the header is bad&quot; do
+</span><span class="marked0"><a name="line36" />36         lambda {
+</span><span class="marked1"><a name="line37" />37             Keybox::Convert::CSV.from_file(@bad_import_csv.path)
+</span><span class="uncovered0"><a name="line38" />38         }.should_raise Keybox::ValidationError
+</span><span class="uncovered1"><a name="line39" />39     end
+</span><span class="inferred0"><a name="line40" />40 
+</span><span class="marked1"><a name="line41" />41     specify &quot;able to write to a csv file&quot; do
+</span><span class="marked0"><a name="line42" />42         entries = Keybox::Convert::CSV.from_file(@import_csv.path)
+</span><span class="marked1"><a name="line43" />43         Keybox::Convert::CSV.to_file(entries,@export_csv.path)
+</span><span class="marked0"><a name="line44" />44         @export_csv.open
+</span><span class="marked1"><a name="line45" />45         data = @export_csv.read
+</span><span class="marked0"><a name="line46" />46         data.size.should_be &gt; 0
+</span><span class="marked1"><a name="line47" />47     end
+</span><span class="inferred0"><a name="line48" />48 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

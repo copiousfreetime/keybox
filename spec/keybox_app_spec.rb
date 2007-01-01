@@ -4,6 +4,7 @@ require 'keybox/application/password_safe'
 
 context "Keybox Password Safe Application" do
     setup do 
+
         @passphrase = "i love ruby"
         @testing_db = Tempfile.new("kps_db.yml")
         @testing_cfg = Tempfile.new("kps_cfg.yml")
@@ -12,12 +13,29 @@ context "Keybox Password Safe Application" do
         container << Keybox::HostAccountEntry.new("test account","localhost","guest", "rubyrocks")
         container << Keybox::URLAccountEntry.new("example site", "http://www.example.com", "rubyhacker")
         container.save
-        container.save("/tmp/kps_db-jjh.yml")
+
+        @import_csv = Tempfile.new("keybox_import.csv")
+        @import_csv.puts "title,hostname,username,password,additional_info"
+        @import_csv.puts "example host,host.example.com,guest,mysecretpassword,use this account only for honeybots"
+        @import_csv.puts "example site,http://www.example.com,guest,mywebpassword,web forum login"
+        @import_csv.close
+
+        @bad_import_csv = Tempfile.new("keybox_bad_header.csv")
+        # missing a valid header
+        @bad_import_csv.puts "title,host,username,password,additional_info"
+        @bad_import_csv.puts "example host,host.example.com,guest,mysecretpassword,use this account only for honeybots"
+        @bad_import_csv.puts "example site,http://www.example.com,guest,mywebpassword,web forum login"
+
+        @export_csv = Tempfile.new("keybox_export.csv")
+
     end
 
     teardown do
         @testing_db.unlink
         @testing_cfg.unlink
+        @import_csv.unlink
+        @bad_import_csv.unlink
+        @export_csv.unlink
     end
 
     specify "nil argv should do nothing" do
@@ -198,5 +216,32 @@ context "Keybox Password Safe Application" do
         kps.stdout.string.should_satisfy { |msg| msg =~ /New master password set/m }
     end
 
+    specify "importing from a valid csv file" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"-i", @import_csv.path])
+        kps.stdout = StringIO.new
+        kps.stdin  = StringIO.new([@passphrase, @passphrase].join("\n"))
+        kps.run
+        kps.stdout.string.should_satisfy { |msg| msg =~ /Imported \d* records from/m }
+    end
+
+    specify "Error message give on invalid imported csv" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"-i", @bad_import_csv.path])
+        kps.stdout = StringIO.new
+        kps.stdin  = StringIO.new([@passphrase, @passphrase].join("\n"))
+        begin
+            kps.run
+        rescue SystemExit => se
+            kps.stdout.string.should_satisfy { |msg| msg =~ /Error: There must be a header on the CSV /m }
+            se.status.should_eql 1
+        end
+    end
+
+    specify "able to export to a csv" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"-x", @export_csv.path])
+        kps.stdout = StringIO.new
+        kps.stdin  = StringIO.new([@passphrase, @passphrase].join("\n"))
+        kps.run
+        kps.stdout.string.should_satisfy { |msg| msg =~ /Exported \d* records to/m }
+    end
 end
 
