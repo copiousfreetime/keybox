@@ -75,12 +75,7 @@ module Keybox
                     op.on("-e", "--edit ACCOUNT", "Edit the account in keybox") do |account|
                         @actions << [:edit, account]
                     end
-
-                    op.on("-s", "--show [REGEX]", "Show the given account(s)") do |regex|
-                        regex = regex || ".*"
-                        @actions << [:show, regex]
-                    end
-
+                    
                     op.on("-l", "--list [REGEX]", "List the matching accounts (no argument will list all)") do |regex|
                         regex = regex || ".*"
                         @actions << [:list, regex]
@@ -89,9 +84,22 @@ module Keybox
                     op.on("-m", "--master-password", "Change the master password") do
                         @actions << [:master_password, nil]
                     end
+                    
+                    op.on("-s", "--show [REGEX]", "Show the given account(s)") do |regex|
+                        regex = regex || ".*"
+                        @actions << [:show, regex]
+                    end
 
                     op.on("-v", "--version", "Show version information") do
                         @parsed_options.show_version = true
+                    end
+
+                    op.on("-i", "--import-from-csv FILE", "Import from a CSV file") do |file|
+                        @actions << [:import_csv, file]
+                    end
+
+                    op.on("-x", "--export-to-csv FILE", "Export contents to a CSV file") do |file|
+                        @actions << [:export_csv, file]
                     end
 
                 end
@@ -204,19 +212,31 @@ module Keybox
             #
             def list(account)
                 matches = @db.find(account)
+                add_info        = "Additional Information"
                 if matches.size > 0 then
-                    title_length    = matches.collect { |f| f.title.length }.max
-                    username_length = matches.collect { |f| f.username.length }.max
-                    add_info        = "Additional Information"
+                    lengths = {
+                        :title              =>  matches.collect { |f| f.title.length }.max,
+                        :username           =>  matches.collect { |f| f.username.length }.max,
+                        :additional_info    => add_info.length
+                    }
+                    full_length = lengths.values.inject(0) { |sum,n| sum + n}
 
-                    color_puts "  # #{"Title".ljust(title_length)} #{"Username".ljust(username_length)} #{add_info}", :yellow
-                    color_puts "=" * (4 + title_length + username_length + 2 + add_info.length), :blue, false
+                    color_puts "  # #{"Title".ljust(lengths[:title])}    #{"Username".ljust(lengths[:username])}    #{add_info}", :yellow
+                    #  3 spaces for number column + 1 space after and 4 spaces between
+                    #  each other column
+                    color_puts "-" * (4 +  4 +  4 + full_length), :blue, false
 
                     matches.each_with_index do |match,i|
                         color_print sprintf("%3d ", i + 1), :white
                         # toggle colors
                         color = [:cyan, :magenta][i % 2]
-                        color_puts [match.title.ljust(title_length), match.username.ljust(username_length), match.additional_info].join(" "), color
+                        columns = []
+                        [:title, :username, :additional_info].each do |f|
+                            t = match.send(f)
+                            t = "-" if t.nil? or t.length == 0 
+                            columns << t.ljust(lengths[f])
+                        end
+                        color_puts columns.join(" " * 4), color
                     end
                 else
                     color_puts "No matching records were found.", :green
@@ -280,9 +300,9 @@ module Keybox
                     default = entry.send(field)
                     p = "#{field} [#{default}]"
 
-                    # we don't echo password prompts and we validate
+                    # we don't echo private field prompts and we validate
                     # them
-                    if field =~ /^pass/ then
+                    if entry.private_field?(field) then
                         echo = false
                         validate = true
                         p = "#{field}"

@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sat Dec 30 19:07:52 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sun Dec 31 19:42:22 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -617,169 +617,169 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked1"><a name="line1" />  1 module Keybox
-</span><span class="inferred0"><a name="line2" />  2     # including this module assumes that the class included has 
-</span><span class="inferred1"><a name="line3" />  3     # @stdout and @stdin member variables.
-</span><span class="inferred0"><a name="line4" />  4     #
-</span><span class="inferred1"><a name="line5" />  5     # This module also assumes that stty is available
-</span><span class="marked0"><a name="line6" />  6     module TermIO
-</span><span class="inferred1"><a name="line7" />  7 
-</span><span class="inferred0"><a name="line8" />  8         # http://pueblo.sourceforge.net/doc/manual/ansi_color_codes.html
-</span><span class="inferred1"><a name="line9" />  9         #
-</span><span class="marked0"><a name="line10" /> 10         ESCAPE      = &quot;\e&quot;
-</span><span class="marked1"><a name="line11" /> 11         BOLD_ON     = &quot;[1m&quot;
-</span><span class="marked0"><a name="line12" /> 12         RESET       = &quot;[0m&quot;
-</span><span class="inferred1"><a name="line13" /> 13 
-</span><span class="marked0"><a name="line14" /> 14         FG_BLACK   = &quot;[30m&quot;
-</span><span class="marked1"><a name="line15" /> 15         FG_RED     = &quot;[31m&quot;
-</span><span class="marked0"><a name="line16" /> 16         FG_GREEN   = &quot;[32m&quot;
-</span><span class="marked1"><a name="line17" /> 17         FG_YELLOW  = &quot;[33m&quot;
-</span><span class="marked0"><a name="line18" /> 18         FG_BLUE    = &quot;[34m&quot;
-</span><span class="marked1"><a name="line19" /> 19         FG_MAGENTA = &quot;[35m&quot;
-</span><span class="marked0"><a name="line20" /> 20         FG_CYAN    = &quot;[36m&quot;
-</span><span class="marked1"><a name="line21" /> 21         FG_WHITE   = &quot;[37m&quot;
-</span><span class="inferred0"><a name="line22" /> 22 
-</span><span class="marked1"><a name="line23" /> 23         COLORS = { 
-</span><span class="inferred0"><a name="line24" /> 24             :black     =&gt; FG_BLACK,
-</span><span class="inferred1"><a name="line25" /> 25             :red       =&gt; FG_RED,
-</span><span class="inferred0"><a name="line26" /> 26             :green     =&gt; FG_GREEN,
-</span><span class="inferred1"><a name="line27" /> 27             :yellow    =&gt; FG_YELLOW,
-</span><span class="inferred0"><a name="line28" /> 28             :blue      =&gt; FG_BLUE,
-</span><span class="inferred1"><a name="line29" /> 29             :magenta   =&gt; FG_MAGENTA,
-</span><span class="inferred0"><a name="line30" /> 30             :cyan      =&gt; FG_CYAN,
-</span><span class="inferred1"><a name="line31" /> 31             :white     =&gt; FG_WHITE,
-</span><span class="inferred0"><a name="line32" /> 32             }   
-</span><span class="inferred1"><a name="line33" /> 33 
-</span><span class="marked0"><a name="line34" /> 34         VALID_COLORS = COLORS.keys()
-</span><span class="inferred1"><a name="line35" /> 35 
-</span><span class="inferred0"><a name="line36" /> 36 
-</span><span class="marked1"><a name="line37" /> 37         STTY            = &quot;stty&quot;
-</span><span class="marked0"><a name="line38" /> 38         STTY_SAVE_CMD   = &quot;#{STTY} -g&quot;
-</span><span class="marked1"><a name="line39" /> 39         STTY_RAW_CMD    = &quot;#{STTY} raw -echo isig&quot;
-</span><span class="inferred0"><a name="line40" /> 40 
-</span><span class="marked1"><a name="line41" /> 41         EOL_CHARS = [10, # '\n'
-</span><span class="inferred0"><a name="line42" /> 42                      13, # '\r'
-</span><span class="inferred1"><a name="line43" /> 43         ]
-</span><span class="inferred0"><a name="line44" /> 44         #
-</span><span class="inferred1"><a name="line45" /> 45         # prompt for input, returning what was typed.  If echo is false,
-</span><span class="inferred0"><a name="line46" /> 46         # then '*' is printed out for each character typed in.  If it is
-</span><span class="inferred1"><a name="line47" /> 47         # any other character then that is output instead.
-</span><span class="inferred0"><a name="line48" /> 48         #
-</span><span class="inferred1"><a name="line49" /> 49         # If validate is set to true, then it will prompt twice and make
-</span><span class="inferred0"><a name="line50" /> 50         # sure that the two values match
-</span><span class="inferred1"><a name="line51" /> 51         #
-</span><span class="marked0"><a name="line52" /> 52         def prompt(p,echo = true, validate = false, width = 20) 
-</span><span class="marked1"><a name="line53" /> 53             validated = false
-</span><span class="marked0"><a name="line54" /> 54             line = &quot;&quot;
-</span><span class="marked1"><a name="line55" /> 55             extra_prompt = &quot; (again)&quot;
-</span><span class="marked0"><a name="line56" /> 56             original_prompt = p
-</span><span class="marked1"><a name="line57" /> 57             validation_prompt = original_prompt + extra_prompt
-</span><span class="marked0"><a name="line58" /> 58             width += extra_prompt.length
-</span><span class="inferred1"><a name="line59" /> 59 
-</span><span class="marked0"><a name="line60" /> 60             until validated do
-</span><span class="marked1"><a name="line61" /> 61                 line = prompt_and_return(original_prompt.rjust(width),echo)
-</span><span class="inferred0"><a name="line62" /> 62 
-</span><span class="inferred1"><a name="line63" /> 63                 # if we are validating then prompt again to validate
-</span><span class="marked0"><a name="line64" /> 64                 if validate then
-</span><span class="marked1"><a name="line65" /> 65                     v = prompt_and_return(validation_prompt.rjust(width),echo)
-</span><span class="marked0"><a name="line66" /> 66                     if v != line then
-</span><span class="marked1"><a name="line67" /> 67                         color_puts &quot;Entries do not match, try again.&quot;, :red
-</span><span class="inferred0"><a name="line68" /> 68                     else
-</span><span class="marked1"><a name="line69" /> 69                         validated = true
-</span><span class="inferred0"><a name="line70" /> 70                     end
-</span><span class="inferred1"><a name="line71" /> 71                 else 
-</span><span class="marked0"><a name="line72" /> 72                     validated = true
-</span><span class="inferred1"><a name="line73" /> 73                 end
-</span><span class="inferred0"><a name="line74" /> 74             end
-</span><span class="marked1"><a name="line75" /> 75             return line
-</span><span class="inferred0"><a name="line76" /> 76         end
-</span><span class="inferred1"><a name="line77" /> 77 
-</span><span class="marked0"><a name="line78" /> 78         def prompt_y_n(p)
-</span><span class="marked1"><a name="line79" /> 79             response = prompt(p)
-</span><span class="marked0"><a name="line80" /> 80             if response.size &gt; 0 and response.downcase[0].chr == 'y' then
-</span><span class="marked1"><a name="line81" /> 81                 true
-</span><span class="inferred0"><a name="line82" /> 82             else
-</span><span class="marked1"><a name="line83" /> 83                 false
-</span><span class="inferred0"><a name="line84" /> 84             end
-</span><span class="inferred1"><a name="line85" /> 85         end
-</span><span class="inferred0"><a name="line86" /> 86 
-</span><span class="marked1"><a name="line87" /> 87         def get_one_char
-</span><span class="marked0"><a name="line88" /> 88             stty_original = %x{#{STTY_SAVE_CMD}}
-</span><span class="marked1"><a name="line89" /> 89             char = nil
-</span><span class="marked0"><a name="line90" /> 90             begin
-</span><span class="marked1"><a name="line91" /> 91                 system STTY_RAW_CMD
-</span><span class="marked0"><a name="line92" /> 92                 char = @stdin.getc
-</span><span class="inferred1"><a name="line93" /> 93             ensure
-</span><span class="marked0"><a name="line94" /> 94                 system &quot;#{STTY} #{stty_original}&quot;
-</span><span class="inferred1"><a name="line95" /> 95             end
-</span><span class="inferred0"><a name="line96" /> 96 
-</span><span class="marked1"><a name="line97" /> 97             return char
-</span><span class="inferred0"><a name="line98" /> 98         end
-</span><span class="inferred1"><a name="line99" /> 99 
-</span><span class="marked0"><a name="line100" />100         def prompt_and_return(the_prompt,echo)
-</span><span class="marked1"><a name="line101" />101             line = &quot;&quot;
-</span><span class="marked0"><a name="line102" />102             color_print &quot;#{the_prompt} : &quot;, :white
-</span><span class="marked1"><a name="line103" />103             if echo != true then
-</span><span class="inferred0"><a name="line104" />104 
-</span><span class="marked1"><a name="line105" />105                 echo_char = echo || '*'
-</span><span class="inferred0"><a name="line106" />106 
-</span><span class="marked1"><a name="line107" />107                 if has_stty? then
-</span><span class="marked0"><a name="line108" />108                     stty_original = %x{#{STTY_SAVE_CMD}}
-</span><span class="inferred1"><a name="line109" />109 
-</span><span class="marked0"><a name="line110" />110                     begin
-</span><span class="marked1"><a name="line111" />111                         system STTY_RAW_CMD
-</span><span class="marked0"><a name="line112" />112                         while char = @stdin.getc
-</span><span class="marked1"><a name="line113" />113                             line &lt;&lt; char
-</span><span class="marked0"><a name="line114" />114                             break if EOL_CHARS.include? char 
-</span><span class="marked1"><a name="line115" />115                             @stdout.putc echo_char
-</span><span class="inferred0"><a name="line116" />116                         end
-</span><span class="inferred1"><a name="line117" />117                     ensure
-</span><span class="marked0"><a name="line118" />118                         system &quot;#{STTY} #{stty_original}&quot;
-</span><span class="inferred1"><a name="line119" />119                     end
-</span><span class="marked0"><a name="line120" />120                     @stdout.puts
-</span><span class="inferred1"><a name="line121" />121                 end
-</span><span class="inferred0"><a name="line122" />122             else
-</span><span class="marked1"><a name="line123" />123                 line = @stdin.gets
-</span><span class="inferred0"><a name="line124" />124             end
-</span><span class="inferred1"><a name="line125" />125 
-</span><span class="inferred0"><a name="line126" />126             # if we got end of file or some other input resulting in
-</span><span class="inferred1"><a name="line127" />127             # line becoming nil then set it to the empty string
-</span><span class="marked0"><a name="line128" />128             line = line || &quot;&quot;
-</span><span class="inferred1"><a name="line129" />129 
-</span><span class="marked0"><a name="line130" />130             return line.rstrip
-</span><span class="inferred1"><a name="line131" />131         end
-</span><span class="inferred0"><a name="line132" />132 
-</span><span class="marked1"><a name="line133" />133         def has_stty?
-</span><span class="marked0"><a name="line134" />134             system &quot;which stty &gt; /dev/null 2&gt;&amp;1&quot;
-</span><span class="marked1"><a name="line135" />135         end
-</span><span class="inferred0"><a name="line136" />136 
-</span><span class="marked1"><a name="line137" />137         def colorize(text,color,bold=true)
-</span><span class="uncovered0"><a name="line138" />138             before = &quot;&quot;
-</span><span class="uncovered1"><a name="line139" />139             after  = &quot;&quot;
-</span><span class="uncovered0"><a name="line140" />140             if VALID_COLORS.include?(color) then
-</span><span class="uncovered1"><a name="line141" />141                 before = ESCAPE + COLORS[color]
-</span><span class="uncovered0"><a name="line142" />142                 before = ESCAPE + BOLD_ON + before if bold
-</span><span class="uncovered1"><a name="line143" />143                 after  = ESCAPE + RESET
-</span><span class="uncovered0"><a name="line144" />144             end
-</span><span class="uncovered1"><a name="line145" />145             &quot;#{before}#{text}#{after}&quot;
-</span><span class="uncovered0"><a name="line146" />146         end
-</span><span class="inferred1"><a name="line147" />147 
-</span><span class="marked0"><a name="line148" />148         def colorize_if_io_isatty(io,text,color,bold)
-</span><span class="marked1"><a name="line149" />149             if io.tty? then
-</span><span class="uncovered0"><a name="line150" />150                 text = colorize(text,color,bold)
-</span><span class="uncovered1"><a name="line151" />151             end
-</span><span class="marked0"><a name="line152" />152             text
-</span><span class="inferred1"><a name="line153" />153         end
-</span><span class="inferred0"><a name="line154" />154 
-</span><span class="marked1"><a name="line155" />155         def color_puts(text, color, bold = true)
-</span><span class="marked0"><a name="line156" />156             @stdout.puts colorize_if_io_isatty(@stdout,text,color,bold)
-</span><span class="marked1"><a name="line157" />157         end
-</span><span class="inferred0"><a name="line158" />158 
-</span><span class="marked1"><a name="line159" />159         def color_print(text,color, bold = true)
-</span><span class="marked0"><a name="line160" />160             @stdout.print colorize_if_io_isatty(@stdout,text,color,bold)
-</span><span class="marked1"><a name="line161" />161         end
-</span><span class="inferred0"><a name="line162" />162     end
-</span><span class="inferred1"><a name="line163" />163 end
+    </table><pre><span class="marked0"><a name="line1" />  1 module Keybox
+</span><span class="inferred1"><a name="line2" />  2     # including this module assumes that the class included has 
+</span><span class="inferred0"><a name="line3" />  3     # @stdout and @stdin member variables.
+</span><span class="inferred1"><a name="line4" />  4     #
+</span><span class="inferred0"><a name="line5" />  5     # This module also assumes that stty is available
+</span><span class="marked1"><a name="line6" />  6     module TermIO
+</span><span class="inferred0"><a name="line7" />  7 
+</span><span class="inferred1"><a name="line8" />  8         # http://pueblo.sourceforge.net/doc/manual/ansi_color_codes.html
+</span><span class="inferred0"><a name="line9" />  9         #
+</span><span class="marked1"><a name="line10" /> 10         ESCAPE      = &quot;\e&quot;
+</span><span class="marked0"><a name="line11" /> 11         BOLD_ON     = &quot;[1m&quot;
+</span><span class="marked1"><a name="line12" /> 12         RESET       = &quot;[0m&quot;
+</span><span class="inferred0"><a name="line13" /> 13 
+</span><span class="marked1"><a name="line14" /> 14         FG_BLACK   = &quot;[30m&quot;
+</span><span class="marked0"><a name="line15" /> 15         FG_RED     = &quot;[31m&quot;
+</span><span class="marked1"><a name="line16" /> 16         FG_GREEN   = &quot;[32m&quot;
+</span><span class="marked0"><a name="line17" /> 17         FG_YELLOW  = &quot;[33m&quot;
+</span><span class="marked1"><a name="line18" /> 18         FG_BLUE    = &quot;[34m&quot;
+</span><span class="marked0"><a name="line19" /> 19         FG_MAGENTA = &quot;[35m&quot;
+</span><span class="marked1"><a name="line20" /> 20         FG_CYAN    = &quot;[36m&quot;
+</span><span class="marked0"><a name="line21" /> 21         FG_WHITE   = &quot;[37m&quot;
+</span><span class="inferred1"><a name="line22" /> 22 
+</span><span class="marked0"><a name="line23" /> 23         COLORS = { 
+</span><span class="inferred1"><a name="line24" /> 24             :black     =&gt; FG_BLACK,
+</span><span class="inferred0"><a name="line25" /> 25             :red       =&gt; FG_RED,
+</span><span class="inferred1"><a name="line26" /> 26             :green     =&gt; FG_GREEN,
+</span><span class="inferred0"><a name="line27" /> 27             :yellow    =&gt; FG_YELLOW,
+</span><span class="inferred1"><a name="line28" /> 28             :blue      =&gt; FG_BLUE,
+</span><span class="inferred0"><a name="line29" /> 29             :magenta   =&gt; FG_MAGENTA,
+</span><span class="inferred1"><a name="line30" /> 30             :cyan      =&gt; FG_CYAN,
+</span><span class="inferred0"><a name="line31" /> 31             :white     =&gt; FG_WHITE,
+</span><span class="inferred1"><a name="line32" /> 32             }   
+</span><span class="inferred0"><a name="line33" /> 33 
+</span><span class="marked1"><a name="line34" /> 34         VALID_COLORS = COLORS.keys()
+</span><span class="inferred0"><a name="line35" /> 35 
+</span><span class="inferred1"><a name="line36" /> 36 
+</span><span class="marked0"><a name="line37" /> 37         STTY            = &quot;stty&quot;
+</span><span class="marked1"><a name="line38" /> 38         STTY_SAVE_CMD   = &quot;#{STTY} -g&quot;
+</span><span class="marked0"><a name="line39" /> 39         STTY_RAW_CMD    = &quot;#{STTY} raw -echo isig&quot;
+</span><span class="inferred1"><a name="line40" /> 40 
+</span><span class="marked0"><a name="line41" /> 41         EOL_CHARS = [10, # '\n'
+</span><span class="inferred1"><a name="line42" /> 42                      13, # '\r'
+</span><span class="inferred0"><a name="line43" /> 43         ]
+</span><span class="inferred1"><a name="line44" /> 44         #
+</span><span class="inferred0"><a name="line45" /> 45         # prompt for input, returning what was typed.  If echo is false,
+</span><span class="inferred1"><a name="line46" /> 46         # then '*' is printed out for each character typed in.  If it is
+</span><span class="inferred0"><a name="line47" /> 47         # any other character then that is output instead.
+</span><span class="inferred1"><a name="line48" /> 48         #
+</span><span class="inferred0"><a name="line49" /> 49         # If validate is set to true, then it will prompt twice and make
+</span><span class="inferred1"><a name="line50" /> 50         # sure that the two values match
+</span><span class="inferred0"><a name="line51" /> 51         #
+</span><span class="marked1"><a name="line52" /> 52         def prompt(p,echo = true, validate = false, width = 20) 
+</span><span class="marked0"><a name="line53" /> 53             validated = false
+</span><span class="marked1"><a name="line54" /> 54             line = &quot;&quot;
+</span><span class="marked0"><a name="line55" /> 55             extra_prompt = &quot; (again)&quot;
+</span><span class="marked1"><a name="line56" /> 56             original_prompt = p
+</span><span class="marked0"><a name="line57" /> 57             validation_prompt = original_prompt + extra_prompt
+</span><span class="marked1"><a name="line58" /> 58             width += extra_prompt.length
+</span><span class="inferred0"><a name="line59" /> 59 
+</span><span class="marked1"><a name="line60" /> 60             until validated do
+</span><span class="marked0"><a name="line61" /> 61                 line = prompt_and_return(original_prompt.rjust(width),echo)
+</span><span class="inferred1"><a name="line62" /> 62 
+</span><span class="inferred0"><a name="line63" /> 63                 # if we are validating then prompt again to validate
+</span><span class="marked1"><a name="line64" /> 64                 if validate then
+</span><span class="marked0"><a name="line65" /> 65                     v = prompt_and_return(validation_prompt.rjust(width),echo)
+</span><span class="marked1"><a name="line66" /> 66                     if v != line then
+</span><span class="marked0"><a name="line67" /> 67                         color_puts &quot;Entries do not match, try again.&quot;, :red
+</span><span class="inferred1"><a name="line68" /> 68                     else
+</span><span class="marked0"><a name="line69" /> 69                         validated = true
+</span><span class="inferred1"><a name="line70" /> 70                     end
+</span><span class="inferred0"><a name="line71" /> 71                 else 
+</span><span class="marked1"><a name="line72" /> 72                     validated = true
+</span><span class="inferred0"><a name="line73" /> 73                 end
+</span><span class="inferred1"><a name="line74" /> 74             end
+</span><span class="marked0"><a name="line75" /> 75             return line
+</span><span class="inferred1"><a name="line76" /> 76         end
+</span><span class="inferred0"><a name="line77" /> 77 
+</span><span class="marked1"><a name="line78" /> 78         def prompt_y_n(p)
+</span><span class="marked0"><a name="line79" /> 79             response = prompt(p)
+</span><span class="marked1"><a name="line80" /> 80             if response.size &gt; 0 and response.downcase[0].chr == 'y' then
+</span><span class="marked0"><a name="line81" /> 81                 true
+</span><span class="inferred1"><a name="line82" /> 82             else
+</span><span class="marked0"><a name="line83" /> 83                 false
+</span><span class="inferred1"><a name="line84" /> 84             end
+</span><span class="inferred0"><a name="line85" /> 85         end
+</span><span class="inferred1"><a name="line86" /> 86 
+</span><span class="marked0"><a name="line87" /> 87         def get_one_char
+</span><span class="marked1"><a name="line88" /> 88             stty_original = %x{#{STTY_SAVE_CMD}}
+</span><span class="marked0"><a name="line89" /> 89             char = nil
+</span><span class="marked1"><a name="line90" /> 90             begin
+</span><span class="marked0"><a name="line91" /> 91                 system STTY_RAW_CMD
+</span><span class="marked1"><a name="line92" /> 92                 char = @stdin.getc
+</span><span class="inferred0"><a name="line93" /> 93             ensure
+</span><span class="marked1"><a name="line94" /> 94                 system &quot;#{STTY} #{stty_original}&quot;
+</span><span class="inferred0"><a name="line95" /> 95             end
+</span><span class="inferred1"><a name="line96" /> 96 
+</span><span class="marked0"><a name="line97" /> 97             return char
+</span><span class="inferred1"><a name="line98" /> 98         end
+</span><span class="inferred0"><a name="line99" /> 99 
+</span><span class="marked1"><a name="line100" />100         def prompt_and_return(the_prompt,echo)
+</span><span class="marked0"><a name="line101" />101             line = &quot;&quot;
+</span><span class="marked1"><a name="line102" />102             color_print &quot;#{the_prompt} : &quot;, :white
+</span><span class="marked0"><a name="line103" />103             if echo != true then
+</span><span class="inferred1"><a name="line104" />104 
+</span><span class="marked0"><a name="line105" />105                 echo_char = echo || '*'
+</span><span class="inferred1"><a name="line106" />106 
+</span><span class="marked0"><a name="line107" />107                 if has_stty? then
+</span><span class="marked1"><a name="line108" />108                     stty_original = %x{#{STTY_SAVE_CMD}}
+</span><span class="inferred0"><a name="line109" />109 
+</span><span class="marked1"><a name="line110" />110                     begin
+</span><span class="marked0"><a name="line111" />111                         system STTY_RAW_CMD
+</span><span class="marked1"><a name="line112" />112                         while char = @stdin.getc
+</span><span class="marked0"><a name="line113" />113                             line &lt;&lt; char
+</span><span class="marked1"><a name="line114" />114                             break if EOL_CHARS.include? char 
+</span><span class="marked0"><a name="line115" />115                             @stdout.putc echo_char
+</span><span class="inferred1"><a name="line116" />116                         end
+</span><span class="inferred0"><a name="line117" />117                     ensure
+</span><span class="marked1"><a name="line118" />118                         system &quot;#{STTY} #{stty_original}&quot;
+</span><span class="inferred0"><a name="line119" />119                     end
+</span><span class="marked1"><a name="line120" />120                     @stdout.puts
+</span><span class="inferred0"><a name="line121" />121                 end
+</span><span class="inferred1"><a name="line122" />122             else
+</span><span class="marked0"><a name="line123" />123                 line = @stdin.gets
+</span><span class="inferred1"><a name="line124" />124             end
+</span><span class="inferred0"><a name="line125" />125 
+</span><span class="inferred1"><a name="line126" />126             # if we got end of file or some other input resulting in
+</span><span class="inferred0"><a name="line127" />127             # line becoming nil then set it to the empty string
+</span><span class="marked1"><a name="line128" />128             line = line || &quot;&quot;
+</span><span class="inferred0"><a name="line129" />129 
+</span><span class="marked1"><a name="line130" />130             return line.rstrip
+</span><span class="inferred0"><a name="line131" />131         end
+</span><span class="inferred1"><a name="line132" />132 
+</span><span class="marked0"><a name="line133" />133         def has_stty?
+</span><span class="marked1"><a name="line134" />134             system &quot;which stty &gt; /dev/null 2&gt;&amp;1&quot;
+</span><span class="marked0"><a name="line135" />135         end
+</span><span class="inferred1"><a name="line136" />136 
+</span><span class="marked0"><a name="line137" />137         def colorize(text,color,bold=true)
+</span><span class="uncovered1"><a name="line138" />138             before = &quot;&quot;
+</span><span class="uncovered0"><a name="line139" />139             after  = &quot;&quot;
+</span><span class="uncovered1"><a name="line140" />140             if VALID_COLORS.include?(color) then
+</span><span class="uncovered0"><a name="line141" />141                 before = ESCAPE + COLORS[color]
+</span><span class="uncovered1"><a name="line142" />142                 before = ESCAPE + BOLD_ON + before if bold
+</span><span class="uncovered0"><a name="line143" />143                 after  = ESCAPE + RESET
+</span><span class="uncovered1"><a name="line144" />144             end
+</span><span class="uncovered0"><a name="line145" />145             &quot;#{before}#{text}#{after}&quot;
+</span><span class="uncovered1"><a name="line146" />146         end
+</span><span class="inferred0"><a name="line147" />147 
+</span><span class="marked1"><a name="line148" />148         def colorize_if_io_isatty(io,text,color,bold)
+</span><span class="marked0"><a name="line149" />149             if io.tty? then
+</span><span class="uncovered1"><a name="line150" />150                 text = colorize(text,color,bold)
+</span><span class="uncovered0"><a name="line151" />151             end
+</span><span class="marked1"><a name="line152" />152             text
+</span><span class="inferred0"><a name="line153" />153         end
+</span><span class="inferred1"><a name="line154" />154 
+</span><span class="marked0"><a name="line155" />155         def color_puts(text, color, bold = true)
+</span><span class="marked1"><a name="line156" />156             @stdout.puts colorize_if_io_isatty(@stdout,text,color,bold)
+</span><span class="marked0"><a name="line157" />157         end
+</span><span class="inferred1"><a name="line158" />158 
+</span><span class="marked0"><a name="line159" />159         def color_print(text,color, bold = true)
+</span><span class="marked1"><a name="line160" />160             @stdout.print colorize_if_io_isatty(@stdout,text,color,bold)
+</span><span class="marked0"><a name="line161" />161         end
+</span><span class="inferred1"><a name="line162" />162     end
+</span><span class="inferred0"><a name="line163" />163 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

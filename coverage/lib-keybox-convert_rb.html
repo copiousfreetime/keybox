@@ -1,7 +1,7 @@
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
       <head>
-        <title>spec/password_hash_spec.rb - C0 code coverage information</title>
+        <title>lib/keybox/convert.rb - C0 code coverage information</title>
         <style type='text/css'>body { background-color: rgb(240, 240, 245); }</style>
         <style type='text/css'>span.cross-ref-title {
  font-size: 140%;
@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sun Dec 31 19:42:22 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sun Dec 31 19:42:21 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -575,13 +575,13 @@ span.run100 {
       <tbody>
         <tr class='light'>
           <td>
-            <a href='spec-password_hash_spec_rb.html'>spec/password_hash_spec.rb</a>
+            <a href='lib-keybox-convert_rb.html'>lib/keybox/convert.rb</a>
           </td>
           <td class='value'>
-            <tt>11</tt>
+            <tt>1</tt>
           </td>
           <td class='value'>
-            <tt>10</tt>
+            <tt>1</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
@@ -617,17 +617,7 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked1"><a name="line1" /> 1 require 'keybox'
-</span><span class="marked0"><a name="line2" /> 2 context &quot;PasswordHash&quot; do
-</span><span class="marked1"><a name="line3" /> 3     setup do 
-</span><span class="marked0"><a name="line4" /> 4         @pwd_hash = Keybox::PasswordHash.new(&quot;i love ruby&quot;)
-</span><span class="inferred1"><a name="line5" /> 5     end
-</span><span class="inferred0"><a name="line6" /> 6 
-</span><span class="marked1"><a name="line7" /> 7     specify &quot;creates string for password&quot; do
-</span><span class="marked0"><a name="line8" /> 8         pwd = @pwd_hash.password_for_url(&quot;http://www.nytimes.com&quot;)
-</span><span class="marked1"><a name="line9" /> 9         pwd.should == &quot;2f85a2e2f&quot;
-</span><span class="marked0"><a name="line10" />10     end
-</span><span class="inferred1"><a name="line11" />11 end
+    </table><pre><span class="marked0"><a name="line1" />1 require 'keybox/convert/csv'
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

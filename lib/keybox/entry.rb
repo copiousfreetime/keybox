@@ -16,7 +16,11 @@ module Keybox
 
         # fields that are actually stored in the entry
         def fields
-            @data_members.keys.collect { |k| k.to_s }.sort
+            (default_fields + @data_members.keys ).collect { |k| k.to_s }.uniq
+        end
+
+        def default_fields
+            %w(title username additional_info)
         end
 
         # fields that can be displayed, some could be calculated
@@ -81,7 +85,7 @@ module Keybox
     #
     class HostAccountEntry < Keybox::AccountEntry
 
-        def fields
+        def default_fields
             %w(title hostname username password additional_info)
         end
 
@@ -104,7 +108,7 @@ module Keybox
     # calculate the password for the account.
     #
     class URLAccountEntry < Keybox::AccountEntry
-        def fields
+        def initial_fields
             %w(title url username additional_info)
         end
         

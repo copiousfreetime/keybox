@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sat Dec 30 19:07:53 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Sun Dec 31 19:42:22 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -617,96 +617,96 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked1"><a name="line1" /> 1 require 'keybox'
-</span><span class="marked0"><a name="line2" /> 2 require 'keybox/storage'
-</span><span class="marked1"><a name="line3" /> 3 require 'keybox/error'
-</span><span class="marked0"><a name="line4" /> 4 require 'keybox/entry'
-</span><span class="marked1"><a name="line5" /> 5 require 'openssl'
-</span><span class="marked0"><a name="line6" /> 6 require 'tempfile'
-</span><span class="marked1"><a name="line7" /> 7 require 'yaml'
-</span><span class="inferred0"><a name="line8" /> 8 
-</span><span class="marked1"><a name="line9" /> 9 context 'a storage container' do
-</span><span class="marked0"><a name="line10" />10     setup do
-</span><span class="marked1"><a name="line11" />11         @passphrase  = &quot;i love ruby&quot;
-</span><span class="marked0"><a name="line12" />12         @keybox_file = Tempfile.new(&quot;keybox&quot;).path
-</span><span class="marked1"><a name="line13" />13         @testing_file = &quot;/tmp/testing.yml&quot;
-</span><span class="marked0"><a name="line14" />14         @container   = Keybox::Storage::Container.new(@passphrase, @keybox_file)
-</span><span class="marked1"><a name="line15" />15         @container &lt;&lt; Keybox::HostAccountEntry.new(&quot;test account&quot;,&quot;localhost&quot;,&quot;guest&quot;, &quot;rubyrocks&quot;)
-</span><span class="marked0"><a name="line16" />16         @container &lt;&lt; Keybox::URLAccountEntry.new(&quot;the times&quot;, &quot;http://www.nytimes.com&quot;, &quot;rubyhacker&quot;)
-</span><span class="marked1"><a name="line17" />17         @container.save
-</span><span class="inferred0"><a name="line18" />18     end
-</span><span class="inferred1"><a name="line19" />19 
-</span><span class="marked0"><a name="line20" />20     teardown do
-</span><span class="marked1"><a name="line21" />21         File.unlink(@testing_file) if File.exists?(@testing_file)
-</span><span class="marked0"><a name="line22" />22         File.unlink(@keybox_file) if File.exists?(@keybox_file)
-</span><span class="inferred1"><a name="line23" />23     end
-</span><span class="inferred0"><a name="line24" />24 
-</span><span class="marked1"><a name="line25" />25     specify 'should have a uuid' do
-</span><span class="marked0"><a name="line26" />26         @container.uuid.should_satisfy { |uuid| uuid.to_s.length == 36 }
-</span><span class="inferred1"><a name="line27" />27     end
-</span><span class="inferred0"><a name="line28" />28 
-</span><span class="marked1"><a name="line29" />29     specify 'should have a valid key ' do
-</span><span class="marked0"><a name="line30" />30         @container.key_digest.should_satisfy { |kd| kd.length == 64 }
-</span><span class="inferred1"><a name="line31" />31     end
-</span><span class="inferred0"><a name="line32" />32 
-</span><span class="marked1"><a name="line33" />33     specify 'should save correctly to a file' do
-</span><span class="marked0"><a name="line34" />34         @container.save(@testing_file)
-</span><span class="marked1"><a name="line35" />35         File.size(@testing_file).should_satisfy { |s| s &gt; 0 }
-</span><span class="inferred0"><a name="line36" />36     end
-</span><span class="inferred1"><a name="line37" />37 
-</span><span class="marked0"><a name="line38" />38     specify &quot;should load correctly from a file&quot; do
-</span><span class="marked1"><a name="line39" />39         @container.save(@testing_file)
-</span><span class="marked0"><a name="line40" />40         new_container = Keybox::Storage::Container.new(@passphrase,@testing_file)
-</span><span class="marked1"><a name="line41" />41         new_container.uuid.should == @container.uuid
-</span><span class="marked0"><a name="line42" />42     end
-</span><span class="inferred1"><a name="line43" />43 
-</span><span class="marked0"><a name="line44" />44     specify &quot;should validate passphrase&quot; do
-</span><span class="marked1"><a name="line45" />45         nc = Keybox::Storage::Container.new(&quot;i love ruby&quot;, @keybox_file)
-</span><span class="marked0"><a name="line46" />46         nc.save(@testing_file)
-</span><span class="marked1"><a name="line47" />47         nc.key_digest.should_eql @container.key_digest
-</span><span class="marked0"><a name="line48" />48         lambda {
-</span><span class="marked1"><a name="line49" />49             Keybox::Storage::Container.new(&quot;i hate ruby&quot;, @testing_file)
-</span><span class="inferred0"><a name="line50" />50         }.should_raise Keybox::ValidationError
-</span><span class="inferred1"><a name="line51" />51 
-</span><span class="marked0"><a name="line52" />52     end
-</span><span class="inferred1"><a name="line53" />53 
-</span><span class="marked0"><a name="line54" />54     specify &quot;url accounts should have the correct password after save&quot; do
-</span><span class="marked1"><a name="line55" />55         @container.save(@testing_file)
-</span><span class="marked0"><a name="line56" />56         new_container = Keybox::Storage::Container.new(@passphrase, @testing_file)
-</span><span class="marked1"><a name="line57" />57         recs = new_container.find_by_url(&quot;nytimes&quot;)
-</span><span class="marked0"><a name="line58" />58         new_container.records.size.should_eql 2
-</span><span class="marked1"><a name="line59" />59         recs.size.should_eql 1
-</span><span class="marked0"><a name="line60" />60         recs[0].password.should == &quot;2f85a2e2f&quot;
-</span><span class="marked1"><a name="line61" />61     end
-</span><span class="inferred0"><a name="line62" />62 
-</span><span class="marked1"><a name="line63" />63     specify &quot;can find matching records&quot; do
-</span><span class="marked0"><a name="line64" />64         matches = @container.find(/times/)
-</span><span class="marked1"><a name="line65" />65         matches.size.should_be 1
-</span><span class="marked0"><a name="line66" />66     end
-</span><span class="inferred1"><a name="line67" />67 
-</span><span class="marked0"><a name="line68" />68     specify &quot;changing the password is safe&quot; do
-</span><span class="marked1"><a name="line69" />69         @container.save(@testing_file)
-</span><span class="marked0"><a name="line70" />70         copy_of_container= Keybox::Storage::Container.new(@passphrase, @testing_file)
-</span><span class="marked1"><a name="line71" />71         times_1 = copy_of_container.find_by_url(&quot;nytimes&quot;).first
-</span><span class="inferred0"><a name="line72" />72 
-</span><span class="marked1"><a name="line73" />73         @container.passphrase = &quot;I love ruby too!&quot;
-</span><span class="marked0"><a name="line74" />74         @container.save(@keybox_file)
-</span><span class="marked1"><a name="line75" />75         @container = Keybox::Storage::Container.new(&quot;I love ruby too!&quot;, @keybox_file)
-</span><span class="marked0"><a name="line76" />76         times_2 = @container.find_by_url(&quot;nytimes&quot;).first
-</span><span class="inferred1"><a name="line77" />77         #@container.modified?.should_eql false
-</span><span class="marked0"><a name="line78" />78         times_1.should_eql times_2
-</span><span class="marked1"><a name="line79" />79     end
-</span><span class="inferred0"><a name="line80" />80 
-</span><span class="marked1"><a name="line81" />81     specify &quot;a freshly loaded db has not been modified&quot; do
-</span><span class="marked0"><a name="line82" />82         @container.modified?.should_eql false
-</span><span class="inferred1"><a name="line83" />83     end
-</span><span class="inferred0"><a name="line84" />84 
-</span><span class="marked1"><a name="line85" />85     specify &quot;a modified db can be detected&quot; do
-</span><span class="marked0"><a name="line86" />86         l1 = @container.find(&quot;localhost&quot;).first
-</span><span class="marked1"><a name="line87" />87         l1.username = &quot;new username&quot;
-</span><span class="inferred0"><a name="line88" />88         #@container.modified?.should_eql true
-</span><span class="marked1"><a name="line89" />89     end
-</span><span class="inferred0"><a name="line90" />90 end
+    </table><pre><span class="marked0"><a name="line1" /> 1 require 'keybox'
+</span><span class="marked1"><a name="line2" /> 2 require 'keybox/storage'
+</span><span class="marked0"><a name="line3" /> 3 require 'keybox/error'
+</span><span class="marked1"><a name="line4" /> 4 require 'keybox/entry'
+</span><span class="marked0"><a name="line5" /> 5 require 'openssl'
+</span><span class="marked1"><a name="line6" /> 6 require 'tempfile'
+</span><span class="marked0"><a name="line7" /> 7 require 'yaml'
+</span><span class="inferred1"><a name="line8" /> 8 
+</span><span class="marked0"><a name="line9" /> 9 context 'a storage container' do
+</span><span class="marked1"><a name="line10" />10     setup do
+</span><span class="marked0"><a name="line11" />11         @passphrase  = &quot;i love ruby&quot;
+</span><span class="marked1"><a name="line12" />12         @keybox_file = Tempfile.new(&quot;keybox&quot;).path
+</span><span class="marked0"><a name="line13" />13         @testing_file = &quot;/tmp/testing.yml&quot;
+</span><span class="marked1"><a name="line14" />14         @container   = Keybox::Storage::Container.new(@passphrase, @keybox_file)
+</span><span class="marked0"><a name="line15" />15         @container &lt;&lt; Keybox::HostAccountEntry.new(&quot;test account&quot;,&quot;localhost&quot;,&quot;guest&quot;, &quot;rubyrocks&quot;)
+</span><span class="marked1"><a name="line16" />16         @container &lt;&lt; Keybox::URLAccountEntry.new(&quot;the times&quot;, &quot;http://www.nytimes.com&quot;, &quot;rubyhacker&quot;)
+</span><span class="marked0"><a name="line17" />17         @container.save
+</span><span class="inferred1"><a name="line18" />18     end
+</span><span class="inferred0"><a name="line19" />19 
+</span><span class="marked1"><a name="line20" />20     teardown do
+</span><span class="marked0"><a name="line21" />21         File.unlink(@testing_file) if File.exists?(@testing_file)
+</span><span class="marked1"><a name="line22" />22         File.unlink(@keybox_file) if File.exists?(@keybox_file)
+</span><span class="inferred0"><a name="line23" />23     end
+</span><span class="inferred1"><a name="line24" />24 
+</span><span class="marked0"><a name="line25" />25     specify 'should have a uuid' do
+</span><span class="marked1"><a name="line26" />26         @container.uuid.should_satisfy { |uuid| uuid.to_s.length == 36 }
+</span><span class="inferred0"><a name="line27" />27     end
+</span><span class="inferred1"><a name="line28" />28 
+</span><span class="marked0"><a name="line29" />29     specify 'should have a valid key ' do
+</span><span class="marked1"><a name="line30" />30         @container.key_digest.should_satisfy { |kd| kd.length == 64 }
+</span><span class="inferred0"><a name="line31" />31     end
+</span><span class="inferred1"><a name="line32" />32 
+</span><span class="marked0"><a name="line33" />33     specify 'should save correctly to a file' do
+</span><span class="marked1"><a name="line34" />34         @container.save(@testing_file)
+</span><span class="marked0"><a name="line35" />35         File.size(@testing_file).should_satisfy { |s| s &gt; 0 }
+</span><span class="inferred1"><a name="line36" />36     end
+</span><span class="inferred0"><a name="line37" />37 
+</span><span class="marked1"><a name="line38" />38     specify &quot;should load correctly from a file&quot; do
+</span><span class="marked0"><a name="line39" />39         @container.save(@testing_file)
+</span><span class="marked1"><a name="line40" />40         new_container = Keybox::Storage::Container.new(@passphrase,@testing_file)
+</span><span class="marked0"><a name="line41" />41         new_container.uuid.should == @container.uuid
+</span><span class="marked1"><a name="line42" />42     end
+</span><span class="inferred0"><a name="line43" />43 
+</span><span class="marked1"><a name="line44" />44     specify &quot;should validate passphrase&quot; do
+</span><span class="marked0"><a name="line45" />45         nc = Keybox::Storage::Container.new(&quot;i love ruby&quot;, @keybox_file)
+</span><span class="marked1"><a name="line46" />46         nc.save(@testing_file)
+</span><span class="marked0"><a name="line47" />47         nc.key_digest.should_eql @container.key_digest
+</span><span class="marked1"><a name="line48" />48         lambda {
+</span><span class="marked0"><a name="line49" />49             Keybox::Storage::Container.new(&quot;i hate ruby&quot;, @testing_file)
+</span><span class="inferred1"><a name="line50" />50         }.should_raise Keybox::ValidationError
+</span><span class="inferred0"><a name="line51" />51 
+</span><span class="marked1"><a name="line52" />52     end
+</span><span class="inferred0"><a name="line53" />53 
+</span><span class="marked1"><a name="line54" />54     specify &quot;url accounts should have the correct password after save&quot; do
+</span><span class="marked0"><a name="line55" />55         @container.save(@testing_file)
+</span><span class="marked1"><a name="line56" />56         new_container = Keybox::Storage::Container.new(@passphrase, @testing_file)
+</span><span class="marked0"><a name="line57" />57         recs = new_container.find_by_url(&quot;nytimes&quot;)
+</span><span class="marked1"><a name="line58" />58         new_container.records.size.should_eql 2
+</span><span class="marked0"><a name="line59" />59         recs.size.should_eql 1
+</span><span class="marked1"><a name="line60" />60         recs[0].password.should == &quot;2f85a2e2f&quot;
+</span><span class="marked0"><a name="line61" />61     end
+</span><span class="inferred1"><a name="line62" />62 
+</span><span class="marked0"><a name="line63" />63     specify &quot;can find matching records&quot; do
+</span><span class="marked1"><a name="line64" />64         matches = @container.find(/times/)
+</span><span class="marked0"><a name="line65" />65         matches.size.should_be 1
+</span><span class="marked1"><a name="line66" />66     end
+</span><span class="inferred0"><a name="line67" />67 
+</span><span class="marked1"><a name="line68" />68     specify &quot;changing the password is safe&quot; do
+</span><span class="marked0"><a name="line69" />69         @container.save(@testing_file)
+</span><span class="marked1"><a name="line70" />70         copy_of_container= Keybox::Storage::Container.new(@passphrase, @testing_file)
+</span><span class="marked0"><a name="line71" />71         times_1 = copy_of_container.find_by_url(&quot;nytimes&quot;).first
+</span><span class="inferred1"><a name="line72" />72 
+</span><span class="marked0"><a name="line73" />73         @container.passphrase = &quot;I love ruby too!&quot;
+</span><span class="marked1"><a name="line74" />74         @container.save(@keybox_file)
+</span><span class="marked0"><a name="line75" />75         @container = Keybox::Storage::Container.new(&quot;I love ruby too!&quot;, @keybox_file)
+</span><span class="marked1"><a name="line76" />76         times_2 = @container.find_by_url(&quot;nytimes&quot;).first
+</span><span class="inferred0"><a name="line77" />77         #@container.modified?.should_eql false
+</span><span class="marked1"><a name="line78" />78         times_1.should_eql times_2
+</span><span class="marked0"><a name="line79" />79     end
+</span><span class="inferred1"><a name="line80" />80 
+</span><span class="marked0"><a name="line81" />81     specify &quot;a freshly loaded db has not been modified&quot; do
+</span><span class="marked1"><a name="line82" />82         @container.modified?.should_eql false
+</span><span class="inferred0"><a name="line83" />83     end
+</span><span class="inferred1"><a name="line84" />84 
+</span><span class="marked0"><a name="line85" />85     specify &quot;a modified db can be detected&quot; do
+</span><span class="marked1"><a name="line86" />86         l1 = @container.find(&quot;localhost&quot;).first
+</span><span class="marked0"><a name="line87" />87         l1.username = &quot;new username&quot;
+</span><span class="inferred1"><a name="line88" />88         #@container.modified?.should_eql true
+</span><span class="marked0"><a name="line89" />89     end
+</span><span class="inferred1"><a name="line90" />90 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />
