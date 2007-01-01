@@ -1,7 +1,7 @@
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
       <head>
-        <title>lib/keybox/storage.rb - C0 code coverage information</title>
+        <title>lib/keybox/convert/csv.rb - C0 code coverage information</title>
         <style type='text/css'>body { background-color: rgb(240, 240, 245); }</style>
         <style type='text/css'>span.cross-ref-title {
  font-size: 140%;
@@ -575,24 +575,24 @@ span.run100 {
       <tbody>
         <tr class='light'>
           <td>
-            <a href='lib-keybox-storage_rb.html'>lib/keybox/storage.rb</a>
+            <a href='lib-keybox-convert-csv_rb.html'>lib/keybox/convert/csv.rb</a>
           </td>
           <td class='value'>
-            <tt>2</tt>
+            <tt>65</tt>
           </td>
           <td class='value'>
-            <tt>2</tt>
+            <tt>41</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
               <tr>
                 <td>
-                  <tt>100.0%</tt>&nbsp;</td>
+                  <tt>63.1%</tt>&nbsp;</td>
                 <td>
                   <table cellspacing='0' class='percent_graph' cellpadding='0' width='100'>
                     <tr>
-                      <td class='covered' width='100' />
-                      <td class='uncovered' width='0' />
+                      <td class='covered' width='63' />
+                      <td class='uncovered' width='37' />
                     </tr>
                   </table>
                 </td>
@@ -603,12 +603,12 @@ span.run100 {
             <table cellspacing='0' cellpadding='0' align='right'>
               <tr>
                 <td>
-                  <tt>100.0%</tt>&nbsp;</td>
+                  <tt>41.5%</tt>&nbsp;</td>
                 <td>
                   <table cellspacing='0' class='percent_graph' cellpadding='0' width='100'>
                     <tr>
-                      <td class='covered' width='100' />
-                      <td class='uncovered' width='0' />
+                      <td class='covered' width='41' />
+                      <td class='uncovered' width='59' />
                     </tr>
                   </table>
                 </td>
@@ -617,8 +617,71 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="marked0"><a name="line1" />1 require 'keybox/storage/record'
-</span><span class="marked1"><a name="line2" />2 require 'keybox/storage/container'
+    </table><pre><span class="inferred1"><a name="line1" /> 1 #
+</span><span class="inferred0"><a name="line2" /> 2 # Convert to/from a CSV file.  When loading a CSV file, it is assumed
+</span><span class="inferred1"><a name="line3" /> 3 # that there is a header on the csv file that shows which of the fields
+</span><span class="inferred0"><a name="line4" /> 4 # belongs to the various fields of the entry.  At a minimum the header
+</span><span class="inferred1"><a name="line5" /> 5 # line should have the default fields from a HostAccountEntry
+</span><span class="inferred0"><a name="line6" /> 6 #
+</span><span class="inferred1"><a name="line7" /> 7 #   - title
+</span><span class="inferred0"><a name="line8" /> 8 #   - username
+</span><span class="inferred1"><a name="line9" /> 9 #   - hostname
+</span><span class="inferred0"><a name="line10" />10 #   - password
+</span><span class="inferred1"><a name="line11" />11 #   - additional information
+</span><span class="inferred0"><a name="line12" />12 #
+</span><span class="inferred1"><a name="line13" />13 # A hostname or url can be used interchangeably same.  Either will work.
+</span><span class="inferred0"><a name="line14" />14 # If both are present both will be stored, but if only one is present
+</span><span class="inferred1"><a name="line15" />15 # then it will be stored in the hostname field of the HostAccount Record
+</span><span class="inferred0"><a name="line16" />16 #
+</span><span class="marked1"><a name="line17" />17 require 'csv'
+</span><span class="marked0"><a name="line18" />18 require 'keybox/entry'
+</span><span class="marked1"><a name="line19" />19 module Keybox
+</span><span class="marked0"><a name="line20" />20     module Convert
+</span><span class="marked1"><a name="line21" />21         class CSV
+</span><span class="marked0"><a name="line22" />22             class &lt;&lt; self 
+</span><span class="marked1"><a name="line23" />23                 def parse_header(header_array) 
+</span><span class="uncovered0"><a name="line24" />24                     field_indexes = {}
+</span><span class="uncovered1"><a name="line25" />25                     Keybox::HostAccountEntry.default_fields.each do |field|
+</span><span class="uncovered0"><a name="line26" />26                         field_indexes[field] = header.index(field)
+</span><span class="uncovered1"><a name="line27" />27                         if field_indexes[field].nil? then
+</span><span class="uncovered0"><a name="line28" />28                             raise Keybox::ValidationError, &quot;There must be a heder on the CSV to import and it must contain the '#{field}' field.&quot;
+</span><span class="uncovered1"><a name="line29" />29                         end
+</span><span class="uncovered0"><a name="line30" />30                     end
+</span><span class="uncovered1"><a name="line31" />31                     field_indexes
+</span><span class="uncovered0"><a name="line32" />32                 end
+</span><span class="inferred1"><a name="line33" />33 
+</span><span class="inferred0"><a name="line34" />34                 # returns an Array of AccountEntry classes or its
+</span><span class="inferred1"><a name="line35" />35                 # descendants
+</span><span class="marked0"><a name="line36" />36                 def from_file(csv_filename)
+</span><span class="uncovered1"><a name="line37" />37                     reader = CSV.open(csv_filename,&quot;r&quot;)
+</span><span class="uncovered0"><a name="line38" />38                     Keybox::Convert::CSV.from_reader(reader)
+</span><span class="uncovered1"><a name="line39" />39                     reader.close
+</span><span class="uncovered0"><a name="line40" />40                 end
+</span><span class="inferred1"><a name="line41" />41 
+</span><span class="inferred0"><a name="line42" />42                 # pull all the items from the CSV file.  There MUST be a
+</span><span class="inferred1"><a name="line43" />43                 # header line that says what the different fields are.
+</span><span class="marked0"><a name="line44" />44                 def from_reader(csv_reader)
+</span><span class="uncovered1"><a name="line45" />45                     field_indexes = parse_header(csv_reader.shift)
+</span><span class="uncovered0"><a name="line46" />46                     entries = []
+</span><span class="uncovered1"><a name="line47" />47                     csv_reader.each do |row|
+</span><span class="uncovered0"><a name="line48" />48                         entry = Keybox::HostAccountEntry.new
+</span><span class="uncovered1"><a name="line49" />49                         field_indexes.each_pair do |field,index|
+</span><span class="uncovered0"><a name="line50" />50                             entry.send(&quot;#{field}=&quot;,row[index] || &quot;&quot;)
+</span><span class="uncovered1"><a name="line51" />51                         end
+</span><span class="uncovered0"><a name="line52" />52                         entries &lt;&lt; entry
+</span><span class="uncovered1"><a name="line53" />53                     end
+</span><span class="uncovered0"><a name="line54" />54                     return entries
+</span><span class="uncovered1"><a name="line55" />55                 end
+</span><span class="inferred0"><a name="line56" />56 
+</span><span class="marked1"><a name="line57" />57                 def to_file(csv_filename)
+</span><span class="inferred0"><a name="line58" />58                 end
+</span><span class="inferred1"><a name="line59" />59 
+</span><span class="marked0"><a name="line60" />60                 def to_writer(csv_writer)
+</span><span class="inferred1"><a name="line61" />61                 end
+</span><span class="inferred0"><a name="line62" />62             end 
+</span><span class="inferred1"><a name="line63" />63         end
+</span><span class="inferred0"><a name="line64" />64     end
+</span><span class="inferred1"><a name="line65" />65 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

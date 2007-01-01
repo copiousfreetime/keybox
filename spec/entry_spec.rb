@@ -1,3 +1,4 @@
+require 'keybox'
 context "Account Entry" do
     specify "fields get set correctly" do
         k = Keybox::AccountEntry.new("a test title", "user")

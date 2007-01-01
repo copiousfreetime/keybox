@@ -7,6 +7,32 @@ module Keybox
     # directly, but it can be if you want.
     #
     class AccountEntry < Keybox::Storage::Record
+        class << self
+            def default_fields
+                %w(title username additional_info)
+            end
+
+            # fields that can be displayed, some could be calculated
+            def display_fields
+                (visible_fields + private_fields).uniq
+            end
+            
+            def private_fields
+                []
+            end
+
+            def visible_fields
+                default_fields - private_fields
+            end
+
+            def visible_field?(field_name)
+                visible_fields.include?(field_name)
+            end
+
+            def private_field?(field_name)
+                private_fields.include?(field_name)
+            end
+        end
 
         def each
             fields.each do |f|
@@ -20,29 +46,29 @@ module Keybox
         end
 
         def default_fields
-            %w(title username additional_info)
+            self.class.default_fields
         end
 
-        # fields that can be displayed, some could be calculated
         def display_fields
-            (visible_fields + private_fields).uniq
+            self.class.display_fields
         end
         
         def private_fields
-            []
-        end
-
-        def visible_fields
-            fields - private_fields
-        end
-
-        def visible_field?(field_name)
-            visible_fields.include?(field_name)
+            self.class.private_fields
         end
 
         def private_field?(field_name)
-            private_fields.include?(field_name)
+            self.class.private_field?(field_name)
         end
+
+        def visible_fields
+            self.class.visible_fields
+        end
+
+        def visible_field?(field_name)
+            self.class.visible_field?(field_name)
+        end
+
 
         def values
             fields.collect { |f| self.send(f) }
@@ -84,13 +110,15 @@ module Keybox
     # Host Accounts are those typical login accounts on machines
     #
     class HostAccountEntry < Keybox::AccountEntry
+        
+        class << self
+            def default_fields
+                %w(title hostname username password additional_info)
+            end
 
-        def default_fields
-            %w(title hostname username password additional_info)
-        end
-
-        def private_fields
-            %w(password)
+            def private_fields
+                %w(password)
+            end
         end
 
         def initialize(title = "",hostname = "",username = "",password = "")
@@ -98,6 +126,7 @@ module Keybox
             self.hostname = hostname
             self.password = password
         end
+
     end
 
     #
@@ -108,12 +137,14 @@ module Keybox
     # calculate the password for the account.
     #
     class URLAccountEntry < Keybox::AccountEntry
-        def initial_fields
-            %w(title url username additional_info)
-        end
-        
-        def private_fields
-            %w(password)
+        class << self
+            def initial_fields
+                %w(title url username additional_info)
+            end
+            
+            def private_fields
+                %w(password)
+            end
         end
 
         def initialize(title = "",url = "",username = "")
@@ -141,5 +172,4 @@ module Keybox
         end
 
     end
-
 end
