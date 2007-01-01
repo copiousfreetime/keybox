@@ -1,32 +1,96 @@
-keybox
-    by FIX
-    FIX
+Keybox
+   http://keybox.rubyforge.org
+   http://rubyforge.org/projects/keybox/
+   jjh-keybox@hinegardner.org
 
 == DESCRIPTION:
-  
-FIX
+
+Keybox is a set of command line applications and ruby libraries for secure
+password storage and password generation.  
 
 == FEATURES/PROBLEMS:
-  
-* FIX
+
+Provides the following command line applications
+
+* keybox - a pure ruby command line password storage application using the
+           embedded OpenSSL included with ruby for encryption.
+
+* kpg   - a pure ruby implementation of the Automated Password Generator (apg)
+          program. It attempts to implemented all the functionality of 'apg', 
+          but it is not completely compatible.  
+
+The full functionality of the command line applications is also available via
+included ruby libraries and could be embedded in other applications.
 
 == SYNOPSYS:
 
-    FIX
+* keybox command line application 
+
+    Usage: keybox [options]
+
+    General Options:
+        -f, --file DATABASE_FILE         The Database File to use
+        -c, --config CONFIG_FILE         The Configuration file to use
+        -D, --debug                      Ouput debug information to STDERR
+            --[no-]use-hash-for-url      Use the password hash algorithm for URL accounts
+
+    Commands, one and only one of these is required:
+        -h, --help
+        -a, --add ACCOUNT                Create a new account in keybox
+        -d, --delete ACCOUNT             Delete the account from keybox
+        -e, --edit ACCOUNT               Edit the account in keybox
+        -l, --list [REGEX]               List the matching accounts (no argument will list all)
+        -m, --master-password            Change the master password
+        -s, --show [REGEX]               Show the given account(s)
+        -v, --version                    Show version information
+
+    Import / Export from other data formats:
+        -i, --import-from-csv FILE       Import from a CSV file
+        -x, --export-to-csv FILE         Export contents to a CSV file
+
+* kpg command line application
+
+    Usage: kpg [options]
+
+    Options:
+        -a, --algorithm ALGORITHM        Select the algorithm for password generation
+                                          pronounceable, random
+        -h, --help
+        -m, --min-length LENGTH          Minimum LENGTH of the new password in letters
+        -x, --max-length LENGTH          Maximum LENGTH of the new password in letters
+        -n, --number NUMBER              Generate NUMBER of passwords (default 6)
+        -u, --use symbol,set,list        Use only one ore more of the following symbol sets:
+                                          [all, lower, numerical, upper, special]
+        -r, --require symbol,set,list    Require passwords to have letters from one or more of the following symbol sets:
+                                          [all, lower, numerical, upper, special]
+        -v, --version                    Show version information
 
 == REQUIREMENTS:
 
-+ FIX
+* A basic ruby install that includes the OpenSSL libraries.
 
 == INSTALL:
 
-+ FIX
+* gem install keybox
+
+== CREDITS:
+
+keybox is inspired by:
+  * Password Safe - http://passwordsafe.sourceforge.net/  
+  * KeePassX - http://keepassx.sourceforge.net/
+  * pwdsafe - http://nsd.dyndns.org/pwsafe/
+  * MyPassword Safe - http://www.semanticgap.com/myps/
+  * Password Gorilla - http://www.fpx.de/fp/Software/Gorilla/
+
+kpg is based on the functionality of 'apg' or Automated Password Generator. 
+Automated Password Generator was was originally developed by Adel I.
+Mirzazhanov and can be found at http://www.adel.nursat.kz/apg/
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2006 FIX
+Copyright (c) 2006, 2007 Jeremy Hinegardner
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sun Dec 31 21:42:52 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Mon Jan 01 16:51:40 -0700 2007 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -578,10 +578,10 @@ span.run100 {
             <a href='lib-keybox_rb.html'>lib/keybox.rb</a>
           </td>
           <td class='value'>
-            <tt>32</tt>
+            <tt>25</tt>
           </td>
           <td class='value'>
-            <tt>27</tt>
+            <tt>22</tt>
           </td>
           <td>
             <table cellspacing='0' cellpadding='0' align='right'>
@@ -617,38 +617,31 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="inferred1"><a name="line1" /> 1 
-</span><span class="marked0"><a name="line2" /> 2 module Keybox
-</span><span class="marked1"><a name="line3" /> 3     APP_ROOT_DIR     = File.dirname(File.expand_path(File.join(__FILE__,&quot;..&quot;))).freeze
-</span><span class="marked0"><a name="line4" /> 4     APP_LIB_DIR      = File.join(APP_ROOT_DIR,&quot;lib&quot;).freeze
-</span><span class="marked1"><a name="line5" /> 5     APP_RESOURCE_DIR = File.join(APP_ROOT_DIR,&quot;resource&quot;).freeze
-</span><span class="inferred0"><a name="line6" /> 6     
-</span><span class="marked1"><a name="line7" /> 7     VERSION     = [1,0,0].freeze
-</span><span class="marked0"><a name="line8" /> 8     AUTHOR      = &quot;Jeremy Hinegardner&quot;.freeze
-</span><span class="marked1"><a name="line9" /> 9     COPYRIGHT   = &quot;2006, Jeremy Hinegardner&quot;.freeze
-</span><span class="marked0"><a name="line10" />10     DESCRIPTION = &lt;&lt;DESC
-</span><span class="inferred1"><a name="line11" />11 kpg is a pure ruby implementation of the 'apg' program. It attempts
-</span><span class="inferred0"><a name="line12" />12 to implement all the functionality of 'apg', but it is not completely
-</span><span class="inferred1"><a name="line13" />13 compatible.
+    </table><pre><span class="marked1"><a name="line1" /> 1 module Keybox
+</span><span class="marked0"><a name="line2" /> 2     APP_ROOT_DIR     = File.dirname(File.expand_path(File.join(__FILE__,&quot;..&quot;))).freeze
+</span><span class="marked1"><a name="line3" /> 3     APP_LIB_DIR      = File.join(APP_ROOT_DIR,&quot;lib&quot;).freeze
+</span><span class="marked0"><a name="line4" /> 4     APP_RESOURCE_DIR = File.join(APP_ROOT_DIR,&quot;resource&quot;).freeze
+</span><span class="inferred1"><a name="line5" /> 5     
+</span><span class="marked0"><a name="line6" /> 6     VERSION     = [1,0,0].freeze
+</span><span class="marked1"><a name="line7" /> 7     AUTHOR      = &quot;Jeremy Hinegardner&quot;.freeze
+</span><span class="marked0"><a name="line8" /> 8     AUTHOR_EMAIL= &quot;jeremy@hinegardner.org&quot;.freeze
+</span><span class="marked1"><a name="line9" /> 9     HOMEPAGE    = &quot;http://keybox.rubyforge.org&quot;.freeze
+</span><span class="marked0"><a name="line10" />10     COPYRIGHT   = &quot;2006, 2007 #{AUTHOR}&quot;.freeze
+</span><span class="inferred1"><a name="line11" />11 end
+</span><span class="inferred0"><a name="line12" />12 
+</span><span class="marked1"><a name="line13" />13 $: &lt;&lt; Keybox::APP_LIB_DIR
 </span><span class="inferred0"><a name="line14" />14 
-</span><span class="inferred1"><a name="line15" />15 apg (Automated Password Generator) was originally developed by
-</span><span class="inferred0"><a name="line16" />16 Adel I. Mirzazhanov and can be found at http://www.adel.nursat.kz/apg/
-</span><span class="inferred1"><a name="line17" />17 DESC
-</span><span class="inferred0"><a name="line18" />18 end
-</span><span class="inferred1"><a name="line19" />19 
-</span><span class="marked0"><a name="line20" />20 $: &lt;&lt; Keybox::APP_LIB_DIR
-</span><span class="inferred1"><a name="line21" />21 
-</span><span class="marked0"><a name="line22" />22 require 'keybox/cipher'
-</span><span class="marked1"><a name="line23" />23 require 'keybox/digest'
-</span><span class="marked0"><a name="line24" />24 require 'keybox/entry'
-</span><span class="marked1"><a name="line25" />25 require 'keybox/error'
-</span><span class="marked0"><a name="line26" />26 require 'keybox/password_hash'
-</span><span class="marked1"><a name="line27" />27 require 'keybox/randomizer'
-</span><span class="marked0"><a name="line28" />28 require 'keybox/storage'
-</span><span class="marked1"><a name="line29" />29 require 'keybox/string_generator'
-</span><span class="marked0"><a name="line30" />30 require 'keybox/uuid'
-</span><span class="marked1"><a name="line31" />31 require 'keybox/term_io'
-</span><span class="marked0"><a name="line32" />32 require 'keybox/convert'
+</span><span class="marked1"><a name="line15" />15 require 'keybox/cipher'
+</span><span class="marked0"><a name="line16" />16 require 'keybox/digest'
+</span><span class="marked1"><a name="line17" />17 require 'keybox/entry'
+</span><span class="marked0"><a name="line18" />18 require 'keybox/error'
+</span><span class="marked1"><a name="line19" />19 require 'keybox/password_hash'
+</span><span class="marked0"><a name="line20" />20 require 'keybox/randomizer'
+</span><span class="marked1"><a name="line21" />21 require 'keybox/storage'
+</span><span class="marked0"><a name="line22" />22 require 'keybox/string_generator'
+</span><span class="marked1"><a name="line23" />23 require 'keybox/uuid'
+</span><span class="marked0"><a name="line24" />24 require 'keybox/term_io'
+</span><span class="marked1"><a name="line25" />25 require 'keybox/convert'
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

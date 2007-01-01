@@ -554,7 +554,7 @@ span.run100 {
       </head>
       <body>
         <h3>C0 code coverage information</h3>
-        <p>Generated on Sun Dec 31 21:42:53 -0700 2006 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
+        <p>Generated on Mon Jan 01 16:51:40 -0700 2007 with <a href='http://eigenclass.org/hiki.rb?rcov'>rcov 0.7.0</a>
         </p>
         <hr /><pre><span class='marked0'>Code reported as executed by Ruby looks like this...
 </span><span class='marked1'>and this: this line is also marked as covered.
@@ -617,97 +617,97 @@ span.run100 {
           </td>
         </tr>
       </tbody>
-    </table><pre><span class="inferred0"><a name="line1" /> 1 #
-</span><span class="inferred1"><a name="line2" /> 2 # Convert to/from a CSV file.  When loading a CSV file, it is assumed
-</span><span class="inferred0"><a name="line3" /> 3 # that there is a header on the csv file that shows which of the fields
-</span><span class="inferred1"><a name="line4" /> 4 # belongs to the various fields of the entry.  At a minimum the header
-</span><span class="inferred0"><a name="line5" /> 5 # line should have the default fields from a HostAccountEntry which are:
-</span><span class="inferred1"><a name="line6" /> 6 #
-</span><span class="inferred0"><a name="line7" /> 7 #   - title
-</span><span class="inferred1"><a name="line8" /> 8 #   - username
-</span><span class="inferred0"><a name="line9" /> 9 #   - hostname
-</span><span class="inferred1"><a name="line10" />10 #   - password
-</span><span class="inferred0"><a name="line11" />11 #   - additional_info
-</span><span class="inferred1"><a name="line12" />12 #
-</span><span class="inferred0"><a name="line13" />13 #
-</span><span class="marked1"><a name="line14" />14 require 'csv'
-</span><span class="marked0"><a name="line15" />15 require 'keybox/entry'
-</span><span class="marked1"><a name="line16" />16 module Keybox
-</span><span class="marked0"><a name="line17" />17     module Convert
-</span><span class="marked1"><a name="line18" />18         class CSV
-</span><span class="marked0"><a name="line19" />19             class &lt;&lt; self 
-</span><span class="inferred1"><a name="line20" />20 
-</span><span class="inferred0"><a name="line21" />21                 # parse the header line from the CSV file and make sure
-</span><span class="inferred1"><a name="line22" />22                 # that all the required columns are listed.
-</span><span class="inferred0"><a name="line23" />23                 #
-</span><span class="marked1"><a name="line24" />24                 def parse_header(header) 
-</span><span class="marked0"><a name="line25" />25                     field_indexes = {}
-</span><span class="marked1"><a name="line26" />26                     Keybox::HostAccountEntry.default_fields.each do |field|
-</span><span class="marked0"><a name="line27" />27                         field_indexes[field] = header.index(field)
-</span><span class="marked1"><a name="line28" />28                         if field_indexes[field].nil? then
-</span><span class="marked0"><a name="line29" />29                             raise Keybox::ValidationError, &quot;There must be a header on the CSV to import and it must contain the '#{field}' field.&quot;
-</span><span class="inferred1"><a name="line30" />30                         end
-</span><span class="inferred0"><a name="line31" />31                     end
-</span><span class="marked1"><a name="line32" />32                     field_indexes
-</span><span class="inferred0"><a name="line33" />33                 end
-</span><span class="inferred1"><a name="line34" />34 
-</span><span class="inferred0"><a name="line35" />35                 # returns an Array of AccountEntry classes or its
-</span><span class="inferred1"><a name="line36" />36                 # descendants
-</span><span class="inferred0"><a name="line37" />37                 #
-</span><span class="marked1"><a name="line38" />38                 def from_file(csv_filename)
-</span><span class="marked0"><a name="line39" />39                     reader = ::CSV.open(csv_filename,&quot;r&quot;)
-</span><span class="marked1"><a name="line40" />40                     entries = Keybox::Convert::CSV.from_reader(reader)
-</span><span class="marked0"><a name="line41" />41                     reader.close
-</span><span class="marked1"><a name="line42" />42                     return entries
-</span><span class="inferred0"><a name="line43" />43                 end
-</span><span class="inferred1"><a name="line44" />44 
-</span><span class="inferred0"><a name="line45" />45                 # pull all the items from the CSV file.  There MUST be a
-</span><span class="inferred1"><a name="line46" />46                 # header line that says what the different fields are.
-</span><span class="inferred0"><a name="line47" />47                 # A HostAccountEntry object is created for each line and
-</span><span class="inferred1"><a name="line48" />48                 # the array of those objects is returned
-</span><span class="inferred0"><a name="line49" />49                 #
-</span><span class="marked1"><a name="line50" />50                 def from_reader(csv_reader)
-</span><span class="marked0"><a name="line51" />51                     field_indexes = parse_header(csv_reader.shift)
-</span><span class="marked1"><a name="line52" />52                     entries = []
-</span><span class="marked0"><a name="line53" />53                     csv_reader.each do |row|
-</span><span class="marked1"><a name="line54" />54                         entry = Keybox::HostAccountEntry.new
-</span><span class="marked0"><a name="line55" />55                         field_indexes.each_pair do |field,index|
-</span><span class="marked1"><a name="line56" />56                             entry.send(&quot;#{field}=&quot;,row[index] || &quot;&quot;)
-</span><span class="inferred0"><a name="line57" />57                         end
-</span><span class="marked1"><a name="line58" />58                         entries &lt;&lt; entry
-</span><span class="inferred0"><a name="line59" />59                     end
-</span><span class="marked1"><a name="line60" />60                     return entries
-</span><span class="inferred0"><a name="line61" />61                 end
-</span><span class="inferred1"><a name="line62" />62 
-</span><span class="inferred0"><a name="line63" />63                 #
-</span><span class="inferred1"><a name="line64" />64                 # records should be an array of AccountEntry objects
-</span><span class="inferred0"><a name="line65" />65                 #
-</span><span class="marked1"><a name="line66" />66                 def to_file(records,csv_filename)
-</span><span class="marked0"><a name="line67" />67                     writer = ::CSV.open(csv_filename,&quot;w&quot;)
-</span><span class="marked1"><a name="line68" />68                     Keybox::Convert::CSV.to_writer(records,writer)
-</span><span class="marked0"><a name="line69" />69                     writer.close
-</span><span class="inferred1"><a name="line70" />70                 end
-</span><span class="inferred0"><a name="line71" />71 
-</span><span class="inferred1"><a name="line72" />72                 #
-</span><span class="inferred0"><a name="line73" />73                 # write all the fields for each record.  We go through
-</span><span class="inferred1"><a name="line74" />74                 # all the records (an array of AccountEntry objects), 
-</span><span class="inferred0"><a name="line75" />75                 # recording all the fields, then using that as the header.  
-</span><span class="inferred1"><a name="line76" />76                 #
-</span><span class="marked0"><a name="line77" />77                 def to_writer(records,csv_writer)
-</span><span class="marked1"><a name="line78" />78                     field_names = records.collect { |r| r.fields }.flatten.uniq
-</span><span class="marked0"><a name="line79" />79                     csv_writer &lt;&lt; field_names
-</span><span class="marked1"><a name="line80" />80                     records.each do |record|
-</span><span class="marked0"><a name="line81" />81                         values = []
-</span><span class="marked1"><a name="line82" />82                         field_names.each do |field|
-</span><span class="marked0"><a name="line83" />83                             values &lt;&lt; record.send(field) || &quot;&quot;
-</span><span class="inferred1"><a name="line84" />84                         end
-</span><span class="marked0"><a name="line85" />85                         csv_writer &lt;&lt; values
-</span><span class="inferred1"><a name="line86" />86                     end
-</span><span class="inferred0"><a name="line87" />87                 end
-</span><span class="inferred1"><a name="line88" />88             end 
-</span><span class="inferred0"><a name="line89" />89         end
-</span><span class="inferred1"><a name="line90" />90     end
-</span><span class="inferred0"><a name="line91" />91 end
+    </table><pre><span class="inferred1"><a name="line1" /> 1 #
+</span><span class="inferred0"><a name="line2" /> 2 # Convert to/from a CSV file.  When loading a CSV file, it is assumed
+</span><span class="inferred1"><a name="line3" /> 3 # that there is a header on the csv file that shows which of the fields
+</span><span class="inferred0"><a name="line4" /> 4 # belongs to the various fields of the entry.  At a minimum the header
+</span><span class="inferred1"><a name="line5" /> 5 # line should have the default fields from a HostAccountEntry which are:
+</span><span class="inferred0"><a name="line6" /> 6 #
+</span><span class="inferred1"><a name="line7" /> 7 #   - title
+</span><span class="inferred0"><a name="line8" /> 8 #   - username
+</span><span class="inferred1"><a name="line9" /> 9 #   - hostname
+</span><span class="inferred0"><a name="line10" />10 #   - password
+</span><span class="inferred1"><a name="line11" />11 #   - additional_info
+</span><span class="inferred0"><a name="line12" />12 #
+</span><span class="inferred1"><a name="line13" />13 #
+</span><span class="marked0"><a name="line14" />14 require 'csv'
+</span><span class="marked1"><a name="line15" />15 require 'keybox/entry'
+</span><span class="marked0"><a name="line16" />16 module Keybox
+</span><span class="marked1"><a name="line17" />17     module Convert
+</span><span class="marked0"><a name="line18" />18         class CSV
+</span><span class="marked1"><a name="line19" />19             class &lt;&lt; self 
+</span><span class="inferred0"><a name="line20" />20 
+</span><span class="inferred1"><a name="line21" />21                 # parse the header line from the CSV file and make sure
+</span><span class="inferred0"><a name="line22" />22                 # that all the required columns are listed.
+</span><span class="inferred1"><a name="line23" />23                 #
+</span><span class="marked0"><a name="line24" />24                 def parse_header(header) 
+</span><span class="marked1"><a name="line25" />25                     field_indexes = {}
+</span><span class="marked0"><a name="line26" />26                     Keybox::HostAccountEntry.default_fields.each do |field|
+</span><span class="marked1"><a name="line27" />27                         field_indexes[field] = header.index(field)
+</span><span class="marked0"><a name="line28" />28                         if field_indexes[field].nil? then
+</span><span class="marked1"><a name="line29" />29                             raise Keybox::ValidationError, &quot;There must be a header on the CSV to import and it must contain the '#{field}' field.&quot;
+</span><span class="inferred0"><a name="line30" />30                         end
+</span><span class="inferred1"><a name="line31" />31                     end
+</span><span class="marked0"><a name="line32" />32                     field_indexes
+</span><span class="inferred1"><a name="line33" />33                 end
+</span><span class="inferred0"><a name="line34" />34 
+</span><span class="inferred1"><a name="line35" />35                 # returns an Array of AccountEntry classes or its
+</span><span class="inferred0"><a name="line36" />36                 # descendants
+</span><span class="inferred1"><a name="line37" />37                 #
+</span><span class="marked0"><a name="line38" />38                 def from_file(csv_filename)
+</span><span class="marked1"><a name="line39" />39                     reader = ::CSV.open(csv_filename,&quot;r&quot;)
+</span><span class="marked0"><a name="line40" />40                     entries = Keybox::Convert::CSV.from_reader(reader)
+</span><span class="marked1"><a name="line41" />41                     reader.close
+</span><span class="marked0"><a name="line42" />42                     return entries
+</span><span class="inferred1"><a name="line43" />43                 end
+</span><span class="inferred0"><a name="line44" />44 
+</span><span class="inferred1"><a name="line45" />45                 # pull all the items from the CSV file.  There MUST be a
+</span><span class="inferred0"><a name="line46" />46                 # header line that says what the different fields are.
+</span><span class="inferred1"><a name="line47" />47                 # A HostAccountEntry object is created for each line and
+</span><span class="inferred0"><a name="line48" />48                 # the array of those objects is returned
+</span><span class="inferred1"><a name="line49" />49                 #
+</span><span class="marked0"><a name="line50" />50                 def from_reader(csv_reader)
+</span><span class="marked1"><a name="line51" />51                     field_indexes = parse_header(csv_reader.shift)
+</span><span class="marked0"><a name="line52" />52                     entries = []
+</span><span class="marked1"><a name="line53" />53                     csv_reader.each do |row|
+</span><span class="marked0"><a name="line54" />54                         entry = Keybox::HostAccountEntry.new
+</span><span class="marked1"><a name="line55" />55                         field_indexes.each_pair do |field,index|
+</span><span class="marked0"><a name="line56" />56                             entry.send(&quot;#{field}=&quot;,row[index] || &quot;&quot;)
+</span><span class="inferred1"><a name="line57" />57                         end
+</span><span class="marked0"><a name="line58" />58                         entries &lt;&lt; entry
+</span><span class="inferred1"><a name="line59" />59                     end
+</span><span class="marked0"><a name="line60" />60                     return entries
+</span><span class="inferred1"><a name="line61" />61                 end
+</span><span class="inferred0"><a name="line62" />62 
+</span><span class="inferred1"><a name="line63" />63                 #
+</span><span class="inferred0"><a name="line64" />64                 # records should be an array of AccountEntry objects
+</span><span class="inferred1"><a name="line65" />65                 #
+</span><span class="marked0"><a name="line66" />66                 def to_file(records,csv_filename)
+</span><span class="marked1"><a name="line67" />67                     writer = ::CSV.open(csv_filename,&quot;w&quot;)
+</span><span class="marked0"><a name="line68" />68                     Keybox::Convert::CSV.to_writer(records,writer)
+</span><span class="marked1"><a name="line69" />69                     writer.close
+</span><span class="inferred0"><a name="line70" />70                 end
+</span><span class="inferred1"><a name="line71" />71 
+</span><span class="inferred0"><a name="line72" />72                 #
+</span><span class="inferred1"><a name="line73" />73                 # write all the fields for each record.  We go through
+</span><span class="inferred0"><a name="line74" />74                 # all the records (an array of AccountEntry objects), 
+</span><span class="inferred1"><a name="line75" />75                 # recording all the fields, then using that as the header.  
+</span><span class="inferred0"><a name="line76" />76                 #
+</span><span class="marked1"><a name="line77" />77                 def to_writer(records,csv_writer)
+</span><span class="marked0"><a name="line78" />78                     field_names = records.collect { |r| r.fields }.flatten.uniq
+</span><span class="marked1"><a name="line79" />79                     csv_writer &lt;&lt; field_names
+</span><span class="marked0"><a name="line80" />80                     records.each do |record|
+</span><span class="marked1"><a name="line81" />81                         values = []
+</span><span class="marked0"><a name="line82" />82                         field_names.each do |field|
+</span><span class="marked1"><a name="line83" />83                             values &lt;&lt; record.send(field) || &quot;&quot;
+</span><span class="inferred0"><a name="line84" />84                         end
+</span><span class="marked1"><a name="line85" />85                         csv_writer &lt;&lt; values
+</span><span class="inferred0"><a name="line86" />86                     end
+</span><span class="inferred1"><a name="line87" />87                 end
+</span><span class="inferred0"><a name="line88" />88             end 
+</span><span class="inferred1"><a name="line89" />89         end
+</span><span class="inferred0"><a name="line90" />90     end
+</span><span class="inferred1"><a name="line91" />91 end
 </span></pre><hr />    <p>Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'>rcov code coverage analysis tool for Ruby</a> version 0.7.0.</p><p>
           <a href='http://validator.w3.org/check/referer'>
             <img src='http://www.w3.org/Icons/valid-xhtml10' height='31' alt='Valid XHTML 1.0!' width='88' />

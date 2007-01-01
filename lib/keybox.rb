@@ -1,4 +1,3 @@
-
 module Keybox
     APP_ROOT_DIR     = File.dirname(File.expand_path(File.join(__FILE__,".."))).freeze
     APP_LIB_DIR      = File.join(APP_ROOT_DIR,"lib").freeze
@@ -6,15 +5,9 @@ module Keybox
     
     VERSION     = [1,0,0].freeze
     AUTHOR      = "Jeremy Hinegardner".freeze
-    COPYRIGHT   = "2006, Jeremy Hinegardner".freeze
-    DESCRIPTION = <<DESC
-kpg is a pure ruby implementation of the 'apg' program. It attempts
-to implement all the functionality of 'apg', but it is not completely
-compatible.
-
-apg (Automated Password Generator) was originally developed by
-Adel I. Mirzazhanov and can be found at http://www.adel.nursat.kz/apg/
-DESC
+    AUTHOR_EMAIL= "jeremy@hinegardner.org".freeze
+    HOMEPAGE    = "http://keybox.rubyforge.org".freeze
+    COPYRIGHT   = "2006, 2007 #{AUTHOR}".freeze
 end
 
 $: << Keybox::APP_LIB_DIR

@@ -2,10 +2,13 @@ require 'keybox/storage/record'
 
 module Keybox
 
-    # 
-    # Base class for Accounts.  Generally this is not instantiated
-    # directly, but it can be if you want.
+    # Entries in the Keybox storage container.  The base class is
+    # AccountEntry with current child classes HostAccountEntry and
+    # URLAccountEntry.
     #
+    # In most cases HostAccountEntry will suffice.  Use URLAccountEntry 
+    # when you would like to link an entry's +password+ field to be
+    # generated based upon the master password of the container.
     class AccountEntry < Keybox::Storage::Record
         class << self
             def default_fields
