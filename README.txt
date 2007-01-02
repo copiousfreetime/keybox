@@ -1,7 +1,7 @@
 Keybox
    http://keybox.rubyforge.org
    http://rubyforge.org/projects/keybox/
-   jjh-keybox@hinegardner.org
+   jjh-keybox at hinegardner dot org
 
 == DESCRIPTION:
 
