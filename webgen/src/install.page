@@ -1,0 +1,18 @@
+---
+title: Install
+inMenu: true
+orderInfo: 30
+---
+h1. General Install
+
+There are no prerequisites other than a basic ruby install that
+includes the OpenSSL libraries as part of the standard lib.
+
+The simplest install for keybox is via rubygems:
+
+@gem install keybox@
+
+h1. Installing on a USB key or portable storage device
+
+TODO
+

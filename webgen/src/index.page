@@ -1,9 +1,24 @@
 ---
-title: Keybox Homepage
-inMenu: true
-orderInfo: 0
+title: Home
+inMenu: false
 directoryName: Keybox
 ---
-h1. Project Keybox
 
-This is the first page your viewers will see!
+h1. Keybox Project
+
+*Keybox* is a set of command line applications and
+ruby libraries for secure password storage and password generation.
+
+Using only the core ruby and the ruby standard library, Keybox provides
+a portable secure mechanism for password management.
+
+Keybox provides 2 command line applications, *keybox* and *kpg*
+
+* *keybox* %- a pure ruby command line password storage application using the embedded OpenSSL included with ruby for encryption.%
+* *kpg* %- a pure ruby implementation of the Automated Password Generator (apg) program. It attempts to implemented all the functionality of 'apg', but it is not completely compatible.%
+
+h1. Some other Items
+
+This is some more stuff to talk about for keybox so that the menu's and
+such will look good and we can have enough content to actually mean
+something.

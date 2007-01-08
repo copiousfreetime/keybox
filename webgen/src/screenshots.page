@@ -1,18 +1,26 @@
 ---
-title: Screenshots
+title: Demo/Screenshots
 inMenu: true
 orderInfo: 40
 ---
-h2. Screenshots
+h1. Demostration
 
-h3. Main View
+h1. Screenshots of *keybox*
 
-Image of Main View
+keybox is a commandline application so take these with a grain of salt.
 
-Description of image
+h2. Creating initial database
 
-h3. Next image
+h2. Adding an entry
 
-Image
+h2. Searching for an entry
 
-bla bla bla
+h2. Display an entry
+
+h3. Remove an entry
+
+h1. Screenshotsof *kpg*
+
+h2. Default
+
+

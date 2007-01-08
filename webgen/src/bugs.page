@@ -1,0 +1,9 @@
+---
+title: Bugs
+inMenu: true
+orderInfo: 20
+---
+h1. Bugs
+
+When you find bugs, please report them via the "Rubyforge bug
+tracker":http://rubyforge.org/tracker/?func=add&group_id=2584&atid=9927.

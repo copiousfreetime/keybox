@@ -9,13 +9,13 @@
 	<meta name="author" content="Jeremy Hinegardner / Original design: Erwin Aligam - http://www.styleshout.com/" />
 	<meta name="generator" content="webgen - http://webgen.rubyforge.org" />
 	<link rel="stylesheet" type="text/css" href="{relocatable: default.css}" />
-	<title>{title:}</title>
+	<title>Keybox - {title:}</title>
   </head>
 
   <body>
     <div id="wrap">
       <div id="header">
-        <h1 id="logo-text"><a href="index.html"><span class="red">key</span><span class="gray">box</span></h1>
+        <h1 id="logo-text"><a href="index.html"><span class="red">key</span><span class="gray">box</span></a></h1>
         <h2 id="slogan">secure password storage</h2>
       </div>
       <div id="content-wrap">
@@ -24,17 +24,16 @@
         </div>
 
 	    <div id="sidebar">
-          <h1>Navigation</h1>
+          <h1>The Project</h1>
           {menu: {menuStyle: vertical}}
-        </div>
 
-        <div id="sidebar">
-          <h1>Links</h1>
-          <ul>
-            <li><a href="http://webgen.rubyforge.org">webgen homepage</a></li>
-		    <li><a href="http://andreasviklund.com/templates">More templates</a></li>
-		    <li><a href="http://openwebdesign.org">OWD</a></li>
-		    <li><a href="http://oswd.org">OSWD</a></li>
+          <h1>Similar Applications</h1>
+          <ul class="sidemenu">
+            <li><a href="http://passwordsafe.sourceforge.net/">Password Safe</a></li>
+		    <li><a href="http://keepassx.sourceforge.net/">KeePassX</a></li>
+		    <li><a href="http://nsd.dyndns.org/pwsafe/">pwdsafe</a></li>
+		    <li><a href="http://www.semanticgap.com/myps/">MyPassword Safe</a></li>
+            <li><a href="http://www.fpx.de/fp/Software/Gorilla/">Password Gorilla</a></li>
           </ul>
 		</div>
 

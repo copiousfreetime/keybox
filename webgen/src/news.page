@@ -1,0 +1,11 @@
+---
+title: News
+inMenu: true
+orderInfo: 20
+---
+h1. Latest News
+
+h2. 2007-01-08
+
+Version 1.0 of keybox is released.  Check out all those
+"Features":features.html.
