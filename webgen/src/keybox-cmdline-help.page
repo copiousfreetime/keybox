@@ -1,0 +1,8 @@
+---
+title: keybox --help
+---
+h1. {title: }
+
+<code>
+{execute: {command: ../bin/keybox -h}}
+</code>
