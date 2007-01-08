@@ -19,13 +19,14 @@
         <h2 id="slogan">secure password storage</h2>
       </div>
       <div id="content-wrap">
+
         <div id="main">
           {block:}
         </div>
 
 	    <div id="sidebar">
-          <h1>The Project</h1>
-          {menu: {menuStyle: vertical}}
+          <h1>Sitemap</h1>
+          {menu: {menuStyle: jjh-vertical}}
 
           <h1>Similar Applications</h1>
           <ul class="sidemenu">

@@ -1,0 +1,24 @@
+index.page:
+    inMenu: false
+    directoryName: keybox
+
+news.page:
+    inMenu: true
+    orderInfo: 10
+
+demo.page:
+    inMenu: true
+    orderInfo: 15
+
+features.page:
+    inMenu: true
+    orderInfo: 20
+
+install.page:
+    inMenu: true
+    orderInfo: 40
+
+bugs.page:
+    inMenu: true
+    orderInfo: 50
+

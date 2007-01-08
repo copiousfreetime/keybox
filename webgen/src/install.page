@@ -1,9 +1,7 @@
 ---
 title: Install
-inMenu: true
-orderInfo: 30
 ---
-h1. General Install
+h1. General Installation
 
 There are no prerequisites other than a basic ruby install that
 includes the OpenSSL libraries as part of the standard lib.
