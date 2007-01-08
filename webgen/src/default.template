@@ -1,0 +1,48 @@
+--- content, html
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="description" content="Secure password storage from the command line" />
+	<meta name="keywords" content="password storage, password generation, password safe" />
+	<meta name="author" content="Jeremy Hinegardner / Original design: Erwin Aligam - http://www.styleshout.com/" />
+	<meta name="generator" content="webgen - http://webgen.rubyforge.org" />
+	<link rel="stylesheet" type="text/css" href="{relocatable: default.css}" />
+	<title>{title:}</title>
+  </head>
+
+  <body>
+    <div id="wrap">
+      <div id="header">
+        <h1 id="logo-text"><a href="index.html"><span class="red">key</span><span class="gray">box</span></h1>
+        <h2 id="slogan">secure password storage</h2>
+      </div>
+      <div id="content-wrap">
+        <div id="main">
+          {block:}
+        </div>
+
+	    <div id="sidebar">
+          <h1>Navigation</h1>
+          {menu: {menuStyle: vertical}}
+        </div>
+
+        <div id="sidebar">
+          <h1>Links</h1>
+          <ul>
+            <li><a href="http://webgen.rubyforge.org">webgen homepage</a></li>
+		    <li><a href="http://andreasviklund.com/templates">More templates</a></li>
+		    <li><a href="http://openwebdesign.org">OWD</a></li>
+		    <li><a href="http://oswd.org">OSWD</a></li>
+          </ul>
+		</div>
+
+	  </div>
+	  <div id="footer">
+        <span id="footer-left"> &copy; 2007 <strong> Jeremy Hinegadner</strong> </span>
+        <span id="footer-right"><a href="index.html">Home</a> | <a href="index.html">Sitemap</a></span>
+      </div>
+	</div>
+  </body>
+</html>
