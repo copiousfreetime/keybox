@@ -15,3 +15,4 @@ Keybox provides 2 command line applications, *keybox* and *kpg*
 * *keybox* %- a pure ruby command line password storage application using the embedded OpenSSL included with ruby for encryption.%
 * *kpg* %- a pure ruby implementation of the Automated Password Generator (apg) program. It attempts to implemented all the functionality of 'apg', but it is not completely compatible.%
 
+h1. Features

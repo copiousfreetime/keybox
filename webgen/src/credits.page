@@ -1,0 +1,38 @@
+---
+title: Credits
+---
+h1. Credit where Credit is due
+
+h2. Password Encryption
+
+Keybox's data store was heavily influenced by the approaches used in :
+
+* %Password Safe - "http://passwordsafe.sourceforge.net/":http://passwordsafe.sourceforge.net/%
+* %KeePassX - "http://keepassx.sourceforge.net/":http://keepassx.sourceforge.net/%
+ 
+
+h2. Automatic Password Generator
+
+Keybox's *kpg* application is an attempt to reimplement *apg* or Automated
+Password Generator. Automated Password Generator was was originally developed
+by Adel I.  Mirzazhanov and can be found at
+"http://www.adel.nursat.kz/apg/":http://www.adel.nursat.kz/apg/.
+
+h2. Website Template
+
+The site's design is a modified version of the Techmania design created
+by "Erwin Aligam":http://www.styleshout.com/ Copyright &copy; 2006 and is
+licensed under the "Creative Commons Attribution 2.5
+License":http://creativecommons.org/licenses/by/2.5/.
+
+h2. Images
+
+The key image is a modified version of "an image found on
+stock.xchng":http://www.sxc.hu/photo/675010 and altered to match the color
+scheme.
+
+h2. Other Tools
+
+* %"Rubyforge":http://www.rubyforge.org/ - hosting and project management%
+* %"Fyre":http://fyre.navi.cx/ - generated the background image of the banner%
+* %"webgen":http://webgen.rubyforge.org/ - site generation%

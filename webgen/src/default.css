@@ -223,24 +223,24 @@ input.button {
    font: bold 1.1em Verdana, Tahoma, 'Trebuchet MS',  Sans-serif;  
 } 
 #header-tabs ul {		
-	margin:0;
+   margin:0;
    padding:2px 0px 0px 7px;
    list-style:none;
 }
 #header-tabs li {
-	display:inline;
+   display:inline;
    margin:0;
    padding:0;
 }
 #header-tabs a {
-	float:left;
+   float:left;
    background: url(images/tableft.gif) no-repeat left top;
    margin:0;
    padding:0 0 0 4px;
    text-decoration:none;
 }
 #header-tabs a span {
-	float:left;
+   float:left;
    display:block;
    background: url(images/tabright.gif) no-repeat right top;
    padding:7px 15px 4px 8px;

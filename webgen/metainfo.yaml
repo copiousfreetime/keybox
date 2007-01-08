@@ -1,6 +1,7 @@
 index.page:
-    inMenu: false
+    inMenu: true
     directoryName: keybox
+    orderInfo: 0
 
 news.page:
     inMenu: true
@@ -8,11 +9,7 @@ news.page:
 
 demo.page:
     inMenu: true
-    orderInfo: 15
-
-features.page:
-    inMenu: true
-    orderInfo: 20
+    orderInfo: 30
 
 install.page:
     inMenu: true
@@ -22,3 +19,6 @@ bugs.page:
     inMenu: true
     orderInfo: 50
 
+credits.page: 
+    inMenu: true
+    orderInfo: 60

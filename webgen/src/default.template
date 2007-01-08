@@ -18,6 +18,7 @@
         <h1 id="logo-text"><a href="index.html"><span class="red">key</span><span class="gray">box</span></a></h1>
         <h2 id="slogan">secure password storage</h2>
       </div>
+
       <div id="content-wrap">
 
         <div id="main">
@@ -27,6 +28,21 @@
 	    <div id="sidebar">
           <h1>Sitemap</h1>
           {menu: {menuStyle: jjh-vertical}}
+
+          <h1>Latest News</h1>
+          {news: {options: {maxEntries: 1 }}}
+
+          <h1>Documentation</h1>
+          <ul class="sidemenu">
+            <li><a href="keybox-cmdline-help.html">keybox --help</a></li>
+            <li><a href="kpg-cmdline-help.html">kpg --help</a></li>
+            <li><a href="keybox-db-format.html">Keybox db format</a></li>
+            <li><a href="password-safe-db-format.html">Password Safe db format</a></li>
+            <li><a href="keypassx-db-format.html">KeyPassX db format</a></li>
+            <li><a href="rdoc/index.html">RDoc</a></li>
+            <li><a href="coverage/index.html">rcov report</a></li>
+
+          </ul>
 
           <h1>Similar Applications</h1>
           <ul class="sidemenu">
@@ -40,8 +56,9 @@
 
 	  </div>
 	  <div id="footer">
-        <span id="footer-left"> &copy; 2007 <strong> Jeremy Hinegadner</strong> </span>
-        <span id="footer-right"><a href="index.html">Home</a> | <a href="index.html">Sitemap</a></span>
+        <span id="footer-left"> Copyright &copy; 2007 <strong>Jeremy Hinegadner</strong> |
+        <a href="mailto:&#106;&#101;&#114;&#101;&#109;&#121;&#64;&#104;i&#110;e&#103;a&#114;&#100;&#110;e&#114;&#46;&#111;&#114;&#103;">&#106;&#101;&#114;e&#109;y&#64;&#104;&#105;&#110;&#101;&#103;&#97;&#114;&#100;&#110;&#101;&#114;&#46;&#111;&#114;&#103;</a></span>
+        <span id="footer-right"><a href="index.html">Home</a></span>
       </div>
 	</div>
   </body>
