@@ -1,5 +1,6 @@
 
 $: << "./lib"
+$: << "./tasks"
 
 require 'rubygems'
 require 'spec/rake/spectask'
@@ -38,6 +39,9 @@ task :create_manifest => :clean do
         end
     end
 end
+
+desc "Create the website with webgen"
+task :create_website => 
 
 Spec::Rake::SpecTask.new do |t|
     t.warning   = true
