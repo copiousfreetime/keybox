@@ -44,7 +44,7 @@ task :create_manifest => :clean do
 end
 
 Webgen::Rake::WebgenTask.new do |webgen|
-    webgen.directory = "webgen/"
+    webgen.directory = "webgen"
 end
 
 Spec::Rake::SpecTask.new do |t|
@@ -52,5 +52,11 @@ Spec::Rake::SpecTask.new do |t|
     t.rcov      = true
     t.rcov_dir  = "doc/coverage"
     t.libs      << "./lib" 
+end
+
+# add :webgen and :spec as prerequisites for :docs
+desc "Generate all docs"
+task :docs => [:webgen,:spec]  do |t|
+    t.prerequisites.each { |p| puts "    #{p}" }
 end
 
