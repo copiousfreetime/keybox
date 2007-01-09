@@ -43,9 +43,8 @@ task :create_manifest => :clean do
     end
 end
 
-Webgen::Rake::WebgenTask.new do |webgen|
-    webgen.directory = "webgen"
-end
+# defaults are good here
+Webgen::Rake::WebgenTask.new(:blarggh)
 
 Spec::Rake::SpecTask.new do |t|
     t.warning   = true

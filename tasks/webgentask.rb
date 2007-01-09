@@ -58,7 +58,7 @@ module Webgen
         #                       a parameter to new (default :webgen)
         # * directory         - the root directory of the webgen site
         #                       (default File.join(Dir.pwd, "webgen")
-        # * clobber_directory - remove +directory+ during clobber
+        # * clobber_outdir    - remove webens output directory on clobber
         #                       (default false)
         # 
         # === Tasks Provided
@@ -72,7 +72,7 @@ module Webgen
         # to relect that.  For Example:
         #
         #   Webgen::Rake::WebgenTask.new(:my_webgen) do |t|
-        #       t.clobber_directory = true
+        #       t.clobber_outdir = true
         #   end
         #
         # This will create tasks:
@@ -93,20 +93,22 @@ module Webgen
             #   File.join(Dir.pwd,"webgen")
             attr_accessor :directory
 
-            # During the clobber, should +directory+ be removed
-            # default is false
-            attr_accessor :clobber_directory
+            # During the clobber, should webgen's output directory be
+            # clobbered.  The default is false
+            attr_accessor :clobber_outdir
 
             # Create a webgen task
             def initialize(name = :webgen)
                 @name               = name
                 @directory          = File.join(Dir.pwd, "webgen")
-                @clobber_directory  = false
+                @clobber_outdir  = false
 
                 yield self if block_given?
 
                 @website        = Webgen::WebSite.new @directory
                 @out_dir        = File.expand_path(@website.param_for_plugin('Core/Configuration', 'outDir'))
+                
+                @rendered_files = FileList.new
 
                 define
             end
@@ -120,7 +122,13 @@ module Webgen
                             # current directory when it runs
                             @website.render
                             puts "Webgen rendered to : #{@out_dir}"
-                            @rendered_files << @website.manager['Misc/RenderedFiles'].files
+                            
+                            file_list = @website.manager['Misc/RenderedFiles'].files
+
+                            # remove @out_dir from the list of rendered_files
+                            file_list.delete @out_dir
+
+                            @rendered_files << file_list
                         rescue => e
                             puts "Webgen task failed: #{e}"
                             raise e
@@ -130,22 +138,23 @@ module Webgen
 
                 clobber_task = paste("clobber_",@name)
 
+                # bit of conundrum here since we don't know what files
+                # to remove until they have been generated, so we have
+                # to generate all the files to remove them.
+                #
+                # I don't know of the right way to do this yet.
                 desc "Remove webgen products"
-                task clobber_task do 
-                    puts @rendered_files
-                    #rm_r @rendered_files rescue nil
+                task clobber_task => [@name] do 
+                    rm_rf @rendered_files
+                    if @clobber_outdir then
+                        rm_r @out_dir rescue nil
+                    end
                 end
                 
                 task :clobber => [clobber_task]
-                task @name => clobber_task
                 self
             end
 
-            # callback method for add_msg_listener
-            def call(node)
-                puts node.path
-                @rendered_files << node.path
-            end
         end
     end
 end
