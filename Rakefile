@@ -1,11 +1,14 @@
 
 $: << "./lib"
-$: << "./tasks"
 
 require 'rubygems'
 require 'spec/rake/spectask'
 require 'hoe'
 require 'keybox'
+
+# get the webgen task
+$: << "./tasks"
+require 'webgentask'
 
 hoe = Hoe.new('keybox', Keybox::VERSION.join(".")) do |p|
   p.rubyforge_name  = 'keybox'
@@ -40,8 +43,9 @@ task :create_manifest => :clean do
     end
 end
 
-desc "Create the website with webgen"
-task :create_website => 
+Webgen::Rake::WebgenTask.new do |webgen|
+    webgen.directory = "webgen/"
+end
 
 Spec::Rake::SpecTask.new do |t|
     t.warning   = true
