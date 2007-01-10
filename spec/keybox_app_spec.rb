@@ -61,7 +61,7 @@ context "Keybox Password Safe Application" do
     end
 
     specify "more than one command options is an error" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--add", "accont", "--edit", "account"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--add", "account", "--edit", "account"])
         kps.stderr = StringIO.new
         kps.stdout = StringIO.new
         begin
@@ -72,6 +72,21 @@ context "Keybox Password Safe Application" do
             se.status.should_eql 1
         end
     end
+
+    specify "space separated words are okay for names" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--add", "An Example"])
+        kps.stderr = StringIO.new
+        kps.stdout = StringIO.new
+        prompted_values = [@passphrase, "An example"] + %w(example.com someuser apassword apassword noinfo yes)
+        kps.stdin  = StringIO.new(prompted_values.join("\n"))
+        begin
+            kps.run
+        rescue
+            puts kps.stderr
+        end
+        kps.db.records.size.should_eql 3
+    end
+
 
     specify "invalid options set the error message, exit 1 and have output on stderr" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"--invalid-option"])

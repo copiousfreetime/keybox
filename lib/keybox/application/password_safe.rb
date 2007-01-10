@@ -160,10 +160,16 @@ module Keybox
                 entry = Keybox::HostAccountEntry.new(account, account)
 
                 if @options.use_password_hash_for_url then
-                    account_uri = URI.parse(account) 
-                    if not account_uri.scheme.nil? then
-                        entry = Keybox::URLAccountEntry.new(account,account)
+                    begin 
+                        account_uri = URI.parse(account) 
+                        if not account_uri.scheme.nil? then
+                            entry = Keybox::URLAccountEntry.new(account,account)
+                        end
+                    rescue ::URI::InvalidURIError => e
+                        # just ignore it, we're fine with the Host
+                        # Account Entry
                     end
+
                 end
 
                 gathered = false
