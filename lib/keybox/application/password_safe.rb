@@ -215,19 +215,22 @@ module Keybox
             #
             def list(account)
                 matches = @db.find(account)
+                title           = "Title"
+                username        = "Username"
                 add_info        = "Additional Information"
                 if matches.size > 0 then
                     lengths = {
-                        :title              =>  matches.collect { |f| f.title.length }.max,
-                        :username           =>  matches.collect { |f| f.username.length }.max,
+                        :title              => (matches.collect { |f| f.title.length } << title.length).max,
+                        :username           => (matches.collect { |f| f.username.length } << username.length).max,
                         :additional_info    => add_info.length
                     }
-                    full_length = lengths.values.inject(0) { |sum,n| sum + n}
 
-                    color_puts "  # #{"Title".ljust(lengths[:title])}    #{"Username".ljust(lengths[:username])}    #{add_info}", :yellow
+                    full_length = lengths.values.inject(0) { |sum,n| sum + n}
+                    header = "  # #{"Title".ljust(lengths[:title])}    #{"Username".ljust(lengths[:username])}    #{add_info}"
+                    color_puts header, :yellow 
                     #  3 spaces for number column + 1 space after and 4 spaces between
                     #  each other column
-                    color_puts "-" * (4 +  4 +  4 + full_length), :blue, false
+                    color_puts "-" * (header.length), :blue, false
 
                     matches.each_with_index do |match,i|
                         color_print sprintf("%3d ", i + 1), :white

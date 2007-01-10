@@ -44,7 +44,7 @@ task :create_manifest => :clean do
 end
 
 # defaults are good here
-Webgen::Rake::WebgenTask.new(:blarggh)
+Webgen::Rake::WebgenTask.new
 
 Spec::Rake::SpecTask.new do |t|
     t.warning   = true

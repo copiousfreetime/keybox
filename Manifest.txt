@@ -1,7 +1,6 @@
 README.txt
 History.txt
 Manifest.txt
-db-format.textile
 db-formats-other.textile
 bin/keybox
 bin/kpg
