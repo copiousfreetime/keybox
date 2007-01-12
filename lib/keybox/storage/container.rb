@@ -67,7 +67,7 @@ module Keybox
                 decrypt_records
                 validate_decryption
                 load_records
-                self.modified = false
+                @modified = false
                 true
             end
 
@@ -80,6 +80,12 @@ module Keybox
                 File.open(path,"w") do |f|
                     f.write(self.to_yaml)
                 end
+
+                # mark everything as not modified
+                @records.each do |record|
+                    record.modified = false
+                end
+                @modified = false
             end
 
             #
@@ -157,14 +163,6 @@ module Keybox
                     return true if record.modified?
                 end
                 return false
-            end
-
-            def modified=(m)
-                super(m)
-                #@records.each do |record|
-                #    record.modified = m
-                #end
-                modified?
             end
 
             private

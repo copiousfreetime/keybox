@@ -38,6 +38,7 @@ context 'a storage container' do
     specify "should load correctly from a file" do
         @container.save(@testing_file)
         new_container = Keybox::Storage::Container.new(@passphrase,@testing_file)
+        new_container.should_be_not_modified
         new_container.uuid.should == @container.uuid
     end
 
@@ -77,7 +78,7 @@ context 'a storage container' do
         times_1.should_eql times_2
     end
 
-    specify "a freshly loaded db has not been modified" do
+    specify "should not be modified upon load" do 
         @container.modified?.should_eql false
     end
 

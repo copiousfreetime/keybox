@@ -259,4 +259,3 @@ context "Keybox Password Safe Application" do
         kps.stdout.string.should_satisfy { |msg| msg =~ /Exported \d* records to/m }
     end
 end
-

@@ -34,12 +34,11 @@ module Keybox
                 @modified
             end
 
+            # this is here so that after this class has been serialized
+            # to a file the container can mark it as clean.  The class
+            # should take care of marking itself dirty.
             def modified=(value)
                 @modified = value
-                if value then
-                    @modification_time        = Time.now
-                    @last_access_time         = @modification_time.dup
-                end
             end
 
             def method_missing(method_id, *args)
@@ -58,7 +57,9 @@ module Keybox
                 if method_name[-1].chr == "=" then
                     raise ArgumentError, "'#{method_name}' requires one and only one argument", caller(1) unless args.size == 1
                     @data_members[member_sym] = args[0]
-                    self.modified = true
+                    @modified = true
+                    @modification_time        = Time.now
+                    @last_access_time         = @modification_time.dup
                 elsif args.size == 0 then
                     @last_access_time = Time.now
                     @data_members[member_sym]
