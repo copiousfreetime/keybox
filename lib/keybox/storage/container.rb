@@ -67,6 +67,7 @@ module Keybox
                 decrypt_records
                 validate_decryption
                 load_records
+                self.modified = false
                 true
             end
 
@@ -79,7 +80,6 @@ module Keybox
                 File.open(path,"w") do |f|
                     f.write(self.to_yaml)
                 end
-                self.modified = false
             end
 
             #
@@ -111,10 +111,13 @@ module Keybox
             end
 
             #
-            # Delete a record from the system
+            # Delete a record from the system, we force a modified flag
+            # here since the underlying Record wasn't 'assigned to' we
+            # have to force modification notification.
             #
             def delete(obj)
                 @records.delete(obj)
+                @modified = true
             end
 
             def find_by_url(url)
@@ -149,7 +152,7 @@ module Keybox
             # modified
             #
             def modified?
-                return true if @modified
+                return true if super
                 @records.each do |record|
                     return true if record.modified?
                 end
@@ -157,13 +160,13 @@ module Keybox
             end
 
             def modified=(m)
-                @modified = m
-                @records.each do |record|
-                    record.modified = m
-                end
+                super(m)
+                #@records.each do |record|
+                #    record.modified = m
+                #end
                 modified?
             end
- 
+
             private
 
             #
@@ -222,7 +225,7 @@ module Keybox
                 @records = YAML.load(@decrypted_yaml)
 
                 # if a record wants, it can have a reference to the
-                # container
+                # container.
                 @records.each do |record|
                     if record.respond_to?("needs_container_passphrase?") and record.needs_container_passphrase? then
                         record.container_passphrase = @passphrase

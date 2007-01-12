@@ -53,7 +53,8 @@ module Keybox
                     csv_reader.each do |row|
                         entry = Keybox::HostAccountEntry.new
                         field_indexes.each_pair do |field,index|
-                            entry.send("#{field}=",row[index] || "")
+                            value = row[index] || ""
+                            entry.send("#{field}=",value.strip)
                         end
                         entries << entry
                     end

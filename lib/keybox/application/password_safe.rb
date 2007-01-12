@@ -200,7 +200,6 @@ module Keybox
                 matches = @db.find(account)
                 count = 0
                 matches.each do |match|
-
                     color_puts "-" * 40, :blue
                     @stdout.puts match
                     color_puts "-" * 40, :blue
@@ -361,7 +360,10 @@ module Keybox
                     self.send(action, param)
 
                     if @db.modified? then 
+                        color_puts "Database modified, saving.", :green
                         @db.save
+                    else
+                        color_puts "Database not modified.", :green
                     end
                 rescue SignalException => se
                     @stdout.puts
