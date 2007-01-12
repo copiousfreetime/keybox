@@ -46,7 +46,7 @@ module Keybox
                     @@DEVICES << device
                     @@DEFAULT = device
                 else
-                    raise "device #{device} is not readable and therefore makes a bad random device"
+                    raise ArgumentError, "device #{device} is not readable and therefore makes a bad random device"
                 end
             end
 
@@ -136,7 +136,7 @@ module Keybox
         attr_reader :random_source
 
         def initialize(random_source_klass = ::Keybox::RandomSource)
-            raise "Invalid random source class" unless random_source_klass.respond_to?("rand")
+            raise ArgumentError, "Invalid random source class" unless random_source_klass.respond_to?("rand")
             @random_source = random_source_klass
         end
 
@@ -145,7 +145,7 @@ module Keybox
         end
 
         def pick_count_from(array, count = 1)
-            raise "Unable to pick from object of class #{array.class.name}" unless has_correct_duck_type?(array)
+            raise ArgumentError, "Unable to pick from object of class #{array.class.name}" unless has_correct_duck_type?(array)
             results = []
             range = array.size
             count.times do

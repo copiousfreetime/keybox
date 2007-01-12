@@ -46,9 +46,7 @@ context 'a storage container' do
         nc = Keybox::Storage::Container.new("i love ruby", @keybox_file)
         nc.save(@testing_file)
         nc.key_digest.should_eql @container.key_digest
-        lambda {
-            Keybox::Storage::Container.new("i hate ruby", @testing_file)
-        }.should_raise Keybox::ValidationError
+        lambda { Keybox::Storage::Container.new("i hate ruby", @testing_file) }.should_raise Keybox::ValidationError
 
     end
 

@@ -11,7 +11,7 @@ context "CSV Convert class" do
 
         @bad_import_csv = Tempfile.new("keybox_bad_header.csv")
         # missing a valid header
-        @bad_import_csv.puts "title,host,username,password,additional_info"
+        @bad_import_csv.puts "ttle,host,username,password,additional_info"
         @bad_import_csv.puts "example host,host.example.com,guest,mysecretpassword,use this account only for honeybots"
         @bad_import_csv.puts "example site,http://www.example.com,guest,mywebpassword,web forum login"
 
@@ -33,9 +33,7 @@ context "CSV Convert class" do
     end
 
     specify "throws error if the header is bad" do
-        lambda {
-            Keybox::Convert::CSV.from_file(@bad_import_csv.path)
-        }.should_raise Keybox::ValidationError
+        lambda { Keybox::Convert::CSV.from_file(@bad_import_csv.path) }.should_raise Keybox::ValidationError
     end
 
     specify "able to write to a csv file" do

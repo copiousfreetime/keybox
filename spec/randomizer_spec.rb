@@ -14,7 +14,7 @@ context "a random device class" do
     end
 
     specify "should raise exception when given an invalid device" do
-        Proc.new {Keybox::RandomDevice.default = "/tmp/junk" }.should_raise
+        Proc.new {Keybox::RandomDevice.default = "/tmp/junk" }.should_raise ArgumentError
     end
 
     specify "should be able to assign a new default source" do
@@ -94,11 +94,11 @@ context "a randomzier instance" do
     end
 
     specify "giving an invalid default random source should raise an exception" do
-        lambda { r = Keybox::Randomizer.new(Array) }.should_raise
+        lambda { r = Keybox::Randomizer.new(Array) }.should_raise ArgumentError
     end
 
     specify "picking from a non-array should raise an exception" do
-        lambda { @randomizer.pick_count_from(@hash) }.should_raise
+        lambda { @randomizer.pick_count_from(@hash) }.should_raise ArgumentError
     end
 
     specify "picking one from an array should be okay" do

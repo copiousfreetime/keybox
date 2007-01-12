@@ -79,11 +79,7 @@ context "Keybox Password Safe Application" do
         kps.stdout = StringIO.new
         prompted_values = [@passphrase, "An example"] + %w(example.com someuser apassword apassword noinfo yes)
         kps.stdin  = StringIO.new(prompted_values.join("\n"))
-        begin
-            kps.run
-        rescue
-            puts kps.stderr
-        end
+        kps.run
         kps.db.records.size.should_eql 3
     end
 
