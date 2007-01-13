@@ -18,7 +18,8 @@ require 'keybox'
 # published to I'll migrate this to using hoe.
 #-----------------------------------------------------------------------
 PKG_INFO = OpenStruct.new
-PKG_INFO.rubyforge_name = 'keybox'
+PKG_INFO.name           = "Keybox"
+PKG_INFO.rubyforge_name = PKG_INFO.name.downcase
 PKG_INFO.summary        = Keybox::DESCRIPTION
 PKG_INFO.description    = Keybox::DESCRIPTION
 PKG_INFO.url            = Keybox::HOMEPAGE
