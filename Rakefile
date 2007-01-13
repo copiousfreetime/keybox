@@ -6,10 +6,7 @@ require 'rubygems'
 require 'rake/gempackagetask'
 require 'rake/clean'
 require 'rake/rdoctask'
-require 'rake/contrib/sshpublisher'
-require 'rubyforge'
 require 'spec/rake/spectask'
-require 'webgen/rake/webgentask'
 require 'keybox'
 
 #-----------------------------------------------------------------------
@@ -32,8 +29,9 @@ PKG_INFO.version        = Keybox::VERSION.join(".")
 PKG_INFO.rdoc_dir       = "doc/rdoc"
 PKG_INFO.rdoc_main      = "README"
 PKG_INFO.rdoc_title     = "#{PKG_INFO.name} - #{PKG_INFO.version}"
-PKG_INFO.rdoc_options   = [ "--line-numbers", "--inline-source" ]
-PKG_INFO.rdoc_files     = FileList['README', 'CHANGES', 'lib/**/*.rb']
+PKG_INFO.rdoc_options   = [ "--line-numbers" , "--inline-source"]
+PKG_INFO.rdoc_files     = FileList['README', 'CHANGES', 'COPYING',
+                                   'lib/**/*.rb','bin/**']
 PKG_INFO.file_list      = FileList['bin/**', 
                                    'resource/**',
                                    'spec/**/*.rb'] + PKG_INFO.rdoc_files
@@ -66,7 +64,7 @@ spec = Gem::Specification.new do |s|
 
     s.extra_rdoc_files      = FileList["*.txt"]
     s.has_rdoc              = true 
-    s.rdoc_options          = PKG_INFO.rdoc_options
+    s.rdoc_options.concat(PKG_INFO.rdoc_options)
 
     s.post_install_message  = PKG_INFO.message
 end
@@ -81,10 +79,18 @@ task :install_gem => [:clean, :package] do
     sh "sudo gem install pkg/*.gem"
 end
 
+#-----------------------------------------------------------------------
+# Documentation and Testing (rspec)
+#-----------------------------------------------------------------------
 
-#-----------------------------------------------------------------------
-# Testing - using rspec instead of unit testing
-#-----------------------------------------------------------------------
+rd = Rake::RDocTask.new do |rdoc|
+    rdoc.rdoc_dir   = PKG_INFO.rdoc_dir
+    rdoc.title      = PKG_INFO.rdoc_title
+    rdoc.main       = PKG_INFO.rdoc_main
+    rdoc.rdoc_files = PKG_INFO.rdoc_files
+    rdoc.options.concat(PKG_INFO.rdoc_options)
+end
+
 rspec = Spec::Rake::SpecTask.new do |r|
     r.warning   = true
     r.rcov      = true
@@ -92,23 +98,40 @@ rspec = Spec::Rake::SpecTask.new do |r|
     r.libs      << "./lib" 
 end
 
-#CLOBBER << rspec.rcov_dir
+# the coverage report is considered documentation
+desc "Generate all documentation"
+task :docs => [:rdoc,:spec] 
 
 #-----------------------------------------------------------------------
-# Documentation
+# if we are in the project source code control sandbox then there are
+# other tasks available.
 #-----------------------------------------------------------------------
+if File.directory?("_darcs") then
+    # create the website for use on rubyforge
+    require 'webgen/rake/webgentask'
+    Webgen::Rake::WebgenTask.new
 
-rd = Rake::RDocTask.new => [:changelog] do |rdoc|
-    rdoc.rdoc_dir   = PKG_INFO.rdoc_dir
-    rdoc.title      = PKG_INFO.rdoc_title
-    rdoc.main       = PKG_INFO.rdoc_main
-    rdoc.options    << PKG_INFO.rdoc_options
-    rdoc.rdoc_files = PKG_INFO.rdoc_files
+    # generate the content for the website
+    task :publish_docs => [:webgen, :rdoc, :spec]
+
+    # push the website and all documentation to rubyforge
+    require 'rubyforge'
+    require 'yaml'
+    desc "Sync #{PKG_INFO.publish_dir} with rubyforge site"
+    task :sync_rubyforge do |rf|
+        rf_config = YAML::load(File.read(File.join(ENV["HOME"],".rubyforge","user-config.yml")))
+        dest_host = "#{rf_config['username']}@rubyforge.org"
+        dest_dir  = "/var/www/gforge-projects/#{PKG_INFO.rubyforge_name}"
+
+        # trailing slash on source, none on destination
+        sh "rsync -zav --delete #{PKG_INFO.publish_dir}/ #{dest_host}:#{dest_dir}"
+    end
+
+    desc "remove all content from the rubyforge site"
+    task :clean_rubyforge => [:clobber, :sync_rubyforge] 
+
+    desc "push the published docs to rubyforge"
+    task :publish_rubyforge => [:publish_docs, :sync_rubyforge] 
+
 end
-
-# defaults are good here
-Webgen::Rake::WebgenTask.new
-
-desc "Generate all docs"
-task :docs => [:rdoc,:webgen,:spec] 
 
