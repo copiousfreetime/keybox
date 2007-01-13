@@ -1,0 +1,15 @@
+= keybox Changelog
+
+=== Version 1.0.0
+
+* Initial public release
+* +keybox+ - Full basic funcationality available
+  - creation of database
+  - basic CRUD operations
+  - searching implemented
+  - import and export of CSV's implemented
+* +kpg+ - Full basic functionality available
+  - pick between random and pronounceable passwords
+  - set minimum and maximum password length
+  - set symbol sets to use in password generation
+

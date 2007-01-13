@@ -67,7 +67,14 @@ included ruby libraries and could be embedded in other applications.
 
 == REQUIREMENTS:
 
+=== For running: 
 * A basic ruby install that includes the OpenSSL libraries.
+
+=== For development:
+* A basic ruby install that includes the OpenSSL libraries.
+* rake
+* webgen >= 0.4.1
+* rspec  >= 0.7.3
 
 == INSTALL:
 

@@ -8,6 +8,10 @@ module Keybox
     AUTHOR_EMAIL= "jeremy@hinegardner.org".freeze
     HOMEPAGE    = "http://keybox.rubyforge.org".freeze
     COPYRIGHT   = "2006, 2007 #{AUTHOR}".freeze
+    DESCRIPTION = <<DESC
+Keybox is a set of command line applications and ruby libraries for
+secure password storage and password generation. 
+DESC
 end
 
 $: << Keybox::APP_LIB_DIR
