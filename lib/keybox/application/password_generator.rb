@@ -21,8 +21,8 @@ module Keybox
                     op.separator "Options:"
 
                     op.on("-aALGORITHM", "--algorithm ALGORITHM", ALGORITHMS.keys,
-                          "Select the algorithm for password generation",
-                          " #{ALGORITHMS.keys.join(', ')}") do |alg|
+                          "Select the algorithm for password ", 
+                          "  generation (#{ALGORITHMS.keys.join(', ')})") do |alg|
                            key = ALGORITHMS.keys.find { |x| x =~ /^#{alg}/ }
                             @parsed_options.algorithm = ALGORITHMS[key]
                     end
@@ -32,12 +32,12 @@ module Keybox
                     end
 
                     op.on("-mLENGTH ", "--min-length LENGTH", Integer,
-                           "Minimum LENGTH of the new password in letters") do |len|
+                           "Minimum LENGTH of the new password","  in letters") do |len|
                         @parsed_options.min_length = len
                     end
                     
                     op.on("-xLENGTH ", "--max-length LENGTH", Integer,
-                           "Maximum LENGTH of the new password in letters") do |len|
+                           "Maximum LENGTH of the new password","  in letters") do |len|
                         @parsed_options.max_length = len
                     end
                     
@@ -47,8 +47,8 @@ module Keybox
                     end
 
                     op.on("-uLIST", "--use symbol,set,list", Array,
-                          "Use only one ore more of the following symbol sets:",
-                          " [#{SYMBOL_SETS.join(', ')}]") do |list|
+                          "Use only one ore more of the following", "  symbol sets:",
+                          "  [#{SYMBOL_SETS.join(', ')}]") do |list|
                         list.each do |symbol_set|
                             sym = SYMBOL_SETS.find { |s| s =~ /^#{symbol_set}/ }
                             raise OptionParser::InvalidArgument, ": #{symbol_set} does not match any of #{SYMBOL_SETS.join(', ')}" if sym.nil?
@@ -58,8 +58,8 @@ module Keybox
                     end
 
                     op.on("-rLIST","--require symbol,set,list", Array,
-                          "Require passwords to have letters from one or more of the following symbol sets:",
-                          " [#{SYMBOL_SETS.join(', ')}]") do |list|
+                          "Require passwords to have letters from", "  one or more of the following",
+                          "  symbol sets:", "  [#{SYMBOL_SETS.join(', ')}]") do |list|
                         list.each do |symbol_set|
                             sym = SYMBOL_SETS.find { |s| s =~ /^#{symbol_set}/ }
                             raise OptionParser::InvalidArgument, ": #{symbol_set} does not match any of #{SYMBOL_SETS.join(', ')}" if sym.nil?

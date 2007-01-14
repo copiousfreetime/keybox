@@ -36,3 +36,4 @@
 
 # project directories
 doc/*
+pkg/*

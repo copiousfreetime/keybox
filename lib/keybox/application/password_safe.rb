@@ -52,7 +52,7 @@ module Keybox
                         @parsed_options.debug = true
                     end
 
-                    op.on("--[no-]use-hash-for-url", "Use the password hash algorithm for URL accounts") do |r|
+                    op.on("--[no-]use-hash-for-url", "Use the password hash algorithm ", "  for URL accounts") do |r|
                         @parsed_options.use_password_hash_for_url = r
                     end
 
@@ -76,7 +76,7 @@ module Keybox
                         @actions << [:edit, account]
                     end
                     
-                    op.on("-l", "--list [REGEX]", "List the matching accounts (no argument will list all)") do |regex|
+                    op.on("-l", "--list [REGEX]", "List the matching accounts", "  (no argument will list all)") do |regex|
                         regex = regex || ".*"
                         @actions << [:list, regex]
                     end
@@ -115,7 +115,7 @@ module Keybox
                 options.show_version                = false
                 options.config_file                 = Keybox::Application::PasswordSafe::DEFAULT_CONFIG
                 options.db_file                     = Keybox::Application::PasswordSafe::DEFAULT_DB
-                options.use_password_hash_for_url   = true
+                options.use_password_hash_for_url   = false
                 return options
             end
 
