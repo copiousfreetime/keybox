@@ -9,18 +9,170 @@ h1. Screenshots of *keybox*
 
 keybox is a commandline application so take these with a grain of salt.
 
-h2. Creating initial database
+h2. Creating initial database and adding an entry
 
-h2. Adding an entry
+<pre>
+<code>
+    % keybox --add me
+    Creating initial database.
+    Initial Password for (/home/jeremy/.keybox/database.yaml) : ***********
+    Initial Password for (/home/jeremy/.keybox/database.yaml) (again) : ***********
+    Gathering information for entry 'me'
+                   title [me] : 
+                hostname [me] : 
+                  username [] : me
+                     password : ****
+             password (again) : ****
+           additional_info [] : ruby
+    ----------------------------------------
+               title : me
+            hostname : me
+            username : me
+            password :  ***** private ***** 
+     additional_info : ruby
+    ----------------------------------------
+    Is this information correct (y/n) [N] ? : y
+    Adding me to database
+    Database modified, saving.
+</code>
+</pre>
+
+h2. Importing data from a CSV
+
+<pre>
+<code>
+    % keybox --import /tmp/secret-passwords.csv
+    Password for (/home/jeremy/.keybox/database.yaml) : ***********
+    Imported 3 records from /tmp/secret-passwords.csv.
+    Database modified, saving.
+</code>
+</pre>
 
 h2. Searching for an entry
 
+<pre>
+<code>
+    % keybox --list test
+    Password for (/home/jeremy/.keybox/database.yaml) : ***********
+      # Title        Username    Additional Information
+    ---------------------------------------------------
+      1 testing 1    user1       -                     
+      2 testing 2    user2       regen this password on jun 12
+    Database not modified.
+</code>
+</pre>
+
 h2. Display an entry
+
+h3. As the entry is displayed
+
+<pre>
+<code>
+    % keybox --show user2
+    Password for (/home/jeremy/.keybox/database.yaml) : ***********
+      1. testing 2
+            hostname : test2.example.com
+            username : user2
+            password : p|]seA77 (press any key).
+</code>
+</pre>
+
+h3. After pressing the 'any key'
+
+<pre>
+<code>
+    % keybox --show user2
+    Password for (/home/jeremy/.keybox/database.yaml) : ***********
+      1. testing 2
+            hostname : test2.example.com
+            username : user2
+            password : ********************
+     additional_info : regen this password on jun 12
+
+    Database not modified.
+</code>
+</pre>
+
 
 h2. Remove an entry
 
+<pre>
+<code>
+    % keybox --delete user1
+    Password for (/home/jeremy/.keybox/database.yaml) : ***********
+    ----------------------------------------
+               title : testing 1
+            hostname : test1.example.com
+            username : user1
+            password :  ***** private ***** 
+     additional_info : 
+    ----------------------------------------
+    Delete this entry (y/n) [N] ? : y
+    1 records matching 'user1' deleted.
+    Database modified, saving.
+</code>
+</pre>
+
 h1. Screenshotsof *kpg*
 
-h2. Default
+h2. Defualt generation
 
+<pre>
+<code>
+    % kpg 
+    SD.>#l;4
+    7Q1#TI4+
+    vLF'8wY8
+    YDVhT|"X
+    Y0FvQC81
+    )%26bfS]
+</code>
+</pre>
 
+h2. Generate a passwords with a minimum length
+
+<pre>
+<code>
+    % kpg --min-length 12
+    poeathoUQ4
+    V3A&h3A8~n
+    ;PtG>mCNsS
+    i<wY)+x{Gb
+    yTIhbe4itL
+    @SGS3aK'}D
+</code>
+</pre>
+
+h2. Using only lower case and numbers
+
+<pre>
+<code>
+    % kpg --min-length 12 --use lower,numerical
+    itlp3ma4d0
+    pdicni3mto
+    bfzrvfxww6
+    tkchon7xuf
+    jk4ec9enpx
+    vj0t7ikpyv
+</code>
+</pre>
+
+h2. Attempt to have *pronounceable* passwords
+
+<pre>
+<code>
+    % kpg --alg pro --number 12
+    ruumefntm
+    tozymcerh
+    mvsypnaz
+    lyvlolzor
+    gemcmpnsf
+    gogenropp
+    pcseppyda
+    tidfaclik
+    nhsdexmys
+    hgrzyidst
+    hbcgezvm
+    eribittr
+</code>
+</pre>

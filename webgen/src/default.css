@@ -79,14 +79,14 @@ img.float-left {
 
 code {
   margin: 5px 0;
-  padding: 10px;
+  padding: 5px;
   text-align: left;
   display: block;
   overflow: auto;  
   font: 500 1em/1.5em 'Lucida Console', 'courier new', monospace;
   white-space: pre;
-  background: #FAFAFA;
-  border: 1px solid #EAEAEA;  
+  background: #f0f0f0;
+  border: 1px solid #a50c0c;  
   border-left: 5px solid #a50c0c;
 }
 acronym {
@@ -173,23 +173,23 @@ input.button {
    padding:0;	
    text-align: left;
    background-color:#FFF;
-   width: 790px;  	
+   width: 850px;  	
    border: solid 2px #000;
 }
 #content-wrap {
 	clear:both;
     margin:0; padding:0;
-	width: 790px;		
+	width: 850px;		
 }
 
 /* header */
 #header {
 	position: relative;
     clear:left;
-    width: 790px;
+    width: 850px;
 	height: 135px; 
 	margin: 0; padding: 0;
-	background: #000 url(images/headerbg-red.png) no-repeat left bottom;	
+	background: #000 url(images/headerbg-red.jpg) no-repeat left bottom;	
 }
 #header h1#logo-text {
 	position: absolute;
@@ -262,7 +262,7 @@ input.button {
 /* main content */
 #main {
 	float: left;
-	width: 535px;
+    width: 600px;
 	margin: 0; padding: 0;
 	background-color: inherit;
 }
@@ -277,7 +277,7 @@ input.button {
 /* sidebar */
 #sidebar {
 	float: right;
-	width: 245px;
+	width: 250px;
 	margin: 0 0 10px 0; padding: 0;
 	background-color: inherit;	
 }

@@ -1,5 +1,5 @@
 Core/Configuration:
-    loggerLevel: 2
+    loggerLevel: 1
     outDir: "../doc"
 
 MenuStyle/Default:
