@@ -7,4 +7,5 @@ MenuStyle/Default:
     selectedMenuitemClass: menu-selected
     submenuClass: sidemenu-sub
     submenuInHierarchyClass: sidemenu-inhierarchy
-
+File/CopyHandler:
+    paths: ["**/*.css", "**/*.js", "**/*.jpg", "**/*.png", "**/*.gif", "**/*.flv", "**/*.swf"]

@@ -1,7 +1,7 @@
 module Keybox
-    APP_ROOT_DIR     = File.dirname(File.expand_path(File.join(__FILE__,".."))).freeze
-    APP_LIB_DIR      = File.join(APP_ROOT_DIR,"lib").freeze
-    APP_RESOURCE_DIR = File.join(APP_ROOT_DIR,"resource").freeze
+    APP_ROOT_DIR    = File.dirname(File.expand_path(File.join(__FILE__,".."))).freeze
+    APP_LIB_DIR     = File.join(APP_ROOT_DIR,"lib").freeze
+    APP_DATA_DIR    = File.join(APP_ROOT_DIR,"data").freeze
     
     VERSION     = [1,0,0].freeze
     AUTHOR      = "Jeremy Hinegardner".freeze

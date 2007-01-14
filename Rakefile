@@ -33,8 +33,7 @@ PKG_INFO.rdoc_title     = "#{PKG_INFO.name} - #{PKG_INFO.version}"
 PKG_INFO.rdoc_options   = [ "--line-numbers" , "--inline-source"]
 PKG_INFO.rdoc_files     = FileList['README', 'CHANGES', 'COPYING',
                                    'lib/**/*.rb','bin/**']
-PKG_INFO.file_list      = FileList['bin/**', 
-                                   'resource/**',
+PKG_INFO.file_list      = FileList['data/**',
                                    'spec/**/*.rb'] + PKG_INFO.rdoc_files
 
 PKG_INFO.publish_dir    = "doc"
@@ -62,6 +61,7 @@ spec = Gem::Specification.new do |s|
 
     s.files                 = PKG_INFO.file_list
     s.require_paths         << "lib"
+    s.executables           = Dir.entries("bin").delete_if { |f| f =~ /^\./ }
 
     s.extra_rdoc_files      = FileList["*.txt"]
     s.has_rdoc              = true 
@@ -78,6 +78,11 @@ end
 desc "Install as a gem"
 task :install_gem => [:clean, :package] do
     sh "sudo gem install pkg/*.gem"
+end
+
+desc "dump_gemspec"
+task :dump_gemspec do
+    puts spec.to_ruby
 end
 
 #-----------------------------------------------------------------------

@@ -3,6 +3,8 @@ title: Demo
 ---
 h1. See keybox in action
 
+{includeFile: {filename: video/flowplayer.html, escapeHTML: false, processOutput: false }}
+
 h1. Screenshots of *keybox*
 
 keybox is a commandline application so take these with a grain of salt.
