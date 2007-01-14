@@ -12,7 +12,26 @@ a portable secure mechanism for password management.
 
 Keybox provides 2 command line applications, *keybox* and *kpg*
 
-* *keybox* %- a pure ruby command line password storage application using the embedded OpenSSL included with ruby for encryption.%
+* *keybox* %- a pure ruby command line password storage application that uses the OpenSSL libraries included with ruby for the encryption.%
 * *kpg* %- a pure ruby implementation of the Automated Password Generator (apg) program. It attempts to implemented all the functionality of 'apg', but it is not completely compatible.%
 
 h1. Features
+
+h2. keybox
+
+* *Encryption*
+** %Uses "sha-256":http://en.wikipedia.org/wiki/SHA256 for "key stretching":http://www.schneier.com/paper-low-entropy.pdf.%
+** %Uses "aes-256":http://en.wikipedia.org/wiki/Advanced_Encryption_Standard for encryption.%
+** %Other algorithms can be plugged in.%
+* %Automatic clearing of the password display after you are done using it.%
+* %Colorized output%
+* %Command line, so you can use it just about everywhere% 
+* %Multiple options for the underlying random number generator, Supports using your own hardware device%
+* %Import and export information from CSV files.%
+
+h2. kpg
+
+* %Generate passwords of specific lengths, or within ranges.%
+* %Limit or require characters from specific character sets (upper, lower, numerical,special).%
+* %Generates "sort of" pronounceable passwords.%
+* %Has an API so embed it in your own applications.%
