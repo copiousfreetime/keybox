@@ -13,6 +13,7 @@ context "Keybox Password Safe Application" do
         container << Keybox::HostAccountEntry.new("test account","localhost","guest", "rubyrocks")
         container << Keybox::URLAccountEntry.new("example site", "http://www.example.com", "rubyhacker")
         container.save
+        container.save("/tmp/jjh-db.yml")
 
         @import_csv = Tempfile.new("keybox_import.csv")
         @import_csv.puts "title,hostname,username,password,additional_info"
@@ -148,8 +149,18 @@ context "Keybox Password Safe Application" do
         kps.db.records.size.should_eql 3
     end
 
+    specify "editing an entry in the database works" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--edit", "localhost"])
+        kps.stdout = StringIO.new
+        prompted_values = [@passphrase] + %w(yes example.com example.com someother anewpassword anewpassword someinfo yes)
+        kps.stdin  = StringIO.new(prompted_values.join("\n"))
+        kps.run
+        kps.db.records.size.should_eql 2
+        kps.db.find("someother")[0].additional_info.should_eql "someinfo"
+    end
+
     specify "add a url entry to the database" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--add", "http://www.example.com"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--use-hash-for-url", "--add", "http://www.example.com"])
         kps.stdout = StringIO.new
         prompted_values = [@passphrase] + %w(www.example.com http://www.example.com someuser noinfo yes)
         kps.stdin  = StringIO.new(prompted_values.join("\n"))

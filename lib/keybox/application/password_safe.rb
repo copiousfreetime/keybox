@@ -171,10 +171,17 @@ module Keybox
                     end
 
                 end
+                new_entry = gather_info(entry)
+                color_puts "Adding #{new_entry.title} to database", :green
+                @db << new_entry
+            end
 
+            #
+            # Gather all the information for the 
+            def gather_info(entry)
                 gathered = false
                 while not gathered do
-                    color_puts "Gathering information for entry '#{account}'", :yellow
+                    color_puts "Gathering information for entry '#{entry.title}'", :yellow
 
                     entry = fill_entry(entry)
 
@@ -189,8 +196,7 @@ module Keybox
                     end
                 end
 
-                color_puts "Adding #{entry.title} to database", :green
-                @db << entry
+                entry
             end
 
             #
@@ -210,6 +216,28 @@ module Keybox
                     end
                 end
                 color_puts "#{count} records matching '#{account}' deleted.", :green
+            end
+
+            #
+            # edit an entry in the database
+            #
+            def edit(account)
+                matches = @db.find(account)
+                count = 0
+                matches.each do |match|
+                    color_puts "-" * 40, :blue
+                    @stdout.puts match
+                    color_puts "-" * 40, :blue
+
+                    if prompt_y_n("Edit this entry (y/n) [N] ?") then
+                        entry = gather_info(match)
+                        @db.delete(match)
+                        @db << entry
+                        count += 1
+                        color_puts "Entry '#{entry.title}' updated.", :green
+                    end
+                end
+                color_puts "#{count} records matching '#{account}' edited.", :green
             end
 
             #

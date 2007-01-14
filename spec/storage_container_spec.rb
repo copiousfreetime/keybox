@@ -91,4 +91,9 @@ context 'a storage container' do
         @container.delete(ll)
         @container.modified?.should_eql true
     end
+
+    specify "able to see how many items are in the container" do
+        @container.size.should_eql 2
+        @container.length.should_eql 2
+    end
 end

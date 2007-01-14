@@ -116,6 +116,14 @@ module Keybox
                 @records << obj
             end
 
+            def length
+                @records.size
+            end
+
+            def size
+                @records.size
+            end
+
             #
             # Delete a record from the system, we force a modified flag
             # here since the underlying Record wasn't 'assigned to' we
