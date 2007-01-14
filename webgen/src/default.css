@@ -137,6 +137,30 @@ input.button {
 	background: #CCC url(imgaes/buttonbg.gif) repeat-x left bottom; 
 	color: #333;/* color: #993311; */
 }
+/* table design */
+table {
+    margin: 10px;
+    background: #fff;
+    padding: 5px;
+    border-collapse: collapse;
+}
+
+tr {
+
+    border-bottom: 1px solid #ccc;
+}
+
+tr th {
+    margin: 0;
+    background: #CCC;
+    font: bolder 12px Arial, Sans-serif;
+    letter-spacing: 2px;
+    padding: 2px;
+}
+td {
+    margin: 0;
+    padding: 2px;
+}
 
 /* search */
 #sidebar #search {

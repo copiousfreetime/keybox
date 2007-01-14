@@ -38,7 +38,7 @@
             <li><a href="kpg-cmdline-help.html">kpg --help</a></li>
             <li><a href="keybox-db-format.html">Keybox db format</a></li>
             <li><a href="password-safe-db-format.html">Password Safe db format</a></li>
-            <li><a href="keypassx-db-format.html">KeyPassX db format</a></li>
+            <li><a href="keepassx-db-format.html">KeePassX db format</a></li>
             <li><a href="rdoc/index.html">RDoc</a></li>
             <li><a href="coverage/index.html">rcov report</a></li>
 
