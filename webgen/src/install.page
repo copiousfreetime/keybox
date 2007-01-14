@@ -8,7 +8,11 @@ includes the OpenSSL libraries as part of the standard lib.
 
 The simplest install for keybox is via rubygems:
 
-@gem install keybox@
+<pre>
+<code>
+    gem install keybox
+</code>
+</pre>
 
 h1. Installing on a USB key or portable storage device
 
