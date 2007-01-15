@@ -9,6 +9,61 @@ require 'yaml'
 
 module Keybox
     module Storage
+        ##
+        # The container of the Keybox records.  The Container itself is
+        # a Keybox::Storage::Record with a few extra methods.
+        #
+        # A instance of a Container is created with a assprhase and a
+        # path to a file.  The passphrase can be anything that has a
+        # to_s method.
+        #
+        #   container = Keybox::Storage::Container.new("i love ruby", "/tmp/database.yml")
+        #
+        # This will load from the given file with the given passphrase
+        # if the file exists, or it will initalize the container to
+        # accept records.
+        #
+        # The records are held decrypted in memory, so keep that in mind
+        # if that is a concern.
+        #  
+        # Add Records
+        #
+        #   record = Keybox::Storage::Record.new
+        #   record.field1 = "data"
+        #   record.field1 = "some more data"
+        #   
+        #   container << record
+        #
+        # Delete Records
+        #
+        #   container.delete(record)
+        # 
+        # There is no 'update' record, just delete it and add it.
+        #
+        # Find a record accepts a string and will look in all the
+        # records it contains for anything that matches it.  It coerces
+        # strings into +Regexp+ so any regex can be used here too.
+        #
+        #   container.find("data")
+        #
+        # Report if the container or any of its records have been
+        # modified:
+        #
+        #   container.modified?
+        #
+        # Save the container to its default location:
+        #
+        #   container.save
+        #
+        # Or to some other location
+        #
+        #   container.save("/some/other/path.yml")
+        # 
+        # Direct access to the decrypted records is also available
+        # through the +records+ accessor.
+        #
+        #   container.records #=> Array of Keybox::Storage::Record
+        #
         class Container < Keybox::Storage::Record
 
             attr_reader     :records
@@ -116,10 +171,16 @@ module Keybox
                 @records << obj
             end
 
+            #
+            # The number of Records in the Container
+            #
             def length
                 @records.size
             end
 
+            #
+            # The number of Records in the Container
+            #
             def size
                 @records.size
             end
@@ -134,6 +195,9 @@ module Keybox
                 @modified = true
             end
 
+            #
+            # Search only records that have a +url+ field
+            #
             def find_by_url(url)
                 find(url,%w(url))
             end

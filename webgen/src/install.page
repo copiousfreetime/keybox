@@ -1,7 +1,7 @@
 ---
 title: Install
 ---
-h1. General Installation
+h1. Quick Installation
 
 There are no prerequisites other than a basic ruby install that
 includes the OpenSSL libraries as part of the standard lib.
@@ -14,7 +14,28 @@ The simplest install for keybox is via rubygems:
 </code>
 </pre>
 
-h1. Installing on a USB key or portable storage device
+h1. Installing without gems.
 
-TODO
+Keybox does not require any gems to operate from an end-user perspective
+so you can just download the .tgz or .zip file from Rubyforge and
+extract it into a directory.  
+
+<pre>
+<code>
+    % tar zvf keybox-1.0.0.tgz
+    % cd keybox-1.0.0
+    % ./bin/keybox --help
+</code>
+</pre>
+
+Then to utilize it with non-standard locations for the *config.yaml* and
+*database.yaml* you would just use the command line options.  So for
+instance I had a usb drive that had keybox locally on it and I had a
+directory in it =<drive-root>/keybox/my-data=
+
+<pre>
+<code
+
+
+
 

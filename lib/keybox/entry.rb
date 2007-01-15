@@ -110,7 +110,17 @@ module Keybox
     end
 
     #
-    # Host Accounts are those typical login accounts on machines
+    # Host Accounts are those typical login accounts on machines.  These
+    # contain at a minimum the fields:
+    #
+    #   - title
+    #   - hostname
+    #   - username
+    #   - pasword
+    #   - additional_info
+    #
+    # Since HostAccountEntry is a descendant of Keybox::Storage::Record
+    # other fields may be added dynamically.
     #
     class HostAccountEntry < Keybox::AccountEntry
         
@@ -133,11 +143,23 @@ module Keybox
     end
 
     #
-    # URLAccounts do not have a password.  It is calculated based upon
-    # the URL and the master password for the database.
+    # URLAccounts do not have a +password+ field, although it appears
+    # to. It is calculated based upon the URL and the master password
+    # for the Container.  The minimum fields for URLAccountEntry are:
     #
-    # This class requires a handle to the container so that it can
-    # calculate the password for the account.
+    #   - title
+    #   - url
+    #   - username
+    #   - additional_info
+    #
+    # This is inspired by http://crypto.stanford.edu/PwdHash/ and
+    # http://www.xs4all.nl/~jlpoutre/BoT/Javascript/PasswordComposer/
+    #
+    # This class also needs to be told the container's passphrase to
+    # calculate its own password.
+    #
+    # TODO: Have this class use any other Keybox::Storage::Record
+    # for the master password instead of the container.
     #
     class URLAccountEntry < Keybox::AccountEntry
         class << self

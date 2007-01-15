@@ -1,9 +1,24 @@
 module Keybox
     module Storage
 
-        # 
+        ## 
         # Record is very similar to an OStruct but it keeps track of the
-        # last access, creation and modification times of the object
+        # last access, creation and modification times of the object.
+        # Each Record also has a UUID for unique identification.
+        #
+        #   rec = Keybox::Storage::Record.new
+        #
+        #   rec.modified?                   # => false
+        #   rec.some_field = "some value"   # => "some value"
+        #   rec.modified?                   # => true
+        #   rec.modification_time           # => Time
+        #   rec.data_members                # => { :some_field => "some value" }
+        #   rec.uuid.to_s                   # => "4b25074d-d3c5-23cd-bf9f-e28d8c8d453d"
+        #
+        # The +creation_time+, +modification_time+ and +last_access_time+ of
+        # each field in the Record is recorded.
+        #
+        # The UUID is create when the class is instantiated.
         #
         class Record 
 

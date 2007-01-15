@@ -1,14 +1,37 @@
 require 'openssl'
 module Keybox
 
+    ##
+    # Use an IO device to retrieve random data.  Usually this is
+    # somethine like '/dev/random' but may be anything that can read
+    # from by IO.read.
     #
-    # use a filesystem device to retrieve random data.  If there is a
-    # some other hardware device or some service that provides random
-    # byte stream, set it as the default device in this class and you
-    # should be good to go.
+    #   bytes = RandomDevice.random_bytes(42)
+    #
+    # or 
+    #
+    #   rd = RandomDevice.new
+    #   bytes = rd.random_bytes(42)
+    #
+    # If there is a some other hardware device or some service that
+    # provides random byte stream, set it as the default device in this
+    # class and it will use it instead of the default.
+    #
+    #   my_random_device = RandomDevice("/dev/super-random-device")
+    #
+    # or 
+    #
+    #   RandomDevice.default = "/dev/super-random-device"
+    #   my_random_device     = RandomDevice.new
+    #   my_random_device.source                        # =>  "/dev/super-random-device"
+    #
+    # All further instances of RandomDevice will use it as the default.
     #
     # RandomDevice can either produce random bytes as a class or as an
     # instance.
+    #
+    #   random_bytes = RandomDevice.random_bytes(42)  
+    #   random_bytes.size                              # => 42
     #
     class RandomDevice
         @@DEVICES = [ "/dev/urandom", "/dev/random" ]
@@ -60,10 +83,10 @@ module Keybox
     #
     # A RandomSource uses one from a set of possible source
     # class/modules.  So long as the @@DEFAULT item responds to
-    # 'random_bytes' it is fine.  
+    # +random_bytes+ it is fine.  
     #
-    # RandomSource supplies a 'rand' method in the same vein as
-    # Kernel::rand.
+    # RandomSource supplies a +rand+ method in the same vein as
+    # Kernel#rand.
     #
     class RandomSource
         @@SOURCE_CLASSES = [ ::Keybox::RandomDevice, ::OpenSSL::Random ]
@@ -99,7 +122,7 @@ module Keybox
             end
 
             #
-            # behave like Kernel#rand where if no maxis specified return
+            # Behave like Kernel#rand where if no max is specified return
             # a value >= 0.0 but < 1.0.
             #
             # If a max is specified, return an Integer between 0 and
@@ -117,17 +140,23 @@ module Keybox
     end
 
     #
-    # the Randomizer will randomly pick a value from anything that
-    # behaves like an array or has a 'to_a' method.  Behaving like an
-    # array means have a 'size' or 'length' method along with an 'at'
+    # Randomizer will randomly pick a value from anything that
+    # behaves like an array or has a +to_a+ method.  Behaving like an
+    # array means having a +size+ or +length+ method along with an +at+
     # method.
     # 
     # The source of randomness is determined at runtime.  Any class that
-    # can provide a method 'rand' method and operates in the same manner
-    # as Kernel#rand can be a used as the random source
+    # can provide a +rand+ method and operates in the same manner
+    # as Kernel#rand can be a used as the random source.
     #
     # The item that is being 'picked' from can be any class that has a
-    # 'size' method along with an 'at' method.
+    # +size+ method along with an +at+ method.
+    #
+    #   array = ("aaa"..."zzz").to_a
+    #   r = Randomizer.new
+    #   r.pick_one_from(array)          # => "lho"
+    #   r.pick_count_from(array,5)      # => ["mvt", "tde", "wdu", "ker", "bgc"]
+    #
     #
     class Randomizer 
 
@@ -158,7 +187,7 @@ module Keybox
         private
 
         def has_correct_duck_type?(obj)
-            (REQUIRED_METHODS  & obj.public_methods).size == REQUIRED_METHODS.size
+            (REQUIRED_METHODS & obj.public_methods).size == REQUIRED_METHODS.size
         end
     end
 end

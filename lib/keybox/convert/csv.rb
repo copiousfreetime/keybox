@@ -1,20 +1,24 @@
-#
-# Convert to/from a CSV file.  When loading a CSV file, it is assumed
-# that there is a header on the csv file that shows which of the fields
-# belongs to the various fields of the entry.  At a minimum the header
-# line should have the default fields from a HostAccountEntry which are:
-#
-#   - title
-#   - username
-#   - hostname
-#   - password
-#   - additional_info
-#
-#
+
 require 'csv'
 require 'keybox/entry'
 module Keybox
     module Convert
+        #
+        # Convert to/from a CSV file.  When loading a CSV file, it is assumed
+        # that there is a header on the csv file that shows which of the fields
+        # belongs to the various fields of the entry.  At a minimum the header
+        # line should have the default fields from an HostAccountEntry which are:
+        #
+        #   - title
+        #   - username
+        #   - hostname
+        #   - password
+        #   - additional_info
+        # 
+        # These headers can be in any order and CSV will do the right
+        # thing.  But these headers must exist.  A
+        # Keybox::ValidationError is thrown if they do not.
+        #       
         class CSV
             class << self 
 
