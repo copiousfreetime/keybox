@@ -22,3 +22,10 @@ bugs.page:
 credits.page: 
     inMenu: true
     orderInfo: 60
+---
+rubyforge.page:
+    title: Rubyforge page
+    inMenu: true
+    orderInfo: 45
+    url: http://rubyforge.org/projects/keybox
+

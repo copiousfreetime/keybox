@@ -24,7 +24,8 @@ The simplest install for keybox is via rubygems:
 h1. Installing without gems
 
 Keybox does not require any gems to operate from an end-user perspective
-so you can just download the .tgz or .zip file from Rubyforge and
+so you can just "download the .tgz or .zip file from
+Rubyforge":http://rubyforge.org/frs/?group_id=2584 and
 extract it into a directory.  
 
 <pre>

@@ -1,4 +1,4 @@
-# Boring file regexps:
+# Boring file regexps
 \.hi$
 \.o$
 \.o\.cmd$
@@ -37,3 +37,4 @@
 # project directories
 doc/*
 pkg/*
+email.txt
