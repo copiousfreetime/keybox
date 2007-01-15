@@ -31,7 +31,7 @@ extract it into a directory.
 Then to utilize it with non-standard locations for the *config.yaml* and
 *database.yaml* you would just use the command line options.  So for
 instance I had a usb drive that had keybox locally on it and I had a
-directory in it =<drive-root>/keybox/my-data=
+directory in it =<drive-root>/keybox/my-data=.  I could then access that 
 
 <pre>
 <code
