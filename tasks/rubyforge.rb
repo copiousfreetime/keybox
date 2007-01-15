@@ -87,7 +87,7 @@ task :post_news do
     subject, title, body, urls = announcement
     rf = RubyForge.new
     rf.login
-    rf.post_news(rubyforge_name, subject, "#{title}\n\n#{body}")
+    rf.post_news(PKG_INFO.rubyforge_name, subject, "#{title}\n\n#{urls}\n\n#{body}")
     puts "Posted to rubyforge"
 end
 
