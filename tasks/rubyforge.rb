@@ -29,7 +29,6 @@ task :clean_rubyforge => [:clobber, :sync_rubyforge]
 desc "Push the published docs to rubyforge"
 task :publish_rubyforge => [:publish_docs, :sync_rubyforge] 
 
-
 #-----------------------------------------------------------------------
 # Create an announcement text file, and post news to rubyforge
 #-----------------------------------------------------------------------
@@ -92,4 +91,23 @@ task :post_news do
     puts "Posted to rubyforge"
 end
 
+#-----------------------------------------------------------------------
+# post the packaged files to rubyforge, again, a modified version of
+# what ships with hoe.
+#-----------------------------------------------------------------------
+desc "Release files to rubyforge"
+task :release_files => [:clean, :package] do 
+    rf = RubyForge.new
+    rf.login
+
+    config = rf.userconfig
+    config["release_notes"]     = PKG_INFO.description
+    config["release_changes"]   = last_changeset
+    config["Prefomatted"]       = true
+
+    files = FileList["pkg/#{PKG_INFO.rubyforge_name}-#{PKG_INFO.version}.*"].to_a
+    puts "Uploading to rubyforge..."
+    rf.add_release PKG_INFO.rubyforge_name, PKG_INFO.name, *files
+    puts "done."
+end
 
