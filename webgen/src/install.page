@@ -1,6 +1,13 @@
 ---
 title: Install
 ---
+h1. Requirements
+
+Keybox uses the SHA256 digest algorithm in its work and this was not
+available in OpenSSL until version 0.9.8.  As a result, the ruby
+installation that runs keybox must be compiled against an OpenSSL
+library of 0.9.8 or greater.
+
 h1. Quick Installation
 
 There are no prerequisites other than a basic ruby install that
@@ -14,7 +21,7 @@ The simplest install for keybox is via rubygems:
 </code>
 </pre>
 
-h1. Installing without gems.
+h1. Installing without gems
 
 Keybox does not require any gems to operate from an end-user perspective
 so you can just download the .tgz or .zip file from Rubyforge and
@@ -30,11 +37,20 @@ extract it into a directory.
 
 Then to utilize it with non-standard locations for the *config.yaml* and
 *database.yaml* you would just use the command line options.  So for
-instance I had a usb drive that had keybox locally on it and I had a
-directory in it =<drive-root>/keybox/my-data=.  I could then access that 
+instance, given the following:
+
+* %ruby installed on the host machine%
+* %USB Drive mounted on */Volumes/MyData/*%
+* %keybox on that drive under *MyData/keybox-1.0.0*%
+
+I could execute keybox against my portable setup with:
 
 <pre>
-<code
+<code>
+% cd /Volumes/MyData/keybox-1.0.0
+% ./bin/keybox --config=./data/config.yaml --database=./data/database.yml
+</code>
+</pre>
 
 
 
