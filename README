@@ -77,13 +77,16 @@ applications.
 == REQUIREMENTS:
 
 === For running: 
-* A basic ruby install that includes the OpenSSL libraries.
+* A basic ruby install that is compiled against OpenSSL >= 0.9.8 
 
 === For development:
-* A basic ruby install that includes the OpenSSL libraries.
-* rake
-* webgen >= 0.4.1
+* A basic ruby install that is compiled against OpenSSL >= 0.9.8 
+* rake >= 0.7.1
+* rcov >= 0.7.0.1
+* RedCloth >= 3.0.4
 * rspec  >= 0.7.3
+* rubyforge >= 0.4.0
+* webgen >= 0.4.1
 
 == INSTALL:
 
