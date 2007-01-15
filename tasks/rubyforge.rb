@@ -96,7 +96,7 @@ end
 # what ships with hoe.
 #-----------------------------------------------------------------------
 desc "Release files to rubyforge"
-task :release_rubyforge=> [:clean, :package] do 
+task :release_rubyforge => [:clean, :package] do 
     rf = RubyForge.new
     rf.login
 
