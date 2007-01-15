@@ -107,7 +107,10 @@ task :release_files => [:clean, :package] do
 
     files = FileList["pkg/#{PKG_INFO.rubyforge_name}-#{PKG_INFO.version}.*"].to_a
     puts "Uploading to rubyforge..."
-    rf.add_release PKG_INFO.rubyforge_name, PKG_INFO.name, *files
+    rf.add_release(PKG_INFO.rubyforge_name, 
+                   PKG_INFO.name, 
+                   PKG_INFO.version, 
+                   *files)
     puts "done."
 end
 
