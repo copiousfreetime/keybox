@@ -87,8 +87,8 @@ desc "Post news to your project on rubyforge"
 task :post_news do
     subject, title, body, urls = announcement
     rf = RubyForge.new
-    #rf.login
-    #rf.post_news(rubyforge_name, subject, "#{title}\n\n#{body}")
+    rf.login
+    rf.post_news(rubyforge_name, subject, "#{title}\n\n#{body}")
     puts "Posted to rubyforge"
 end
 
