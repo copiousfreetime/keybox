@@ -96,7 +96,7 @@ end
 # what ships with hoe.
 #-----------------------------------------------------------------------
 desc "Release files to rubyforge"
-task :release_files => [:clean, :package] do 
+task :release_rubyforge=> [:clean, :package] do 
     rf = RubyForge.new
     rf.login
 
@@ -107,10 +107,7 @@ task :release_files => [:clean, :package] do
 
     files = FileList["pkg/#{PKG_INFO.rubyforge_name}-#{PKG_INFO.version}.*"].to_a
     puts "Uploading to rubyforge..."
-    rf.add_release(PKG_INFO.rubyforge_name, 
-                   PKG_INFO.name, 
-                   PKG_INFO.version, 
-                   *files)
+    rf.add_release(PKG_INFO.rubyforge_name, PKG_INFO.name, PKG_INFO.version, *files)
     puts "done."
 end
 
