@@ -145,19 +145,19 @@ module Keybox
             "#{before}#{text}#{after}"
         end
 
-        def colorize_if_io_isatty(io,text,color,bold)
-            if io.tty? then
+        def colorize_if_ok(io,text,color,bold)
+            if io.tty? and ( @options.color_scheme != :none ) then
                 text = colorize(text,color,bold)
             end
             text
         end
 
         def color_puts(text, color, bold = true)
-            @stdout.puts colorize_if_io_isatty(@stdout,text,color,bold)
+            @stdout.puts colorize_if_ok(@stdout,text,color,bold)
         end
 
         def color_print(text,color, bold = true)
-            @stdout.print colorize_if_io_isatty(@stdout,text,color,bold)
+            @stdout.print colorize_if_ok(@stdout,text,color,bold)
         end
     end
 end

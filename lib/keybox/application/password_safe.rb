@@ -48,6 +48,11 @@ module Keybox
                         @parsed_options.config_file = cfile
                     end
 
+                    op.on("--color SCHEME","The color scheme to use", "none,dark_bg,light_bg,<other>") do |scheme|
+                        @parsed_options.color_scheme = scheme.to_sym
+                    end
+                          
+
                     op.on("-D", "--debug", "Ouput debug information to STDERR") do 
                         @parsed_options.debug = true
                     end
@@ -116,6 +121,7 @@ module Keybox
                 options.config_file                 = Keybox::Application::PasswordSafe::DEFAULT_CONFIG
                 options.db_file                     = Keybox::Application::PasswordSafe::DEFAULT_DB
                 options.use_password_hash_for_url   = false
+                options.color_scheme                = :dark_bg
                 return options
             end
 
