@@ -86,7 +86,9 @@ context "Keybox Password Safe Application" do
 
 
     specify "invalid options set the error message, exit 1 and have output on stderr" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"--invalid-option"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, 
+                                                     "-c", @testing_cfg.path,
+                                                     "--invalid-option"])
         kps.stderr = StringIO.new
         kps.stdout = StringIO.new
         begin
@@ -169,9 +171,13 @@ context "Keybox Password Safe Application" do
     end
 
     specify "double prompting on failed password for entry to the database works" do
-        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--add", "example.com"])
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, 
+                                                     "-c", @testing_cfg.path, 
+                                                     "--add", "example.com"])
         kps.stdout = StringIO.new
-        prompted_values = [@passphrase, ""] + %w(example.com someuser apassword abadpassword abcdef abcdef noinfo yes)
+        prompted_values = [@passphrase, ""] + %w(example.com someuser 
+                                                 apassword abadpassword 
+                                                 abcdef abcdef noinfo yes)
         kps.stdin  = StringIO.new(prompted_values.join("\n"))
         kps.run
         kps.db.records.size.should_eql 3
