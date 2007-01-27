@@ -64,7 +64,7 @@ module Keybox
                 if validate then
                     v = prompt_and_return(validation_prompt.rjust(width),echo)
                     if v != line then
-                        color_puts "Entries do not match, try again.", :red
+                        color_puts "Entries do not match, try again.", :error
                     else
                         validated = true
                     end

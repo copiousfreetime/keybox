@@ -1,0 +1,31 @@
+# yaml document for the dark background scheme
+# 
+# The colorized elements of keybox are:
+#   :prompt         -> Whenever you are asked to input information
+#   :header         -> Header line on a table of output
+#   :header_bar     -> Horizontal bar under a table header
+#   :line_number    -> Number at the beginning of a line of tabular
+#                      output
+#   :even_row       -> Color of an even numbered row of tabular data
+#   :odd_row        -> Color of an odd numbered row of tabular data
+#   :information    -> Informational message from keybox
+#   :error          -> Error message from keybox
+#   :private        -> Private data being displayed
+#   :separator      -> Separator between name : value pairs
+#   :separator_bar  -> Separator displayed entries
+#   :name           -> Names from name : value pairs
+#   :value          -> Values from name : value pairs
+---
+:prompt:        [ :bold, :white     ]
+:header:        [ :bold, :yellow    ]
+:header_bar:    [ :blue             ]
+:line_number:   [ :bold, :white     ]
+:even_row:      [ :bold, :magenta   ]
+:odd_row:       [ :bold, :cyan      ]
+:information:   [ :bold, :green     ]
+:error:         [ :bold, :red       ]
+:private:       [ :bold, :red       ]
+:separator:     [ :bold, :white     ]
+:separator_bar: [ :bold, :blue      ]
+:name:          [ :bold, :blue      ]
+:value:         [ :bold, :cyan      ]

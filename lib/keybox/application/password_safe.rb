@@ -11,7 +11,7 @@ require 'fileutils'
 module Keybox
     module Application 
         class PasswordSafe < Base
-            include Keybox::TermIO
+            include Keybox::HighLineUtil
 
             attr_accessor :actions
             attr_reader   :db
@@ -144,13 +144,80 @@ module Keybox
                 options = YAML.load_file(file_path) || Hash.new
             end
 
+            #
+            # load the given color scheme.  If the scheme cannot be
+            # found it will default to the +:none+ scheme which has no
+            # color
+            #
+            # The color_scheme file exists either in the application data
+            # directory, or in the same directory as the configuration
+            # file.
+            # 
+            # The file name convention for the scheme file is
+            # +schemename.color_scheme.yaml+.  So for instance the default
+            # +:dark_bg+ color scheme file is named:
+            #
+            #   dark_bg.color_scheme.yaml
+            def load_color_scheme
+                search_directories  = [ Keybox::APP_DATA_DIR, File.dirname(@options.config_file) ]
+                scheme_basename     = "#{@options.color_scheme.to_s}.color_scheme.yaml"
+                scheme_path         = nil
+                
+                puts "basename = #{scheme_basename}"
+                # get the path to the file
+                search_directories.each do |sd|
+                    if File.exists?(File.join(sd,scheme_basename)) then
+                        scheme_path = File.join(sd,scheme_basename)
+                        break
+                    end
+                end
+              
+                # if we have a file then load it and make sure we have
+                # all the valid labels.
+                if scheme_path then
+                    puts "found scheme at #{scheme_path}"
+                    initial_color_scheme = YAML::load(File.read(scheme_path))
+                  
+                    # make sure that everything is a Symbol and in the
+                    # process make sure that all of the required labels
+                    # are there.
+                    color_scheme = {}
+                    initial_color_scheme.each_pair do |label,ansi_seq|
+                        color_scheme[label.to_sym] = ansi_seq.collect { |a| a.to_sym }
+                    end
+
+                    # validate that all the required color labels exist
+                    (NONE_SCHEME.keys - color_scheme.keys).each do |missing_label|
+                        # yes this may get executed more than once, but that's fine
+                        @options.color_scheme = :none  
+                        
+                        @stdout.puts "The label ':#{missing_label}' is missing from the '#{@options.color_scheme.to_s}' scheme located in file '#{scheme_path}'."
+                    end
+
+                    # okay if we made it through all that, then assign
+                    # the color scheme to highline
+                    ::HighLine.color_scheme = ::HighLine::ColorScheme.new(color_scheme)
+                    puts "using color_scheme: #{HighLine.using_color_scheme?}"
+
+                else
+                    # if we don't have a file then set the color scheme
+                    # to +none+ and we're done
+                    @options.color_scheme = :none 
+                    ::HighLine.color_scheme = ::HighLine::ColorScheme.new(NONE_SCHEME)
+
+                end
+            end
+
+            #
+            # load the database from its super secret location
+            #
             def load_database
                 password = nil
                 if not File.exists?(@options.db_file) then
-                    color_puts "Creating initial database.", :yellow
-                    password  = prompt("Initial Password for (#{@options.db_file})", false, true)
+                    hsay 'Creating initial database.', :information
+                    password  = prompt("Initial Password for (#{@options.db_file})", :no_echo, :validate)
                 else
-                    password  = prompt("Password for (#{@options.db_file})", false)
+                    password  = prompt("Password for (#{@options.db_file})", :no_echo)
                 end
                 @db = Keybox::Storage::Container.new(password,@options.db_file)
             end
@@ -176,7 +243,7 @@ module Keybox
 
                 end
                 new_entry = gather_info(entry)
-                color_puts "Adding #{new_entry.title} to database", :green
+                hsay "Adding #{new_entry.title} to database.", :information
                 @db << new_entry
             end
 
@@ -185,19 +252,19 @@ module Keybox
             def gather_info(entry)
                 gathered = false
                 while not gathered do
-                    color_puts "Gathering information for entry '#{entry.title}'", :yellow
+                    hsay "Gathering information for entry '#{entry.title}'", :information
 
                     entry = fill_entry(entry)
 
                     # dump the info we have gathered and make sure that
                     # it is the input that the user wants to store.
                    
-                    color_puts "-" * 40, :blue
-                    @stdout.puts entry
-                    color_puts "-" * 40, :blue
-                    if prompt_y_n("Is this information correct (y/n) [N] ?") then
-                        gathered = true
-                    end
+                    hsay "-" * 40, :separator_bar
+                    hsay entry
+                    hsay "-" * 40, :separator_bar
+                    
+
+                    gathered = hagree "Is this information correct? (y/n)"
                 end
 
                 entry
@@ -210,16 +277,16 @@ module Keybox
                 matches = @db.find(account)
                 count = 0
                 matches.each do |match|
-                    color_puts "-" * 40, :blue
-                    @stdout.puts match
-                    color_puts "-" * 40, :blue
+                    hsay "-" * 40, :separator_bar
+                    hsay match
+                    hsay "-" * 40, :separator_bar
 
-                    if prompt_y_n("Delete this entry (y/n) [N] ?") then
+                    if hagree "Delete this entry (y/n) ?" then
                         @db.delete(match)
                         count += 1
                     end
                 end
-                color_puts "#{count} records matching '#{account}' deleted.", :green
+                hsay "#{count} records matching '#{account}' deleted.", :information
             end
 
             #
@@ -229,19 +296,19 @@ module Keybox
                 matches = @db.find(account)
                 count = 0
                 matches.each do |match|
-                    color_puts "-" * 40, :blue
-                    @stdout.puts match
-                    color_puts "-" * 40, :blue
+                    hsay "-" * 40, :separator_bar
+                    hsay match
+                    hsay "-" * 40, :separator_bar
 
-                    if prompt_y_n("Edit this entry (y/n) [N] ?") then
+                    if hagree "Edit this entry (y/n) ?" then
                         entry = gather_info(match)
                         @db.delete(match)
                         @db << entry
                         count += 1
-                        color_puts "Entry '#{entry.title}' updated.", :green
+                        hsay "Entry '#{entry.title}' updated.", :information
                     end
                 end
-                color_puts "#{count} records matching '#{account}' edited.", :green
+                hsay "#{count} records matching '#{account}' edited.", :information
             end
 
             #
@@ -264,25 +331,26 @@ module Keybox
 
                     full_length = lengths.values.inject(0) { |sum,n| sum + n}
                     header = "  # #{"Title".ljust(lengths[:title])}    #{"Username".ljust(lengths[:username])}    #{add_info}"
-                    color_puts header, :yellow 
+                    hsay header, :header
                     #  3 spaces for number column + 1 space after and 4 spaces between
                     #  each other column
-                    color_puts "-" * (header.length), :blue, false
+                    hsay"-" * (header.length), :header_bar
 
                     matches.each_with_index do |match,i|
-                        color_print sprintf("%3d ", i + 1), :white
+                        line_number = sprintf("%3d", i + 1)
                         # toggle colors
-                        color = [:cyan, :magenta][i % 2]
+                        color = [:even_row, :odd_row][i % 2]
                         columns = []
                         [:title, :username, :additional_info].each do |f|
                             t = match.send(f)
                             t = "-" if t.nil? or t.length == 0 
                             columns << t.ljust(lengths[f])
                         end
-                        color_puts columns.join(" " * 4), color
+                        cdata = columns.join(" " * 4)
+                        @highline.say("<%= color('#{line_number}',:line_number) %> <%= color('#{cdata}','#{color}') %>")
                     end
                 else
-                    color_puts "No matching records were found.", :green
+                    hsay "No matching records were found.", :information
                 end
             end
 
@@ -293,31 +361,33 @@ module Keybox
                 matches = @db.find(account)
                 if matches.size > 0 then
                     matches.each_with_index do |match,i|
-                        color_puts "#{sprintf("%3d",i + 1)}. #{match.title}", :yellow
+                        hsay "#{sprintf("%3d",i + 1)}. #{match.title}", :header
                         max_name_length = match.max_field_length + 1
                         match.each do |name,value|
                             next if name == "title"
                             next if value.length == 0
 
                             name_out = name.rjust(max_name_length)
-                            color_print name_out, :blue
-                            color_print " : ", :white
+                            @highline.say("<%= color('#{name_out}', :name) %> <%= color(':',:separator) %> ")
 
                             if match.private_field?(name) then
-                                color_print value, :red
-                                color_print " (press any key).", :white
-                                junk = get_one_char
-                                color_print "\r#{name_out}", :blue
-                                color_print " : ", :white
-                                color_puts "#{"*" * 20}\e[K", :red
+                                @highline.ask(
+                                   "<%= color('#{value}',:private) %> <%= color('(press any key).', :prompt) %> "
+                                ) do |q|
+                                    q.overwrite = true
+                                    q.echo      = false
+                                    q.character = true
+                                end
+                                
+                                @highline.say("<%= color('#{name_out}', :name) %> <%= color(':',:separator) %> <%= color('#{'*' * 20}', :private) %>")
                             else
-                                color_puts value, :cyan
+                                hsay value, :value
                             end
                         end
                         @stdout.puts
                     end
                 else
-                    color_puts "No matching records were found.", :green
+                    hsay "No matching records were found.", :information
                 end
             end
 
@@ -327,7 +397,7 @@ module Keybox
             def master_password(ignore_this)
                 new_password = prompt("Enter new master password", false, true, 30)
                 @db.passphrase = new_password
-                color_puts "New master password set.", :green
+                hsay "New master password set.", :information
             end
 
             #
@@ -338,14 +408,14 @@ module Keybox
                 entries.each do |entry|
                     @db << entry
                 end
-                color_puts "Imported #{entries.size} records from #{file}.", :green
+                hsay "Imported #{entries.size} records from #{file}.", :information
             end
 
             #
             # Export data from the database into a CSV file
             def export_to_csv(file)
                 Keybox::Convert::CSV.to_file(@db.records, file)
-                color_puts "Exported #{@db.records.size} records to #{file}.", :green
+                hsay "Exported #{@db.records.size} records to #{file}.", :information
             end
 
             def fill_entry(entry)
@@ -383,6 +453,8 @@ module Keybox
                 begin
                     error_version_help
                     merge_options
+                    puts "loading color scheme"
+                    load_color_scheme
                     load_database
 
                     if @actions.size == 0 then
@@ -392,20 +464,20 @@ module Keybox
                     self.send(action, param)
 
                     if @db.modified? then 
-                        color_puts "Database modified, saving.", :green
+                        hsay "Database modified, saving.", :information
                         @db.save
                     else
-                        color_puts "Database not modified.", :green
+                        hsay "Database not modified.", :information
                     end
                 rescue SignalException => se
                     @stdout.puts
-                    color_puts "Interrupted", :red
-                    color_puts "There may be private information on your screen.", :red
-                    color_puts "Please close this terminal.", :red
+                    hsay "Interrupted", :error
+                    hsay "There may be private information on your screen.", :error
+                    hsay "Please close this terminal.", :error
                     exit 1
                 rescue StandardError => e
-                    @stdout.puts
-                    color_puts "Error: #{e.message}", :red
+                    @stdout.puts caller(0).join("\n")
+                    hsay "Error: #{e.message}", :error
                     exit 1
                 end
             end
