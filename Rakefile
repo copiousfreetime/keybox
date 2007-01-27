@@ -104,6 +104,7 @@ rspec = Spec::Rake::SpecTask.new do |r|
     r.rcov      = true
     r.rcov_dir  = "doc/coverage"
     r.libs      << "./lib" 
+    r.spec_opts = %w(-f s)
 end
 
 # the coverage report is considered documentation

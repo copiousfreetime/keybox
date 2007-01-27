@@ -24,6 +24,7 @@ module Keybox
             attr_reader :stdout
             attr_reader :stderr
             attr_reader :stdin
+            attr_reader :highline
 
             def initialize(argv = [])
                 # make sure we have an empty array, we could be

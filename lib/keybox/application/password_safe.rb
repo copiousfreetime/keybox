@@ -159,50 +159,57 @@ module Keybox
             #
             #   dark_bg.color_scheme.yaml
             def load_color_scheme
-                search_directories  = [ Keybox::APP_DATA_DIR, File.dirname(@options.config_file) ]
-                scheme_basename     = "#{@options.color_scheme.to_s}.color_scheme.yaml"
-                scheme_path         = nil
-                
-                # get the path to the file
-                search_directories.each do |sd|
-                    if File.exists?(File.join(sd,scheme_basename)) then
-                        scheme_path = File.join(sd,scheme_basename)
-                        break
+                if @options.color_scheme != :none then
+                    search_directories  = [ Keybox::APP_DATA_DIR, File.dirname(@options.config_file) ]
+                    scheme_basename     = "#{@options.color_scheme.to_s}.color_scheme.yaml"
+                    scheme_path         = nil
+                    
+                    # get the path to the file
+                    search_directories.each do |sd|
+                        if File.exists?(File.join(sd,scheme_basename)) then
+                            scheme_path = File.join(sd,scheme_basename)
+                            break
+                        end
                     end
-                end
-              
-                # if we have a file then load it and make sure we have
-                # all the valid labels.
-                if scheme_path then
-                    initial_color_scheme = YAML::load(File.read(scheme_path))
                   
-                    # make sure that everything is a Symbol and in the
-                    # process make sure that all of the required labels
-                    # are there.
-                    color_scheme = {}
-                    initial_color_scheme.each_pair do |label,ansi_seq|
-                        color_scheme[label.to_sym] = ansi_seq.collect { |a| a.to_sym }
+                    # if we have a file then load it and make sure we have
+                    # all the valid labels.
+                    if scheme_path then
+                        initial_color_scheme = YAML::load(File.read(scheme_path))
+                      
+                        # make sure that everything is a Symbol and in the
+                        # process make sure that all of the required labels
+                        # are there.
+                        color_scheme = {}
+                        initial_color_scheme.each_pair do |label,ansi_seq|
+                            color_scheme[label.to_sym] = ansi_seq.collect { |a| a.to_sym }
+                        end
+
+                        # validate that all the required color labels exist
+                        if (NONE_SCHEME.keys - color_scheme.keys).size == 0 then
+                            ::HighLine.color_scheme = ::HighLine::ColorScheme.new(color_scheme)
+                        else
+                            @options.color_scheme   = :none  
+                            ::HighLine.color_scheme = ::HighLine::ColorScheme.new(NONE_SCHEME)
+
+                            @stdout.puts "The color scheme in file '#{scheme_path}' is Invalid"
+                            @stdout.puts "It is missing the following items:"
+
+                            (NONE_SCHEME.keys - color_scheme.keys).each do |missing_label|
+                                @stdout.puts "\t :#{missing_label}"
+                            end
+
+                            @stdout.puts "Not using any color scheme."
+                        end
+
+                    else
+                        # if we don't have a file then set the color
+                        # scheme to nil and we're done
+                        @options.color_scheme = :none
+                        ::HighLine.color_scheme = ::HighLine::ColorScheme.new(NONE_SCHEME)
                     end
-
-                    # validate that all the required color labels exist
-                    (NONE_SCHEME.keys - color_scheme.keys).each do |missing_label|
-                        # yes this may get executed more than once, but that's fine
-                        @options.color_scheme = :none  
-                        color_scheme = ::HighLine::ColorScheme.new(NONE_SCHEME)
-                        
-                        @stdout.puts "The label ':#{missing_label}' is missing from the '#{@options.color_scheme.to_s}' scheme located in file '#{scheme_path}'."
-                    end
-
-                    # okay if we made it through all that, then assign
-                    # the color scheme to highline
-                    ::HighLine.color_scheme = ::HighLine::ColorScheme.new(color_scheme)
-
                 else
-                    # if we don't have a file then set the color scheme
-                    # to +none+ and we're done
-                    @options.color_scheme = :none 
                     ::HighLine.color_scheme = ::HighLine::ColorScheme.new(NONE_SCHEME)
-
                 end
             end
 
@@ -473,7 +480,6 @@ module Keybox
                     hsay "Please close this terminal.", :error
                     exit 1
                 rescue StandardError => e
-                    @stdout.puts 
                     hsay "Error: #{e.message}", :error
                     exit 1
                 end

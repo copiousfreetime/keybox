@@ -37,6 +37,7 @@ context "Keybox Password Safe Application" do
         @import_csv.unlink
         @bad_import_csv.unlink
         @export_csv.unlink
+
     end
 
     specify "nil argv should do nothing" do
@@ -226,7 +227,7 @@ context "Keybox Password Safe Application" do
 
     specify "show all the entries" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--show"])
-        stdin = StringIO.new(@passphrase)
+        stdin = StringIO.new([@passphrase, "", ""].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
         kps.stdout.string.should_satisfy { |msg| msg =~ /2./m }
@@ -266,5 +267,31 @@ context "Keybox Password Safe Application" do
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
         kps.stdout.string.should_satisfy { |msg| msg =~ /Exported \d* records to/m }
+    end
+
+    specify "able to turn off color schemes" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"--color","none"])
+        kps.set_io(StringIO.new(@passphrase),StringIO.new,StringIO.new)
+        kps.run
+        kps.options.color_scheme.should_equal :none
+    end
+
+    specify "an invalid color scheme results in a no color scheme" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"--color","dne"])
+        kps.set_io(StringIO.new(@passphrase),StringIO.new,StringIO.new)
+        kps.run
+        kps.options.color_scheme.should_equal :none
+    end
+
+    specify "an incomplete color scheme results in an error message and then 'none' color scheme" do
+        bad_color_scheme = { :bad => [:bold, :white, :on_magenta] }
+        File.open("/tmp/test.color_scheme.yaml", "w+") { |f| f.write(bad_color_scheme.to_yaml) }
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"--color","test"])
+        kps.set_io(StringIO.new(@passphrase),StringIO.new,StringIO.new)
+        kps.run
+
+        File.unlink("/tmp/test.color_scheme.yaml")
+        kps.stdout.string.should_satisfy { |msg| msg =~ /It is missing the following items/m }
+        kps.options.color_scheme.should_equal :none
     end
 end
