@@ -19,6 +19,7 @@ module Keybox
                 :separator_bar  => [ :clear ], 
                 :name           => [ :clear ], 
                 :value          => [ :clear ], 
+                :normal         => [ :clear ],
         }
 
         #
@@ -26,7 +27,11 @@ module Keybox
         # easy to have all the ERB happening in one spot to avoid
         # escaping issues.
         def hsay(output,color_scheme)
-            @highline.say("<%= color('#{output}','#{color_scheme}') %>")
+            @highline.say("<%= color(%Q{#{output}},'#{color_scheme}') %>")
+        end
+
+        def hagree(output)
+            @highline.agree("<%= color(%Q{#{output}},:prompt) %> ")
         end
 
         #
@@ -37,23 +42,29 @@ module Keybox
         #
         # If validate is set to true, then it will prompt twice and make
         # sure that the two values match
-        def prompt(p,*options)
+        def prompt(p,options)
             validated = false
             line = ""
             extra_prompt = " (again)"
             original_prompt = p
             validation_prompt = original_prompt + extra_prompt
 
-            echo = options.include?(:no_echo) ? '*' : true
+            echo     = options[:echo].nil? ? true : options[:echo]
+            width    = options[:width] || 30
+            validate = options[:validate] || false
 
             until validated do
-                line = @highline.ask("<%= color('#{original_prompt}',:prompt) %> ") { |q| q.echo = echo }
-                #line = prompt_and_return(original_prompt.rjust(width),echo)
+                line = @highline.ask("<%= color('#{original_prompt.rjust(width)}',:prompt) %> : ") { |q| q.echo = echo }
+                # ensure we are at the beginning of the line
+                @stdout.print "\r"
 
                 # if we are validating then prompt again to validate
-                if options.include?(:validate) then
-                    v = @highline.ask("<%= color('#{validation_prompt}', :prompt) %> ") { |q| q.echo = echo }
-                    #v = prompt_and_return(validation_prompt.rjust(width),echo)
+                if validate then
+                    v = @highline.ask("<%= color('#{validation_prompt.rjust(width)}', :prompt) %> : ") { |q| q.echo = echo }
+                    # ensure we are at the beginning of the line
+                    @stdout.print "\r"
+                   
+                    # line on some terminals
                     if v != line then
                         @highline.say("<%= color('Entries do not match, try again.', :error) %>")
                     else

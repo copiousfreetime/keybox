@@ -16,6 +16,7 @@
 #   :name           -> Names from name : value pairs
 #   :value          -> Values from name : value pairs
 ---
+:normal:        [ :clear            ]
 :prompt:        [ :bold, :white     ]
 :header:        [ :bold, :yellow    ]
 :header_bar:    [ :blue             ]

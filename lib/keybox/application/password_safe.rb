@@ -163,7 +163,6 @@ module Keybox
                 scheme_basename     = "#{@options.color_scheme.to_s}.color_scheme.yaml"
                 scheme_path         = nil
                 
-                puts "basename = #{scheme_basename}"
                 # get the path to the file
                 search_directories.each do |sd|
                     if File.exists?(File.join(sd,scheme_basename)) then
@@ -175,7 +174,6 @@ module Keybox
                 # if we have a file then load it and make sure we have
                 # all the valid labels.
                 if scheme_path then
-                    puts "found scheme at #{scheme_path}"
                     initial_color_scheme = YAML::load(File.read(scheme_path))
                   
                     # make sure that everything is a Symbol and in the
@@ -190,6 +188,7 @@ module Keybox
                     (NONE_SCHEME.keys - color_scheme.keys).each do |missing_label|
                         # yes this may get executed more than once, but that's fine
                         @options.color_scheme = :none  
+                        color_scheme = ::HighLine::ColorScheme.new(NONE_SCHEME)
                         
                         @stdout.puts "The label ':#{missing_label}' is missing from the '#{@options.color_scheme.to_s}' scheme located in file '#{scheme_path}'."
                     end
@@ -197,7 +196,6 @@ module Keybox
                     # okay if we made it through all that, then assign
                     # the color scheme to highline
                     ::HighLine.color_scheme = ::HighLine::ColorScheme.new(color_scheme)
-                    puts "using color_scheme: #{HighLine.using_color_scheme?}"
 
                 else
                     # if we don't have a file then set the color scheme
@@ -215,9 +213,9 @@ module Keybox
                 password = nil
                 if not File.exists?(@options.db_file) then
                     hsay 'Creating initial database.', :information
-                    password  = prompt("Initial Password for (#{@options.db_file})", :no_echo, :validate)
+                    password  = prompt("Initial Password for (#{@options.db_file})", :echo => "*", :validate => true)
                 else
-                    password  = prompt("Password for (#{@options.db_file})", :no_echo)
+                    password  = prompt("Password for (#{@options.db_file})", :echo => "*")
                 end
                 @db = Keybox::Storage::Container.new(password,@options.db_file)
             end
@@ -260,7 +258,7 @@ module Keybox
                     # it is the input that the user wants to store.
                    
                     hsay "-" * 40, :separator_bar
-                    hsay entry
+                    hsay entry, :normal
                     hsay "-" * 40, :separator_bar
                     
 
@@ -278,7 +276,7 @@ module Keybox
                 count = 0
                 matches.each do |match|
                     hsay "-" * 40, :separator_bar
-                    hsay match
+                    hsay match, :normal
                     hsay "-" * 40, :separator_bar
 
                     if hagree "Delete this entry (y/n) ?" then
@@ -297,7 +295,7 @@ module Keybox
                 count = 0
                 matches.each do |match|
                     hsay "-" * 40, :separator_bar
-                    hsay match
+                    hsay match, :normal
                     hsay "-" * 40, :separator_bar
 
                     if hagree "Edit this entry (y/n) ?" then
@@ -395,7 +393,7 @@ module Keybox
             # Change the master password on the database
             #
             def master_password(ignore_this)
-                new_password = prompt("Enter new master password", false, true, 30)
+                new_password = prompt("Enter new master password", :echo => false, :validate => true, :width => 45)
                 @db.passphrase = new_password
                 hsay "New master password set.", :information
             end
@@ -434,12 +432,12 @@ module Keybox
                     # we don't echo private field prompts and we validate
                     # them
                     if entry.private_field?(field) then
-                        echo = false
+                        echo = '*'
                         validate = true
                         p = "#{field}"
                     end
 
-                    value = prompt(p,echo,validate,max_length)
+                    value = prompt("#{p}",:echo => echo ,:validate => validate,:width => max_length)
 
                     if value.nil? or value.size == 0 then
                         value = default
@@ -453,7 +451,6 @@ module Keybox
                 begin
                     error_version_help
                     merge_options
-                    puts "loading color scheme"
                     load_color_scheme
                     load_database
 
@@ -476,7 +473,7 @@ module Keybox
                     hsay "Please close this terminal.", :error
                     exit 1
                 rescue StandardError => e
-                    @stdout.puts caller(0).join("\n")
+                    @stdout.puts 
                     hsay "Error: #{e.message}", :error
                     exit 1
                 end
