@@ -30,7 +30,9 @@ PKG_INFO.version        = Keybox::VERSION.join(".")
 PKG_INFO.rdoc_dir       = "doc/rdoc"
 PKG_INFO.rdoc_main      = "README"
 PKG_INFO.rdoc_title     = "#{PKG_INFO.name} - #{PKG_INFO.version}"
-PKG_INFO.rdoc_options   = [ "--line-numbers" , "--inline-source"]
+PKG_INFO.rdoc_options   = [ "--line-numbers" , "--inline-source",
+                            "--title", PKG_INFO.rdoc_title,
+                            "--main", PKG_INFO.rdoc_main ]
 PKG_INFO.rdoc_files     = FileList['README', 'CHANGES', 'COPYING',
                                    'lib/**/*.rb','bin/**']
 PKG_INFO.file_list      = FileList['data/**',
