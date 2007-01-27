@@ -16,6 +16,12 @@ end
 
 $: << Keybox::APP_LIB_DIR
 
+# highline can be required via the new gem method or it can use the
+# version of highline shipped with keybox.
+require 'rubygems'
+gem 'highline'
+require 'highline'
+
 require 'keybox/cipher'
 require 'keybox/digest'
 require 'keybox/entry'

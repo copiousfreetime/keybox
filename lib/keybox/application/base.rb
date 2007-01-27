@@ -21,19 +21,17 @@ module Keybox
             attr_accessor :error_message
 
             # these allow for testing instrumentation
-            attr_accessor :stdout
-            attr_accessor :stderr
-            attr_accessor :stdin
+            attr_reader :stdout
+            attr_reader :stderr
+            attr_reader :stdin
 
             def initialize(argv = [])
                 # make sure we have an empty array, we could be
                 # initially passed nil explicitly
                 argv ||= []
 
-                # for testing instrumentation
-                @stdin  = $stdin
-                @stdout = $stdout
-                @stderr = $stderr
+                # setup default io streams
+                set_io
 
                 @options        = self.default_options
                 @parsed_options = self.default_options
@@ -47,6 +45,21 @@ module Keybox
                             "Try `#{@parser.program_name} --help` for more information"]
                     @error_message = msg.join("\n")
                 end
+            end
+
+            #
+            # Allow the IO to be reset.  This is generally just for
+            # testing instrumentation, but it may be useful for
+            # something else too.
+            #
+            def set_io(stdin = $stdin,stdout = $stdout,stderr = $stderr)
+                # for testing instrumentation
+                @stdin    = stdin
+                @stdout   = stdout
+                @stderr   = stderr
+                
+                # Instance of HighLine for the colorization of output
+                @highline = ::HighLine.new(@stdin,@stdout)
             end
 
             def option_parser
@@ -97,17 +110,17 @@ module Keybox
                     @stderr.puts @error_message
                     exit 1
                 elsif @parsed_options.show_version then
-                    @stdout.puts "#{@parser.program_name}: version #{Keybox::VERSION.join(".")}"
+                    @highline.say "#{@parser.program_name}: version #{Keybox::VERSION.join(".")}"
                     exit 0
                 elsif @parsed_options.show_help then
-                    @stdout.puts @parser
+                    @highline.say @parser.to_s
                     exit 0
                 end
             end
 
             def run 
                 error_version_help
-                @stdout.puts "Keybox Base Application.  Doing nothing but output this line."
+                @highline.say "Keybox Base Application.  Doing nothing but output this line."
             end
         end
     end

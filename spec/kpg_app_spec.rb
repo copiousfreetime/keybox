@@ -12,7 +12,7 @@ context "Keybox Password Generator Application" do
 
     specify "invalid options set the error message, exit 1 and have output on stderr" do
         kpg = Keybox::Application::PasswordGenerator.new(["--invalid-option"])
-        kpg.stderr = StringIO.new
+        kpg.set_io(StringIO.new,StringIO.new,StringIO.new)
         begin
             kpg.run
         rescue SystemExit => se
@@ -24,14 +24,14 @@ context "Keybox Password Generator Application" do
 
     specify "can set the algorithm" do
         kpg = Keybox::Application::PasswordGenerator.new(["--alg", "pron"])
-        kpg.stdout = StringIO.new
+        kpg.set_io(StringIO.new,StringIO.new)
         kpg.run
         kpg.options.algorithm.should == :pronounceable
     end
     
     specify "can specify the number of passwords created " do
         kpg = Keybox::Application::PasswordGenerator.new(["--num", "4"])
-        kpg.stdout = StringIO.new
+        kpg.set_io(StringIO.new,StringIO.new)
         kpg.run
         kpg.options.number_to_generate.should_eql 4
         kpg.stdout.string.split(/\s+/).size.should == 4
@@ -39,7 +39,7 @@ context "Keybox Password Generator Application" do
 
     specify "help has output on stdout and exits 0" do
         kpg = Keybox::Application::PasswordGenerator.new(["--h"]) 
-        kpg.stdout = StringIO.new
+        kpg.set_io(StringIO.new,StringIO.new)
         begin
             kpg.run
         rescue SystemExit => se
@@ -51,7 +51,7 @@ context "Keybox Password Generator Application" do
 
     specify "version has output on stdout and exits 0" do
         kpg = Keybox::Application::PasswordGenerator.new(["--version"]) 
-        kpg.stdout = StringIO.new
+        kpg.set_io(StringIO.new,StringIO.new)
         begin
             kpg.run
         rescue SystemExit => se
@@ -62,7 +62,7 @@ context "Keybox Password Generator Application" do
 
     specify "minimum length can be set and all generated passwords will have length >= minimum length" do
         kpg = Keybox::Application::PasswordGenerator.new(["--min", "4"]) 
-        kpg.stdout = StringIO.new
+        kpg.set_io(StringIO.new,StringIO.new)
         kpg.run
 
         kpg.options.min_length.should_eql 4
@@ -73,7 +73,7 @@ context "Keybox Password Generator Application" do
 
     specify "maximum length can be set and all generated passwords will have length <= maximum length" do
         kpg = Keybox::Application::PasswordGenerator.new(["--max", "4", "--min", "3"]) 
-        kpg.stdout = StringIO.new
+        kpg.set_io(StringIO.new,StringIO.new,StringIO.new)
         kpg.run
 
         kpg.options.max_length.should_eql 4
@@ -84,7 +84,7 @@ context "Keybox Password Generator Application" do
 
     specify "setting an invalid required symbol set exits 1 and outputs data on stderr" do
         kpg = Keybox::Application::PasswordGenerator.new(["--req","bunk"])
-        kpg.stderr = StringIO.new
+        kpg.set_io(StringIO.new,StringIO.new,StringIO.new)
         begin
             kpg.run
         rescue SystemExit => se
@@ -97,7 +97,7 @@ context "Keybox Password Generator Application" do
 
     specify "setting an invalid use symbol set exits 1 and outputs data on stderr" do
         kpg = Keybox::Application::PasswordGenerator.new(["--use","bunk"])
-        kpg.stderr = StringIO.new
+        kpg.set_io(StringIO.new,StringIO.new,StringIO.new)
         begin
             kpg.run
         rescue SystemExit => se
@@ -110,7 +110,7 @@ context "Keybox Password Generator Application" do
 
     specify "setting an valid use symbol works" do
         kpg = Keybox::Application::PasswordGenerator.new(["--use","l"])
-        kpg.stdout = StringIO.new
+        kpg.set_io(StringIO.new,StringIO.new,StringIO.new)
         kpg.run
         kpg.options.use_symbols.should_include Keybox::SymbolSet::LOWER_ASCII
         kpg.stdout.string.split(/\s+/).size.should == 6
@@ -118,7 +118,7 @@ context "Keybox Password Generator Application" do
 
     specify "setting an valid required symbol works" do
         kpg = Keybox::Application::PasswordGenerator.new(["--req","l"])
-        kpg.stdout = StringIO.new
+        kpg.set_io(StringIO.new,StringIO.new,StringIO.new)
         kpg.run
         kpg.options.require_symbols.should_include Keybox::SymbolSet::LOWER_ASCII
         kpg.stdout.string.split(/\s+/).size.should == 6

@@ -10,7 +10,7 @@ context "Keybox Base Application" do
 
     specify "executing with no args should have output on stdout" do
         kba = Keybox::Application::Base.new(nil)
-        kba.stdout = StringIO.new
+        kba.set_io(StringIO.new,StringIO.new,StringIO.new)
         kba.run
         kba.stdout.string.size.should_be > 0
     end
@@ -18,8 +18,7 @@ context "Keybox Base Application" do
 
     specify "invalid options set the error message, exit 1 and have output on stderr" do
         kba = Keybox::Application::Base.new(["--invalid-option"])
-        kba.stderr = StringIO.new
-        kba.stdout = StringIO.new
+        kba.set_io(StringIO.new,StringIO.new,StringIO.new)
         begin
             kba.run
         rescue SystemExit => se
@@ -32,7 +31,7 @@ context "Keybox Base Application" do
 
     specify "help has output on stdout and exits 0" do
         kba = Keybox::Application::Base.new(["--h"]) 
-        kba.stdout = StringIO.new
+        kba.set_io(StringIO.new,StringIO.new,StringIO.new)
         begin
             kba.run
         rescue SystemExit => se
@@ -43,7 +42,7 @@ context "Keybox Base Application" do
 
     specify "version has output on stdout and exits 0" do
         kba = Keybox::Application::Base.new(["--ver"]) 
-        kba.stdout = StringIO.new
+        kba.set_io(StringIO.new,StringIO.new,StringIO.new)
         begin
             kba.run
         rescue SystemExit => se
