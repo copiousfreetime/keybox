@@ -36,7 +36,7 @@ PKG_INFO.rdoc_options       = [ "--line-numbers" , "--inline-source",
 PKG_INFO.extra_rdoc_files   = FileList['README', 'CHANGES', 'COPYING']
 PKG_INFO.rdoc_files         = FileList['lib/**/*.rb', 'bin/**'] + 
                               PKG_INFO.extra_rdoc_files
-PKG_INFO.file_list          = FileList['data/**',
+PKG_INFO.file_list          = FileList['data/**','vendor/**',
                                        'spec/**/*.rb'] + PKG_INFO.rdoc_files
 PKG_INFO.publish_dir        = "doc"
 PKG_INFO.message            = "Try `keybox --help` for more information"
@@ -70,7 +70,7 @@ spec = Gem::Specification.new do |s|
     s.rdoc_options.concat(PKG_INFO.rdoc_options)
 
     s.post_install_message  = PKG_INFO.message
-    s.add_dependency("highline", ">= 1.2.6")
+    #s.add_dependency("highline", ">= 1.2.6")
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|

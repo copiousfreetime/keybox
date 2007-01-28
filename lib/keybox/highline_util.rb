@@ -1,3 +1,14 @@
+begin
+    # first try to use the gem
+    require 'rubygems'
+    gem 'highline', ">=1.2.6"
+rescue Gem::LoadError
+    # then use what is included
+    $: << File.join(Keybox::APP_VENDOR_DIR,"highline")
+end
+
+require 'highline'
+
 module Keybox
     # including this module assumes that the class included has 
     # an @highline variable

@@ -1,5 +1,6 @@
 require 'optparse'
 require 'ostruct'
+require 'keybox/highline_util'
 
 #------------------------------------------------------------------------
 # Base class for applications in keybox

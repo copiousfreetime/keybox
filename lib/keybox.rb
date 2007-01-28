@@ -2,6 +2,7 @@ module Keybox
     APP_ROOT_DIR    = File.dirname(File.expand_path(File.join(__FILE__,".."))).freeze
     APP_LIB_DIR     = File.join(APP_ROOT_DIR,"lib").freeze
     APP_DATA_DIR    = File.join(APP_ROOT_DIR,"data").freeze
+    APP_VENDOR_DIR  = File.join(APP_ROOT_DIR,"vendor").freeze
     
     VERSION     = [1,1,0].freeze
     AUTHOR      = "Jeremy Hinegardner".freeze
@@ -16,12 +17,6 @@ end
 
 $: << Keybox::APP_LIB_DIR
 
-# highline can be required via the new gem method or it can use the
-# version of highline shipped with keybox.
-require 'rubygems'
-gem 'highline', ">= 1.2.6"
-require 'highline'
-
 require 'keybox/cipher'
 require 'keybox/digest'
 require 'keybox/entry'
@@ -31,5 +26,4 @@ require 'keybox/randomizer'
 require 'keybox/storage'
 require 'keybox/string_generator'
 require 'keybox/uuid'
-require 'keybox/highline_util'
 require 'keybox/convert'
