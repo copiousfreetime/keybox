@@ -57,7 +57,7 @@ context "Keybox Password Generator Application" do
         rescue SystemExit => se
             se.status.should_eql 0
         end
-        kpg.stdout.string.should_satisfy { |msg| msg =~ /version 1.0.0/m }
+        kpg.stdout.string.should_satisfy { |msg| msg =~ /version 1/m }
     end
 
     specify "minimum length can be set and all generated passwords will have length >= minimum length" do
