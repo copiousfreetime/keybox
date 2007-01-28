@@ -248,7 +248,7 @@ context "Keybox Password Safe Application" do
         begin
             kps.run
         rescue SystemExit => se
-            kps.stdout.string.should_satisfy { |msg| msg =~ /Master Password is too short./m }
+            kps.stdout.string.should_satisfy { |msg| msg =~ /Passphrase is not strong enough./m }
             se.status.should_eql 1
         end
     end
