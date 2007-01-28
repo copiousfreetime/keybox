@@ -86,9 +86,20 @@ class NewsTag < Tags::DefaultTag
 
         # limit the entries if there is an options for it
         limit = param('options')['maxEntries'] || time_content_entries.size
+        max_paragraphs = param('options')['maxParagraphs'] || nil
+
         # we want a descending sort
         time_content_entries.sort! { |a,b| b[0] <=> a[0] }
-        time_content_entries[0...limit]
+
+        if max_paragraphs then
+            max_paragraphs = max_paragraphs.to_i
+            time_content_entries[0...limit].collect do |e|
+                e[1] = e[1].split("\n\n")[0...max_paragraphs].join("\n\n")
+                e
+            end
+        else
+            time_content_entries[0...limit]
+        end
     end
 
 end

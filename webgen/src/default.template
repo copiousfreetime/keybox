@@ -30,7 +30,7 @@
           {menu: {menuStyle: jjh-vertical}}
 
           <h1>Latest News</h1>
-          {news: {options: {maxEntries: 1 }}}
+          {news: {options: {maxEntries: 1, maxParagraphs: 1}}}
 
           <h1>Documentation</h1>
           <ul class="sidemenu">

@@ -24,7 +24,7 @@ h2. keybox
 ** %Uses "aes-256":http://en.wikipedia.org/wiki/Advanced_Encryption_Standard for encryption.%
 ** %Other algorithms can be plugged in.%
 * %Automatic clearing of the password display after you are done using it.%
-* %Colorized output%
+* %Colorized output with customizable schemes%
 * %Command line, so you can use it just about everywhere% 
 * %Multiple options for the underlying random number generator, Supports using your own hardware device%
 * %Import and export information from CSV files.%

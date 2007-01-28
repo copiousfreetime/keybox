@@ -1,2 +1,14 @@
-2007-01-14: >
-    Version 1.0 of keybox is released. "Read all about it":index.html
+2007-01-27: |
+  h4. Version 1.1.0 of keybox is released.
+
+  Changes in this release
+
+  * %keybox now uses HighLine for terminal input/output%
+  * %Added *--color SCHEME* option to support custom colorized output and non-colorzed output.%
+  * %Ships with light_bg and dark_bg schemes, dark_bg is default%
+  * %Fixed configuration bug where command line options were not correctly overwriting default options.%
+        
+2007-01-14: |
+  h4. Version 1.0.0 of keybox is released. 
+  
+  "Read all about it":index.html
