@@ -171,9 +171,7 @@ context "Keybox Password Safe Application" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, 
                                                      "-c", @testing_cfg.path, 
                                                      "--add", "example.com"])
-        prompted_values = [@passphrase, ""] + %w(example.com someuser 
-                                                 apassword abadpassword 
-                                                 abcdef abcdef noinfo yes)
+        prompted_values = [@passphrase, ""] + %w(example.com someuser apassword abadpassword abcdef abcdef noinfo yes)
         stdin  = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
