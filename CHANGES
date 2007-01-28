@@ -1,4 +1,12 @@
 = keybox Changelog
+=== Version 1.1.0
+
+* keybox now uses HighLine for terminal input/output
+* Added --color option to allow for custom color schemes
+  - '--color none' will have normal, non-colorized output
+* Fixed configuration bug where command line options were not 
+  correctly overwriting default options.
+
 === Version 1.0.0
 
 * Initial public release

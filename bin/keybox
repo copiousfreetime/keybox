@@ -6,7 +6,8 @@
 #----------------------------------------------------------------------
 # bootstrap
 #----------------------------------------------------------------------
-require File.expand_path(File.join(File.dirname(__FILE__),"..","lib","keybox"))
+$: << File.expand_path(File.join(File.dirname(__FILE__),"..","lib"))
+require 'keybox'
 require 'keybox/application/password_safe'
 
 #----------------------------------------------------------------------

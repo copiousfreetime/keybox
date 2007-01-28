@@ -18,28 +18,28 @@ require 'keybox'
 # published to I'll migrate this to using hoe.
 #-----------------------------------------------------------------------
 PKG_INFO = OpenStruct.new
-PKG_INFO.name           = "keybox"
-PKG_INFO.rubyforge_name = PKG_INFO.name.downcase
-PKG_INFO.summary        = Keybox::DESCRIPTION
-PKG_INFO.description    = Keybox::DESCRIPTION
-PKG_INFO.url            = Keybox::HOMEPAGE
-PKG_INFO.email          = Keybox::AUTHOR_EMAIL
-PKG_INFO.author         = Keybox::AUTHOR
-PKG_INFO.version        = Keybox::VERSION.join(".")
+PKG_INFO.name               = "keybox"
+PKG_INFO.rubyforge_name     = PKG_INFO.name.downcase
+PKG_INFO.summary            = Keybox::DESCRIPTION
+PKG_INFO.description        = Keybox::DESCRIPTION
+PKG_INFO.url                = Keybox::HOMEPAGE
+PKG_INFO.email              = Keybox::AUTHOR_EMAIL
+PKG_INFO.author             = Keybox::AUTHOR
+PKG_INFO.version            = Keybox::VERSION.join(".")
 
-PKG_INFO.rdoc_dir       = "doc/rdoc"
-PKG_INFO.rdoc_main      = "README"
-PKG_INFO.rdoc_title     = "#{PKG_INFO.name} - #{PKG_INFO.version}"
-PKG_INFO.rdoc_options   = [ "--line-numbers" , "--inline-source",
-                            "--title", PKG_INFO.rdoc_title,
-                            "--main", PKG_INFO.rdoc_main ]
-PKG_INFO.rdoc_files     = FileList['README', 'CHANGES', 'COPYING',
-                                   'lib/**/*.rb','bin/**']
-PKG_INFO.file_list      = FileList['data/**',
-                                   'spec/**/*.rb'] + PKG_INFO.rdoc_files
-
-PKG_INFO.publish_dir    = "doc"
-PKG_INFO.message        = "Try `keybox --help` for more information"
+PKG_INFO.rdoc_dir           = "doc/rdoc"
+PKG_INFO.rdoc_main          = "README"
+PKG_INFO.rdoc_title         = "#{PKG_INFO.name} - #{PKG_INFO.version}"
+PKG_INFO.rdoc_options       = [ "--line-numbers" , "--inline-source",
+                                "--title", PKG_INFO.rdoc_title,
+                                "--main", PKG_INFO.rdoc_main ]
+PKG_INFO.extra_rdoc_files   = FileList['README', 'CHANGES', 'COPYING']
+PKG_INFO.rdoc_files         = FileList['lib/**/*.rb', 'bin/**'] + 
+                              PKG_INFO.extra_rdoc_files
+PKG_INFO.file_list          = FileList['data/**',
+                                       'spec/**/*.rb'] + PKG_INFO.rdoc_files
+PKG_INFO.publish_dir        = "doc"
+PKG_INFO.message            = "Try `keybox --help` for more information"
 
 #-----------------------------------------------------------------------
 # setup an initial task
@@ -65,11 +65,12 @@ spec = Gem::Specification.new do |s|
     s.require_paths         << "lib"
     s.executables           = Dir.entries("bin").delete_if { |f| f =~ /^\./ }
 
-    s.extra_rdoc_files      = FileList["*.txt"]
+    s.extra_rdoc_files      = PKG_INFO.extra_rdoc_files
     s.has_rdoc              = true 
     s.rdoc_options.concat(PKG_INFO.rdoc_options)
 
     s.post_install_message  = PKG_INFO.message
+    s.add_dependency("highline", ">= 1.2.6")
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
