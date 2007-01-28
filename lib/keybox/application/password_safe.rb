@@ -16,9 +16,10 @@ module Keybox
             attr_accessor :actions
             attr_reader   :db
 
-            DEFAULT_DIRECTORY = File.join(ENV["HOME"],".keybox")
-            DEFAULT_DB        = File.join(DEFAULT_DIRECTORY,"database.yaml")
-            DEFAULT_CONFIG    = File.join(DEFAULT_DIRECTORY,"config.yaml")
+            DEFAULT_DIRECTORY    = File.join(ENV["HOME"],".keybox")
+            DEFAULT_DB           = File.join(DEFAULT_DIRECTORY,"database.yaml")
+            DEFAULT_CONFIG       = File.join(DEFAULT_DIRECTORY,"config.yaml")
+            DEFAULT_COLOR_SCHEME = :dark_bg
 
             ACTION_LIST       = %w(add delete edit show list master-password)
 
@@ -119,7 +120,7 @@ module Keybox
                 options.config_file                 = Keybox::Application::PasswordSafe::DEFAULT_CONFIG
                 options.db_file                     = Keybox::Application::PasswordSafe::DEFAULT_DB
                 options.use_password_hash_for_url   = false
-                options.color_scheme                = :dark_bg
+                options.color_scheme                = Keybox::Application::PasswordSafe::DEFAULT_COLOR_SCHEME
                 return options
             end
 
@@ -130,7 +131,6 @@ module Keybox
             # we use the default unless the parsed_options contain a
             # configuration file then we use that one
             def configuration_file_options
-
                 file_path = @parsed_options.config_file || DEFAULT_CONFIG
 
                 # if the file is 0 bytes, then this is illegal and needs
@@ -163,7 +163,7 @@ module Keybox
                     search_directories  = [ Keybox::APP_DATA_DIR, File.dirname(@options.config_file) ]
                     scheme_basename     = "#{@options.color_scheme.to_s}.color_scheme.yaml"
                     scheme_path         = nil
-                    
+                   
                     # get the path to the file
                     search_directories.each do |sd|
                         if File.exists?(File.join(sd,scheme_basename)) then

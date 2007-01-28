@@ -35,7 +35,7 @@ module Keybox
                 set_io
 
                 @options        = self.default_options
-                @parsed_options = self.default_options
+                @parsed_options = OpenStruct.new
                 @parser         = self.option_parser
                 @error_message  = nil
 
@@ -94,7 +94,7 @@ module Keybox
             # then merge in the command line options
             def merge_options
                 options = default_options.marshal_dump
-                configuration_file_options.each_pair do |key,value|
+                self.configuration_file_options.each_pair do |key,value|
                     options[key] = value
                 end
 
