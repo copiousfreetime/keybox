@@ -3,7 +3,7 @@ begin
     require 'rubygems'
     gem 'highline', ">=1.2.6"
 rescue Gem::LoadError
-    # then use what is included
+    # If that fails, then use what ships with keybox
     $: << File.join(Keybox::APP_VENDOR_DIR,"highline")
 end
 

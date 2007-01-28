@@ -37,4 +37,6 @@
 # project directories
 doc/*
 pkg/*
+\.swo$
+\.swp$
 email.txt

@@ -36,10 +36,10 @@ PKG_INFO.rdoc_options       = [ "--line-numbers" , "--inline-source",
 PKG_INFO.extra_rdoc_files   = FileList['README', 'CHANGES', 'COPYING']
 PKG_INFO.rdoc_files         = FileList['lib/**/*.rb', 'bin/**'] + 
                               PKG_INFO.extra_rdoc_files
-PKG_INFO.file_list          = FileList['data/**','vendor/**',
+PKG_INFO.file_list          = FileList['data/**','vendor/**/*.rb',
                                        'spec/**/*.rb'] + PKG_INFO.rdoc_files
 PKG_INFO.publish_dir        = "doc"
-PKG_INFO.message            = "Try `keybox --help` for more information"
+PKG_INFO.message            = "\e[1m\e[31m\e[40mTry `keybox --help` for more information\e[0m"
 
 #-----------------------------------------------------------------------
 # setup an initial task
@@ -79,7 +79,7 @@ Rake::GemPackageTask.new(spec) do |pkg|
 end
 
 desc "Install as a gem"
-task :install_gem => [:clean, :package] do
+task :install_gem => [:clobber, :package] do
     sh "sudo gem install pkg/*.gem"
 end
 
