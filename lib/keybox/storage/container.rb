@@ -13,14 +13,14 @@ module Keybox
         # The container of the Keybox records.  The Container itself is
         # a Keybox::Storage::Record with a few extra methods.
         #
-        # A instance of a Container is created with a assprhase and a
+        # A instance of a Container is created with a passphrase and a
         # path to a file.  The passphrase can be anything that has a
         # to_s method.
         #
         #   container = Keybox::Storage::Container.new("i love ruby", "/tmp/database.yml")
         #
         # This will load from the given file with the given passphrase
-        # if the file exists, or it will initalize the container to
+        # if the file exists, or it will initialize the container to
         # accept records.
         #
         # The records are held decrypted in memory, so keep that in mind
@@ -30,7 +30,7 @@ module Keybox
         #
         #   record = Keybox::Storage::Record.new
         #   record.field1 = "data"
-        #   record.field1 = "some more data"
+        #   record.field2 = "some more data"
         #   
         #   container << record
         #
