@@ -3,7 +3,7 @@ module Keybox
     APP_LIB_DIR     = File.join(APP_ROOT_DIR,"lib").freeze
     APP_DATA_DIR    = File.join(APP_ROOT_DIR,"data").freeze
     
-    VERSION     = [1,0,0].freeze
+    VERSION     = [1,1,0].freeze
     AUTHOR      = "Jeremy Hinegardner".freeze
     AUTHOR_EMAIL= "jeremy@hinegardner.org".freeze
     HOMEPAGE    = "http://keybox.rubyforge.org".freeze
