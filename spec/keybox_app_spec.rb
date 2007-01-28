@@ -241,6 +241,18 @@ context "Keybox Password Safe Application" do
         kps.stdout.string.should_satisfy { |msg| msg =~ /New master password set/m }
     end
 
+    specify "master password must be non-zero" do
+        kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--master-password"])
+        stdin  = StringIO.new([@passphrase, "", ""].join("\n"))
+        kps.set_io(stdin,StringIO.new,StringIO.new)
+        begin
+            kps.run
+        rescue SystemExit => se
+            kps.stdout.string.should_satisfy { |msg| msg =~ /Master Password is too short./m }
+            se.status.should_eql 1
+        end
+    end
+
     specify "importing from a valid csv file" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"-i", @import_csv.path])
         stdin  = StringIO.new([@passphrase, @passphrase].join("\n"))

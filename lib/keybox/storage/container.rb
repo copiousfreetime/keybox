@@ -68,15 +68,18 @@ module Keybox
 
             attr_reader     :records
 
-            ITERATIONS = 2048 
+            ITERATIONS            = 2048 
+            MINIMUM_PHRASE_LENGTH = 4
             def initialize(passphrase,path)
                 super()
+
 
                 @path        = path
                 @passphrase  = passphrase
                 @records     = []
 
                 if not load_from_file then
+                    strength_check(@passphrase)
                     self.version                    = Keybox::VERSION
                     
                     self.key_calc_iterations        = ITERATIONS
@@ -98,6 +101,7 @@ module Keybox
             # Change the master password of the container
             #
             def passphrase=(new_passphrase)
+                strength_check(new_passphrase)
                 @passphrase                 = new_passphrase
                 self.key_digest_salt        = Keybox::RandomDevice.random_bytes(32)
                 self.key_digest             = calculated_key_digest(new_passphrase)
@@ -238,6 +242,20 @@ module Keybox
             end
 
             private
+
+            #
+            # validate the passphrase against some criteria.  Right now
+            # this criteria is very minimal and should be changed at
+            # some point.
+            #
+            # An invalid passphrase raises a Keybox::ValidationException
+            #
+            def strength_check(phrase)
+                if phrase.to_s.length < MINIMUM_PHRASE_LENGTH
+                    raise Keybox::ValidationError, "Passphrase is not strong enough.  It is too short."
+                end
+                true
+            end
 
             #
             # calculate the key digest of the input pass phrase and

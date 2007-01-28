@@ -400,8 +400,7 @@ module Keybox
             # Change the master password on the database
             #
             def master_password(ignore_this)
-                new_password = prompt("Enter new master password", :echo => false, :validate => true, :width => 45)
-                @db.passphrase = new_password
+                @db.passphrase = prompt("Enter new master password", :echo => '*', :validate => true, :width => 45) 
                 hsay "New master password set.", :information
             end
 
