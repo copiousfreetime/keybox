@@ -75,7 +75,7 @@ task :email do
         mail.puts 
         mail.puts urls
     end
-    puts "Created the follwoing as email.txt:"
+    puts "Created the following as email.txt:"
     puts "-" * 72
     puts File.read("email.txt")
     puts "-" * 72
