@@ -66,14 +66,10 @@ module Keybox
 
             until validated do
                 line = @highline.ask("<%= color('#{original_prompt.rjust(width)}',:prompt) %> : ") { |q| q.echo = echo }
-                # ensure we are at the beginning of the line
-                @stdout.print "\r"
 
                 # if we are validating then prompt again to validate
                 if validate then
                     v = @highline.ask("<%= color('#{validation_prompt.rjust(width)}', :prompt) %> : ") { |q| q.echo = echo }
-                    # ensure we are at the beginning of the line
-                    @stdout.print "\r"
                    
                     # line on some terminals
                     if v != line then
