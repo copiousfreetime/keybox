@@ -13,7 +13,6 @@ context "Keybox Password Safe Application" do
         container << Keybox::HostAccountEntry.new("test account","localhost","guest", "rubyrocks")
         container << Keybox::URLAccountEntry.new("example site", "http://www.example.com", "rubyhacker")
         container.save
-        container.save("/tmp/jjh-db.yml")
 
         @import_csv = Tempfile.new("keybox_import.csv")
         @import_csv.puts "title,hostname,username,password,additional_info"
