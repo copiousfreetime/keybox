@@ -21,6 +21,50 @@
 require 'parsedate'
 require 'stringio'
 
+# This plugin creates a 'news' tag which can be used to display the
+# contents of a news file.
+#
+# The news file by default is 'news.yaml' and placed in the root of
+# the webgen directory.  This can be changed with the 'filename'
+# parameter.
+#
+# The yaml file has the basic format of
+#
+#   date: content
+#   date: content
+#
+# Where the date has the format indicated by the 'dateFormat'
+# parmater, which by default is YYYY-MM-DD.  The content is formated
+# according to the 'contentFormat' parameter and is textile by
+# default.  I recommend using the '|' version of block text for the
+# content.  For example:
+#
+#   2007-03-20: |
+#       h2. this is an entry
+#
+#       This is some content
+#
+# When utilzed in a template the 'news' tag can optionally take to
+# additional parameters 'maxEntries' and 'maxParagraphs'.  
+#
+#   maxEntries: the N most recent entries by date in the news.yaml
+#               file to display.
+#
+#   maxParagraphs: the content of an entry is truncated to N
+#                  paragraphs, where a paragraphs ending is defined by
+#                  "\n\n"
+# 
+# So the following usage of the news tag would disply the first
+# paragraph of the most recent item in the news.yaml file.
+#
+#   {news: {options: {maxEntries: 1, maxParagraphs: 1}}}
+#
+# While this usage would display all the contents of the news.yaml file
+# sorted in reverse chronological order and displayed fully.
+#
+#   {news: }
+#
+#
 class NewsTag < Tags::DefaultTag
 
     infos( :name => 'Tag/News',
