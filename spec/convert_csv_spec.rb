@@ -7,6 +7,7 @@ describe "CSV Convert class" do
         @import_csv.puts "title,hostname,username,password,additional_info"
         @import_csv.puts "example host,host.example.com,guest,mysecretpassword,use this account only for honeybots"
         @import_csv.puts "example site,http://www.example.com,guest,mywebpassword,web forum login"
+        @import_csv.puts "example site,http://www.example.com,guest,mywebpassword,web forum login's information"
         @import_csv.close
 
         @bad_import_csv = Tempfile.new("keybox_bad_header.csv")
@@ -27,9 +28,10 @@ describe "CSV Convert class" do
 
     it "able to load records from a file" do
         entries = Keybox::Convert::CSV.from_file(@import_csv.path)
-        entries.size.should == 2
+        entries.size.should == 3
         entries[0].hostname.should == "host.example.com"
         entries[1].password.should == "mywebpassword"
+        entries[2].additional_info.should == "web forum login's information"
     end
 
     it "throws error if the header is bad" do

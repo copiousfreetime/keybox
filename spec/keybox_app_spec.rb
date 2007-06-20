@@ -12,12 +12,16 @@ describe "Keybox Password Safe Application" do
         container = Keybox::Storage::Container.new(@passphrase, @testing_db.path)
         container << Keybox::HostAccountEntry.new("test account","localhost","guest", "rubyrocks")
         container << Keybox::URLAccountEntry.new("example site", "http://www.example.com", "rubyhacker")
+        apos = Keybox::HostAccountEntry.new("a title","hostname","login", "password")
+        apos.additional_info = "Someone's additional information"
+        container << apos
         container.save
 
         @import_csv = Tempfile.new("keybox_import.csv")
         @import_csv.puts "title,hostname,username,password,additional_info"
         @import_csv.puts "example host,host.example.com,guest,mysecretpassword,use this account only for honeybots"
         @import_csv.puts "example site,http://www.example.com,guest,mywebpassword,web forum login"
+        @import_csv.puts "example site,http://www.example.com,guest,mywebpassword,web forum's login"
         @import_csv.close
 
         @bad_import_csv = Tempfile.new("keybox_bad_header.csv")
@@ -78,7 +82,7 @@ describe "Keybox Password Safe Application" do
         stdin = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
-        kps.db.records.size.should == 3
+        kps.db.records.size.should == 4
     end
 
 
@@ -135,7 +139,7 @@ describe "Keybox Password Safe Application" do
         stdin  = StringIO.new(@passphrase + "\n")
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
-        kps.db.records.size.should == 2
+        kps.db.records.size.should == 3
     end
 
     it "adding an entry to the database works" do
@@ -144,7 +148,7 @@ describe "Keybox Password Safe Application" do
         stdin  = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
-        kps.db.records.size.should == 3
+        kps.db.records.size.should == 4
     end
 
     it "editing an entry in the database works" do
@@ -153,7 +157,7 @@ describe "Keybox Password Safe Application" do
         stdin  = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
-        kps.db.records.size.should == 2
+        kps.db.records.size.should == 3
         kps.db.find("someother")[0].additional_info.should == "someinfo"
     end
 
@@ -163,7 +167,7 @@ describe "Keybox Password Safe Application" do
         stdin  = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
-        kps.db.records.size.should == 3
+        kps.db.records.size.should == 4
     end
 
     it "double prompting on failed password for entry to the database works" do
@@ -174,7 +178,7 @@ describe "Keybox Password Safe Application" do
         stdin  = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
-        kps.db.records.size.should == 3
+        kps.db.records.size.should == 4
     end
 
     it "able to delete an entry" do
@@ -183,7 +187,7 @@ describe "Keybox Password Safe Application" do
         stdin = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
-        kps.db.records.size.should == 1
+        kps.db.records.size.should == 2
         kps.stdout.string.should =~ /example' deleted/ 
     end
 
@@ -193,7 +197,7 @@ describe "Keybox Password Safe Application" do
         stdin = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
-        kps.db.records.size.should == 2
+        kps.db.records.size.should == 3
         kps.stdout.string.should =~ /example' deleted/ 
     end
 
@@ -224,7 +228,7 @@ describe "Keybox Password Safe Application" do
 
     it "show all the entries" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--show"])
-        stdin = StringIO.new([@passphrase, "", ""].join("\n"))
+        stdin = StringIO.new([@passphrase, "", "", ""].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
         kps.stdout.string.should =~ /2./m 

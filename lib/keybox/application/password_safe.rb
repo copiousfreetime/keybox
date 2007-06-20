@@ -352,7 +352,7 @@ module Keybox
                             columns << t.ljust(lengths[f])
                         end
                         cdata = columns.join(" " * 4)
-                        @highline.say("<%= color('#{line_number}',:line_number) %> <%= color('#{cdata}','#{color}') %>")
+                        @highline.say("<%= color('#{line_number}',:line_number) %> <%= color(%Q{#{cdata}},'#{color}') %>")
                     end
                 else
                     hsay "No matching records were found.", :information
@@ -373,18 +373,18 @@ module Keybox
                             next if value.length == 0
 
                             name_out = name.rjust(max_name_length)
-                            @highline.say("<%= color('#{name_out}', :name) %> <%= color(':',:separator) %> ")
+                            @highline.say("<%= color(%Q{#{name_out}}, :name) %> <%= color(':',:separator) %> ")
 
                             if match.private_field?(name) then
                                 @highline.ask(
-                                   "<%= color('#{value}',:private) %> <%= color('(press any key).', :prompt) %> "
+                                   "<%= color(%Q{#{value}},:private) %> <%= color('(press any key).', :prompt) %> "
                                 ) do |q|
                                     q.overwrite = true
                                     q.echo      = false
                                     q.character = true
                                 end
                                 
-                                @highline.say("<%= color('#{name_out}', :name) %> <%= color(':',:separator) %> <%= color('#{'*' * 20}', :private) %>")
+                                @highline.say("<%= color(%Q{#{name_out}}, :name) %> <%= color(':',:separator) %> <%= color('#{'*' * 20}', :private) %>")
                             else
                                 hsay value, :value
                             end

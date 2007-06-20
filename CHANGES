@@ -1,8 +1,9 @@
 = keybox Changelog
 === Version 1.2.0
 
+* Fixed Bug [#10639] --show search is now NOT case sensitive
 * Fixed Bug [#8330] finding user home directory may be wrong
-* Fixed Bug [#10639] search is case sensitive
+* Fixed Bug [#11684] apostrophe's in additional information cause errors
 
 === Version 1.1.0
 
