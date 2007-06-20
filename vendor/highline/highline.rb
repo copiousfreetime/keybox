@@ -600,21 +600,32 @@ class HighLine
         raw_no_echo_mode if stty = CHARACTER_MODE == "stty"
         
         line = ""
+        backspace_limit = 0
         begin
+
           while character = (stty ? @input.getc : get_character(@input))
             # honor backspace and delete
             if character == 127 or character == 8
               line.slice!(-1, 1)
+              backspace_limit -= 1
             else
               line << character.chr
+              backspace_limit += 1
             end
             # looking for carriage return (decimal 13) or
             # newline (decimal 10) in raw input
             break if character == 13 or character == 10 or
                      (@question.limit and line.size == @question.limit)
             if @question.echo != false
-              if character == 127 or character == 8
-                @output.print("\b#{ERASE_CHAR}")
+              if character == 127 or character == 8 
+
+                  # only backspace if we have characters on the line to
+                  # eliminate, otherwise we'll tromp over the prompt
+                  if backspace_limit >= 0 then
+                    @output.print("\b#{ERASE_CHAR}")
+                  else 
+                      # do nothing
+                  end
               else
                 @output.print(@question.echo)
               end

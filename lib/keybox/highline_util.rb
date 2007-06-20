@@ -47,9 +47,10 @@ module Keybox
 
         #
         # Prompt for input, returning what was typed.  Options can be
-        # passed as If echo is false,
-        # then '*' is printed out for each character typed in.  If it is
-        # any other character then that is output instead.
+        # passed in. 
+        #
+        # If echo is false,  then '*' is printed out for each character 
+        # typed in.  If it is any other character then that is output instead.
         #
         # If validate is set to true, then it will prompt twice and make
         # sure that the two values match
