@@ -4,7 +4,7 @@ module Keybox
     APP_DATA_DIR    = File.join(APP_ROOT_DIR,"data").freeze
     APP_VENDOR_DIR  = File.join(APP_ROOT_DIR,"vendor").freeze
     
-    VERSION     = [1,2,0].freeze
+    VERSION     = [1,1,1].freeze
     AUTHOR      = "Jeremy Hinegardner".freeze
     AUTHOR_EMAIL= "jeremy@hinegardner.org".freeze
     HOMEPAGE    = "http://keybox.rubyforge.org".freeze
