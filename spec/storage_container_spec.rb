@@ -64,6 +64,16 @@ describe 'a storage container' do
         matches.size.should == 1
     end
 
+    it "can find matching records - case insensitive via regex input" do
+        matches = @container.find(/Times/)
+        matches.size.should == 1
+    end
+    
+    it "can find matching records - case insensitive via string input" do
+        matches = @container.find("Times")
+        matches.size.should == 1
+    end
+
     it "changing the password is safe" do
         @container.save(@testing_file)
         copy_of_container= Keybox::Storage::Container.new(@passphrase, @testing_file)

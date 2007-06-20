@@ -215,7 +215,12 @@ module Keybox
             # regexp will only be matched against those fields
             #
             def find(search_string,restricted_to = nil)
-                regex = Regexp.new(search_string)
+                case search_string
+                when Regexp
+                    regex = Regexp.new(search_string.source,search_string.options | Regexp::IGNORECASE)
+                else
+                    regex = Regexp.new(search_string.to_s,Regexp::IGNORECASE)
+                end
                 matches = []
                 @records.each do |record|
                     restricted_to = restricted_to || ( record.fields - %w(password) )

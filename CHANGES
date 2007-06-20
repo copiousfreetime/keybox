@@ -1,7 +1,8 @@
 = keybox Changelog
 === Version 1.2.0
 
-* [Bug 8330] - Fixed - home directory detection 
+* Fixed Bug [#8330] finding user home directory may be wrong
+* Fixed Bug [#10639] search is case sensitive
 
 === Version 1.1.0
 
