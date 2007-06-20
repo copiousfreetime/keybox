@@ -1,4 +1,8 @@
 = keybox Changelog
+=== Version 1.2.0
+
+* [Bug 8330] - Fixed - home directory detection 
+
 === Version 1.1.0
 
 * keybox now uses HighLine for terminal input/output
