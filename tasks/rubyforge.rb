@@ -5,6 +5,7 @@
 #   
 #   Ripped from the guts of hoe
 #-----------------------------------------------------------------------
+require 'webgen/website'
 require 'webgen/rake/webgentask'
 Webgen::Rake::WebgenTask.new
 

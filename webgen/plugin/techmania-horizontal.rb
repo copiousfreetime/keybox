@@ -24,7 +24,7 @@ load_plugin 'webgen/plugins/menustyles/default'
 
 module MenuStyles
 
-  class TechmaniaHorizontalMenuStyle < MenuStyles::DefaultMenuStyle
+  class TechmaniaHorizontalMenuStyle <  DefaultMenuStyle
 
     infos( :name => 'MenuStyle/TechmaniaHorizontal',
            :author => "Jeremy Hinegardner",

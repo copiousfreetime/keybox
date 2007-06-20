@@ -10,9 +10,6 @@
 #++
 #
 
-
-
-
 load_plugin 'webgen/plugins/filehandlers/filehandler'
 
 module MiscPlugins
