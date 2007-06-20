@@ -1,114 +1,112 @@
 require 'keybox'
-context "string generator" do
-    setup do
+describe Keybox::StringGenerator  do
+    before(:each) do
         @generator = Keybox::StringGenerator.new
     end
 
-    specify "should not be used alone" do
-        lambda { @generator.generate }.should_raise Keybox::KeyboxError
+    it "should not be used alone" do
+        lambda { @generator.generate }.should raise_error(Keybox::KeyboxError)
     end
 
-    specify "cannot have a min length greater than a max length" do
+    it "cannot have a min length greater than a max length" do
         @generator.min_length = 90
-        lambda { @generator.generate }.should_raise Keybox::ValidationError
-        @generator.min_length = 8
+        lambda { @generator.generate }.should raise_error(Keybox::ValidationError)
     end
     
-    specify "cannot have a max length less than a min length" do
+    it "cannot have a max length less than a min length" do
         @generator.max_length = 2
-        lambda { @generator.generate }.should_raise Keybox::ValidationError
-        @generator.max_length = 10
+        lambda { @generator.generate }.should raise_error(Keybox::ValidationError)
     end
 
-    specify "initially there are no chunks" do
-        @generator.chunks.should_have(0).entries
+    it "initially there are no chunks" do
+        @generator.chunks.should have(0).entries
     end
 end
 
-context "chargram generator" do
-    setup do 
+describe "chargram generator" do
+    before(:each) do 
         @generator = Keybox::CharGramGenerator.new
     end
 
-    specify "should have a positive size" do
-        @generator.size.should_be > 26
+    it "should have a positive size" do
+        @generator.size.should > 26
     end
 
-    specify "should emit a string with length > 0" do
-        @generator.generate_chunk.size.should_be > 0
+    it "should emit a string with length > 0" do
+        @generator.generate_chunk.size.should > 0
     end
 
-    specify "should emit an array " do
-        @generator.generate_chunk.should_be_instance_of String
+    it "should emit an array " do
+        @generator.generate_chunk.should be_instance_of(String)
     end
 
-    specify "2 succesive emits should have a common first and last character" do
+    it "2 succesive emits should have a common first and last character" do
         one = @generator.generate_chunk
         two = @generator.generate_chunk
         one[-1].should == two[0]
     end
 
-    specify "2 calls to generate_chunk should have a string that is 1 less than the 2 chunks" do
+    it "2 calls to generate_chunk should have a string that is 1 less than the 2 chunks" do
         one = @generator.generate_chunk
         two = @generator.generate_chunk
         @generator.to_s.length.should == (one.length + two.length - 1)
     end
 end
 
-context "SymbolSetGenerator" do
-    setup do 
+describe "SymbolSetGenerator" do
+    before(:each) do 
         @generator = Keybox::SymbolSetGenerator.new
     end
 
-    specify "symbol sets have the right number or characters" do
+    it "symbol sets have the right number or characters" do
         Keybox::SymbolSetGenerator::ALL.size.should == 92
     end
 
-    specify "generating chunks should produce an array" do
+    it "generating chunks should produce an array" do
         12.times do 
             @generator.generate_chunk
         end
-        @generator.chunks.should_have(12).entries
+        @generator.chunks.should have(12).entries
     end
 
-    specify "generate should produce a string" do
-        @generator.generate.should_be_instance_of(String)
-        @generator.to_s.size.should_be > 0
+    it "generate should produce a string" do
+        @generator.generate.should be_instance_of(String)
+        @generator.to_s.size.should > 0
     end
 
-    specify "generating chunks can be cleared" do
+    it "generating chunks can be cleared" do
         @generator.generate
         @generator.clear
-        @generator.chunks.should_have(0).entries
+        @generator.chunks.should have(0).entries
     end
 
-    specify "min and max lengths are respected" do
+    it "min and max lengths are respected" do
         @generator.max_length = 25
         @generator.min_length = 25
-        @generator.generate.size.should_be == 25
+        @generator.generate.size.should == 25
     end
 
-    specify "required sets are utilized" do
+    it "required sets are utilized" do
         gen = Keybox::SymbolSetGenerator.new([Keybox::SymbolSet::NUMERAL_ASCII, Keybox::SymbolSet::LOWER_ASCII])
         gen.required_sets << Keybox::SymbolSet::UPPER_ASCII
         p = gen.generate
-        gen.required_sets.flatten.uniq.should_include(p[0].chr)
+        gen.required_sets.flatten.uniq.should be_include(p[0].chr)
     end
-    specify "required sets are merged with symbol sets" do
+    it "required sets are merged with symbol sets" do
         gen = Keybox::SymbolSetGenerator.new([Keybox::SymbolSet::NUMERAL_ASCII, Keybox::SymbolSet::LOWER_ASCII])
         gen.required_sets << Keybox::SymbolSet::UPPER_ASCII
         gen.required_sets.flatten.uniq.each do |c|
-            gen.symbols.should_include(c)
+            gen.symbols.should be_include(c)
         end
     end
 
-    specify "generated passwords autoclear" do
+    it "generated passwords autoclear" do
         @generator.generate.should_not == @generator.generate
     end
 
-    specify "setting min and max should not affect " do
+    it "setting min and max should not affect " do
         g = Keybox::SymbolSetGenerator.new(Keybox::SymbolSet::ALL)
-        g.generate.should_be_instance_of(String)
+        g.generate.should be_instance_of(String)
     end
 
 end

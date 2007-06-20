@@ -101,7 +101,7 @@ rd = Rake::RDocTask.new do |rdoc|
 end
 
 rspec = Spec::Rake::SpecTask.new do |r|
-    r.warning   = true
+    r.warning   = false
     r.rcov      = true
     r.rcov_dir  = "doc/coverage"
     r.libs      << "./lib" 

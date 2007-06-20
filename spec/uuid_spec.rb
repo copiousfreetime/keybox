@@ -1,29 +1,30 @@
 require 'keybox/uuid'
-context "UUID class" do
-    specify "should have 16 bytes" do
+describe "UUID class" do
+    it "should have 16 bytes" do
         uuid = Keybox::UUID.new
         uuid.bytes.size.should == 16 
     end
 
-    specify "as an array should have 16 members" do
+    it "as an array should have 16 members" do
         uuid = Keybox::UUID.new
         uuid.to_a.size.should == 16
     end
 
-    specify "array elements should have values between 0 and 256 " do
+    it "array elements should have values between 0 and 256 " do
         uuid = Keybox::UUID.new
         uuid.to_a.each do |b|
-            b.should_satisfy { |s| s.between?(0,256) }
+            b.should >= 0
+            b.should <= 256
         end
     end
 
-    specify "as a string should match regex" do
+    it "as a string should match regex" do
         regex = Keybox::UUID::REGEX
         uuid  = Keybox::UUID.new
-        uuid.to_s.should_match(regex)
+        uuid.to_s.should =~ regex
     end
 
-    specify "initialized with a string should give a valid uuid" do
+    it "initialized with a string should give a valid uuid" do
         s      = "0123456789abcdef"
         s_a    = s.unpack("C*")
         s_uuid = sprintf(Keybox::UUID::FORMAT,*s_a)
@@ -31,44 +32,44 @@ context "UUID class" do
         uuid.to_s.should == s_uuid
     end
 
-    specify "initialized with a string in the format of a uuid is valid " do
+    it "initialized with a string in the format of a uuid is valid " do
         s = "c8b5a23a-2507-4834-ab19-60f2cb2a5271"
         uuid = Keybox::UUID.new(s)
         uuid.to_s.should == s
     end
     
-    specify "not enough bytes should throw an expeption" do
+    it "not enough bytes should throw an expeption" do
         s = "0123456789"
-        lambda { Keybox::UUID.new(s) }.should_raise ArgumentError
+        lambda { Keybox::UUID.new(s) }.should raise_error(ArgumentError)
     end
 
-    specify "invalid uuid string should throw an exception" do
+    it "invalid uuid string should throw an exception" do
         s = "z8b5a23a-2507-4834-ab19-60f2cb2a5271"
-        lambda { Keybox::UUID.new(s) }.should_raise ArgumentError
+        lambda { Keybox::UUID.new(s) }.should raise_error(ArgumentError)
     end
 
-    specify "initialing with a non-string raises an exception" do
-        lambda { Keybox::UUID.new(42) }.should_raise ArgumentError
+    it "initialing with a non-string raises an exception" do
+        lambda { Keybox::UUID.new(42) }.should raise_error(ArgumentError)
     end
 
-    specify "should equal another keybox created with same data" do
+    it "should equal another keybox created with same data" do
         s = "c8b5a23a-2507-4834-ab19-60f2cb2a5271"
         one = Keybox::UUID.new(s)
         two = Keybox::UUID.new(s)
         one.should == two
     end
 
-    specify "should equal a string that is the same uuid" do
+    it "should equal a string that is the same uuid" do
         s = "c8b5a23a-2507-4834-ab19-60f2cb2a5271"
         one = Keybox::UUID.new(s)
         one.should == s
     end
 
-    specify "should not equal some other uuid or random string" do
+    it "should not equal some other uuid or random string" do
         s = "c8b5a23a-2507-4834-ab19-60f2cb2a5271"
         one = Keybox::UUID.new(s)
-        one.should_not_eql Keybox::UUID.new
-        one.should_not_eql "i love ruby"
-        one.should_not_eql 4
+        one.should_not == Keybox::UUID.new
+        one.should_not == "i love ruby"
+        one.should_not == 4
     end
 end
