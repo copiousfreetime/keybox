@@ -223,7 +223,7 @@ module Keybox
                 end
                 matches = []
                 @records.each do |record|
-                    restricted_to = restricted_to || ( record.fields - %w(password) )
+                    restricted_to = restricted_to || ( record.data_member_names - %w(password) )
                     record.data_members.each_pair do |k,v|
                         if regex.match(v) and restricted_to.include?(k.to_s) then
                             matches << record

@@ -1,9 +1,13 @@
 = keybox Changelog
-=== Version 1.2.0
+=== Version 1.1.1
 
-* Fixed Bug [#10639] --show search is now NOT case sensitive
+* update all tests to use latest RSpec syntax
+* Fixed Bug [#8231] storage::container.find() does not work for anything but AccountEntry classes
 * Fixed Bug [#8330] finding user home directory may be wrong
+* Fixed Bug [#9827] Password field on add screen can be deleted
+* Fixed Bug [#10639] search is case sensitive
 * Fixed Bug [#11684] apostrophe's in additional information cause errors
+* Updated to using HighLine 1.2.8 (fixes Bug #9827)
 
 === Version 1.1.0
 

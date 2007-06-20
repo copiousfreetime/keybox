@@ -49,6 +49,12 @@ module Keybox
                 @modified
             end
 
+            # an array of the data member names
+            def data_member_names
+                @data_members.keys.collect { |n| n.to_s }
+            end
+
+
             # this is here so that after this class has been serialized
             # to a file the container can mark it as clean.  The class
             # should take care of marking itself dirty.
