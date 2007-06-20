@@ -27,6 +27,15 @@ module Keybox
             attr_reader :stdin
             attr_reader :highline
 
+            class << self
+                # thank you Jamis - from Capistrano
+                def home_directory # :nodoc:
+                    ENV["HOME"] ||
+                        (ENV["HOMEPATH"] && "#{ENV["HOMEDRIVE"]}#{ENV["HOMEPATH"]}") ||
+                        "/"
+                end
+            end
+
             def initialize(argv = [])
                 # make sure we have an empty array, we could be
                 # initially passed nil explicitly
@@ -124,6 +133,7 @@ module Keybox
                 error_version_help
                 @highline.say "Keybox Base Application.  Doing nothing but output this line."
             end
+
         end
     end
 end

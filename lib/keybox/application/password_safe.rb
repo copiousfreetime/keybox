@@ -16,7 +16,7 @@ module Keybox
             attr_accessor :actions
             attr_reader   :db
 
-            DEFAULT_DIRECTORY    = File.join(ENV["HOME"],".keybox")
+            DEFAULT_DIRECTORY    = File.join(home_directory,".keybox")
             DEFAULT_DB           = File.join(DEFAULT_DIRECTORY,"database.yaml")
             DEFAULT_CONFIG       = File.join(DEFAULT_DIRECTORY,"config.yaml")
             DEFAULT_COLOR_SCHEME = :dark_bg

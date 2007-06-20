@@ -303,4 +303,8 @@ describe "Keybox Password Safe Application" do
         kps.stdout.string.should =~ /It is missing the following items/m 
         kps.options.color_scheme.should == :none
     end
+
+    it "should have a valid home directory" do
+        File.dirname(Keybox::Application::PasswordSafe::DEFAULT_DIRECTORY).size.should > 0
+    end
 end

@@ -15,7 +15,6 @@ describe "Keybox Base Application" do
         kba.stdout.string.size.should > 0
     end
 
-
     it "invalid options set the error message, exit 1 and have output on stderr" do
         kba = Keybox::Application::Base.new(["--invalid-option"])
         kba.set_io(StringIO.new,StringIO.new,StringIO.new)
@@ -50,6 +49,5 @@ describe "Keybox Base Application" do
             kba.stdout.string.length.should > 0
         end
     end
- 
 end
 
