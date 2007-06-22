@@ -29,7 +29,7 @@ require "abbrev"
 #
 class HighLine
   # The version of the installed library.
-  VERSION = "1.2.7".freeze
+  VERSION = "1.2.9".freeze
   
   # An internal HighLine error.  User code does not need to trap this.
   class QuestionError < StandardError
@@ -47,6 +47,19 @@ class HighLine
   # Returns true if HighLine is currently using color escapes.
   def self.use_color?
     @@use_color
+  end
+  
+  # The setting used to disable EOF tracking.
+  @@track_eof = true
+  
+  # Pass +false+ to _setting_ to turn off HighLine's EOF tracking.
+  def self.track_eof=( setting )
+    @@track_eof = setting
+  end
+  
+  # Returns true if HighLine is currently tracking EOF for input.
+  def self.track_eof?
+    @@track_eof
   end
 
   # The setting used to control color schemes.
@@ -191,9 +204,11 @@ class HighLine
     @question ||= Question.new(question, answer_type, &details)
     
     return gather if @question.gather
-    
-    # readline() needs to handle it's own output
-    say(@question) unless @question.readline
+  
+    # readline() needs to handle it's own output, but readline only supports 
+    # full line reading.  Therefore if @question.echo is anything but true, 
+    # the prompt will not be issued. And we have to account for that now.
+    say(@question) unless (@question.readline and @question.echo == true)
     begin
       @answer = @question.answer_or_default(get_response)
       unless @question.valid_answer?(@answer)
@@ -575,7 +590,8 @@ class HighLine
 
       answer
     else
-      raise EOFError, "The input stream is exhausted." if @input.eof?
+      raise EOFError, "The input stream is exhausted." if @@track_eof and
+                                                          @input.eof?
 
       @question.change_case(@question.remove_whitespace(@input.gets))
     end
@@ -610,7 +626,7 @@ class HighLine
               backspace_limit -= 1
             else
               line << character.chr
-              backspace_limit += 1
+              backspace_limit = line.size
             end
             # looking for carriage return (decimal 13) or
             # newline (decimal 10) in raw input
@@ -618,7 +634,6 @@ class HighLine
                      (@question.limit and line.size == @question.limit)
             if @question.echo != false
               if character == 127 or character == 8 
-
                   # only backspace if we have characters on the line to
                   # eliminate, otherwise we'll tromp over the prompt
                   if backspace_limit >= 0 then
