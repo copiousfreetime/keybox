@@ -22,7 +22,6 @@
 
 load_plugin 'webgen/plugins/menustyles/default'
 
-module MenuStyles
 
   class JJHVerticalMenuStyle < MenuStyles::DefaultMenuStyle
 
@@ -88,4 +87,3 @@ module MenuStyles
 
   end
 
-end

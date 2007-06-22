@@ -1,4 +1,4 @@
-2007-06-22: |
+2007-06-21: |
   h4. Version 1.1.1 of keybox is released.
 
   Changes in this release
@@ -9,7 +9,7 @@
   * %Fixed Bug [#9827] Password field on add screen can be deleted%
   * %Fixed Bug [#10639] search is case sensitive%
   * %Fixed Bug [#11684] apostrophe's in additional information cause errors%
-  * %Updated to using HighLine 1.2.8 (fixes Bug #9827)%
+  * %Updated to using HighLine 1.2.9 (fixes Bug #9827)%
   
 2007-01-27: |
   h4. Version 1.1.0 of keybox is released.
