@@ -1,5 +1,5 @@
 = keybox Changelog
-=== Version 1.1.1
+=== Version 1.1.1 - 2007-06-21
 
 * update all tests to use latest RSpec syntax
 * Fixed Bug [#8231] storage::container.find() does not work for anything but AccountEntry classes
@@ -9,7 +9,7 @@
 * Fixed Bug [#11684] apostrophe's in additional information cause errors
 * Updated to using HighLine 1.2.9 (fixes Bug #9827)
 
-=== Version 1.1.0
+=== Version 1.1.0 - 2007-01-27
 
 * keybox now uses HighLine for terminal input/output
 * Added --color SCHEME option to support custom colorized output
@@ -18,7 +18,7 @@
 * Fixed configuration bug where command line options were not 
   correctly overwriting default options.
 
-=== Version 1.0.0
+=== Version 1.0.0 - 2007-01-14
 
 * Initial public release
 * +keybox+ - Full basic functionality 

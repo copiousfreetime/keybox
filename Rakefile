@@ -70,7 +70,7 @@ spec = Gem::Specification.new do |s|
     s.rdoc_options.concat(PKG_INFO.rdoc_options)
 
     s.post_install_message  = PKG_INFO.message
-    s.add_dependency("highline", ">= 1.2.6")
+    s.add_dependency("highline", ">= 1.2.9")
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
