@@ -1,0 +1,10 @@
+--- 
+title:      News
+created_at: Sun Sep 09 01:59:46 -0600 2007
+filter:
+  - erb
+  - textile
+--- 
+h1. <%= @page.title %>
+
+<%= news %>

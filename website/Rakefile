@@ -1,0 +1,6 @@
+
+load 'tasks/setup.rb'
+
+task :default => :build
+
+# EOF

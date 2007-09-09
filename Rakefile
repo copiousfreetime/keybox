@@ -10,10 +10,7 @@ require 'spec/rake/spectask'
 require 'keybox'
 
 # load all the extra tasks for the project
-TASK_DIR = File.join(File.dirname(__FILE__),"tasks")
-FileList[File.join(TASK_DIR,"*.rake")].each do |tasklib|
-    load "tasks/#{File.basename(tasklib)}"
-end
+FileList["tasks/*.rake"].each { |tasklib| import tasklib }
 
 task :default => 'test:default'
 
