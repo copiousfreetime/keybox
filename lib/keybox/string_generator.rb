@@ -84,7 +84,7 @@ module Keybox
 
         def load_default_chargram_list
             list = []
-            File.open(File.join(Keybox::APP_DATA_DIR,"chargrams.txt")) do |f|
+            File.open(File.join(Keybox::APP_RESOURCE_DIR,"chargrams.txt")) do |f|
                 f.each_line do |line|
                     next if line =~ /^#/
                     list << line.rstrip

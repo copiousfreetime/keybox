@@ -123,7 +123,7 @@ module Keybox
                     @stderr.puts @error_message
                     exit 1
                 elsif @parsed_options.show_version then
-                    @highline.say "#{@parser.program_name}: version #{Keybox::VERSION.join(".")}"
+                    @highline.say "#{@parser.program_name}: version #{Keybox::VERSION}"
                     exit 0
                 elsif @parsed_options.show_help then
                     @highline.say @parser.to_s

@@ -9,12 +9,12 @@ namespace :site do
 
     desc "Update the website on rubyforge"
     task :deploy => :build do
-        sh "rsync -zav --delete #{Rabal::SPEC.local_site_dir} #{Rabal::SPEC.remote_site_location}"
+        sh "rsync -zav --delete #{Keybox::SPEC.local_site_dir} #{Keybox::SPEC.remote_site_location}"
     end
 
     #desc "View the website locally"
     task :view => :build do
-        show_files Rabal::SPEC.local_site_dir
+        show_files Keybox::SPEC.local_site_dir
     end
 
 end

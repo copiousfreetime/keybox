@@ -177,7 +177,7 @@ module Keybox
             #   dark_bg.color_scheme.yaml
             def load_color_scheme
                 if @options.color_scheme != :none then
-                    search_directories  = [ Keybox::APP_DATA_DIR, File.dirname(@options.config_file) ]
+                    search_directories  = [ Keybox::APP_RESOURCE_DIR, File.dirname(@options.config_file) ]
                     scheme_basename     = "#{@options.color_scheme.to_s}.color_scheme.yaml"
                     scheme_path         = nil
                    
