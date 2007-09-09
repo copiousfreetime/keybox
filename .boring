@@ -35,8 +35,8 @@
 (^|/)autom4te\.cache($|/)
 
 # project directories
-doc/*
-pkg/*
+(^|/)doc($|/)
+(^|/)pkg($|/)
 \.swo$
 \.swp$
 email.txt

@@ -11,7 +11,7 @@ require 'keybox'
 
 # load all the extra tasks for the project
 TASK_DIR = File.join(File.dirname(__FILE__),"tasks")
-FileList[File.join(TASK_DIR,"*.task")].each do |tasklib|
+FileList[File.join(TASK_DIR,"*.rake")].each do |tasklib|
     load "tasks/#{File.basename(tasklib)}"
 end
 
