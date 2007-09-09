@@ -2,8 +2,8 @@
 
 === Version 1.2.0 - 2007-09-09
 
-* Update to use HighLine 1.4.0
 * Added Feature [#11796] Change initial setup prompts to NOT have colorized output and ask the user what color scheme is appropriate for them
+* Update to use HighLine 1.4.0
 * general code cleanup
 * rework rake tasks to keep in line with other projects
 * switch to webby for site generation
