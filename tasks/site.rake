@@ -3,8 +3,15 @@
 #-----------------------------------------------------------------------
 namespace :site do
 
+    begin
+        require 'webby'
+    rescue LoadError
+        puts "Unable to build website.  Webby is not installed"
+    end
+    
     desc "Build the public website"
     task :build do
+        sh "pushd website && rake"
     end
 
     desc "Update the website on rubyforge"

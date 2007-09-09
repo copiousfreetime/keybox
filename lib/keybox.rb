@@ -3,6 +3,7 @@ module Keybox
     APP_LIB_DIR         = File.join(APP_ROOT_DIR,"lib").freeze
     APP_RESOURCE_DIR    = File.join(APP_ROOT_DIR,"resources").freeze
     APP_VENDOR_DIR      = File.join(APP_ROOT_DIR,"vendor").freeze
+    APP_BIN_DIR         = File.join(APP_ROOT_DIR,"bin").freeze
 end
 
 $: << Keybox::APP_LIB_DIR

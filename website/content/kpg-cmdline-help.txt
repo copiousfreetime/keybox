@@ -8,5 +8,5 @@ filter:
 h1. <%= @page.title %>
 
 <code>
-../bin/kpg -h
+<%= %x[#{::Keybox::APP_BIN_DIR}/kpg -h] %>
 </code>

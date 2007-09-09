@@ -11,8 +11,8 @@ h2. Password Encryption
 
 Keybox's data store was heavily influenced by the approaches used in :
 
-* Password Safe - "http://passwordsafe.sourceforge.net/":http://passwordsafe.sourceforge.net/
-* KeePassX - "http://keepassx.sourceforge.net/":http://keepassx.sourceforge.net/
+* %Password Safe - "http://passwordsafe.sourceforge.net/":http://passwordsafe.sourceforge.net/%
+* %KeePassX - "http://keepassx.sourceforge.net/":http://keepassx.sourceforge.net/%
  
 
 h2. Automatic Password Generator
@@ -37,9 +37,9 @@ scheme.
 
 h2. Other Tools
 
-* "Rubyforge":http://www.rubyforge.org/ - hosting and project management
-* "Fyre":http://fyre.navi.cx/ - generated the background image of the banner
-* "webgen":http://webgen.rubyforge.org/ - site generation
-* "xvidcap":http://xvidcap.sourceforge.net/ - screen capturing tool
-* "flowplayer":http://flowplayer.sourceforge.net/index.html - open source flash video player
+* %"Rubyforge":http://www.rubyforge.org/ - hosting and project management%
+* %"Fyre":http://fyre.navi.cx/ - generated the background image of the banner%
+* %"webgen":http://webgen.rubyforge.org/ - site generation%
+* %"xvidcap":http://xvidcap.sourceforge.net/ - screen capturing tool%
+* %"flowplayer":http://flowplayer.sourceforge.net/index.html - open source flash video player%
 

@@ -84,12 +84,13 @@ class News
             content = StringIO.new
             e.each do |datetime,entry|
                 content.puts "#{DATE_TAG}. #{datetime.strftime(DATE_FORMAT)}"
+                content.puts
                 content.print "<#{CONTENT_TAG}>" if CONTENT_TAG.to_s.length > 0 
-                content.print entry
+                content.puts entry
                 content.print "</#{CONTENT_TAG}>" if CONTENT_TAG.to_s.length > 0 
+                content.puts
             end
-
-            
+            content.string
         end
     end
 end

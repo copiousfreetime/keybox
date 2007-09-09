@@ -111,12 +111,12 @@ And the Field Types and their associated Field Data Structures are :
 
 h2. Encrypt/Decrypt Process
 
-# P = user pass phrase
-# MasterKey = SHA-256(P)
-# TMasterKey = AES-encrypt(RandomSeed, MasterKey, Rounds)
-# FMasterKey = SHA-256(TMasterKey,FinalRandomSeed)
-# Plaintext = AES-decrypt(FMasterKey, IV, Cipher Text)
-# ContentHash = SHA-256(Plaintext)
+# %P = user pass phrase%
+# %MasterKey = SHA-256(P)%
+# %TMasterKey = AES-encrypt(RandomSeed, MasterKey, Rounds)%
+# %FMasterKey = SHA-256(TMasterKey,FinalRandomSeed)%
+# %Plaintext = AES-decrypt(FMasterKey, IV, Cipher Text)%
+# %ContentHash = SHA-256(Plaintext)%
 
 
 A Master Key is calculated with either a password or file or both.

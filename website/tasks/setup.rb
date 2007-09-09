@@ -1,17 +1,17 @@
 
+$: << "../lib"
 require 'ostruct'
-
+require 'keybox'
+    
 SITE = OpenStruct.new
 
 SITE.content_dir   = 'content'
-# TODO: change this to the value from the SPEC
-SITE.output_dir    = File.join(File.dirname(__FILE__),"..","..","doc")
-SITE.layout_dir    = 'layouts'
+SITE.output_dir    = 'output'
+SITE.layout_dir    = 'layousts'
 SITE.template_dir  = 'templates'
 SITE.exclude       = %w[tmp$ bak$ ~$ CVS \.svn]
-# TODO: change this to the value from the SPEC
-SITE.deploy_to     = "jjh@rubyforge.org:/path/to/html"
-SITE.news_file     = "data/news.yaml"
+SITE.deploy_to     = Keybox::SPEC.remote_site_location
+SITE.news_file     = 'data/news.yaml'
   
 SITE.page_defaults = {
   'extension' => 'html',

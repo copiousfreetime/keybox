@@ -25,7 +25,7 @@ module Keybox
 
                 spec.test_files         = FileList["spec/**/*.rb"]
                 spec.default_executable = "#{spec.name}"
-                spec.executables        = Dir.entries("bin").delete_if { |f| f =~ /\A\./ }
+                spec.executables        = Dir.entries(Keybox::APP_BIN_DIR).delete_if { |f| f =~ /\A\./ }
                 spec.files              = spec.test_files + spec.extra_rdoc_files + 
                                           FileList["lib/**/*.rb", "resources/**/*", "data/**/*"]
 
@@ -36,6 +36,7 @@ module Keybox
                 spec.platform = Gem::Platform::RUBY
 
                 spec.remote_user        = "jjh"
+                spec.local_site_dir     = "doc"
                 spec.local_rdoc_dir     = "doc/rdoc"
                 spec.remote_rdoc_dir    = ""
                 spec.local_coverage_dir = "doc/coverage"
