@@ -1,8 +1,0 @@
----
-title: kpg --help
----
-h1. {title: }
-
-<code>
-{execute: {command: ../bin/kpg -h}}
-</code>
