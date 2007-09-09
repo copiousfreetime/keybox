@@ -1,6 +1,5 @@
-require 'tempfile'
-require 'keybox'
-require 'keybox/convert/csv'
+require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
+
 describe "CSV Convert class" do
     before(:each) do 
         @import_csv = Tempfile.new("keybox_import.csv")

@@ -73,7 +73,6 @@ module Keybox
             def initialize(passphrase,path)
                 super()
 
-
                 @path        = path
                 @passphrase  = passphrase
                 @records     = []

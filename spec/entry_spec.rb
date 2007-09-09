@@ -1,4 +1,4 @@
-require 'keybox'
+require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
 describe "Account Entry" do
     it "fields get set correctly" do
         k = Keybox::AccountEntry.new("a test title", "user")

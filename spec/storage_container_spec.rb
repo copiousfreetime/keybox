@@ -1,10 +1,4 @@
-require 'keybox'
-require 'keybox/storage'
-require 'keybox/error'
-require 'keybox/entry'
-require 'openssl'
-require 'tempfile'
-require 'yaml'
+require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
 
 describe 'a storage container' do
     before(:each) do

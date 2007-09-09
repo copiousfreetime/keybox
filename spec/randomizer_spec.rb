@@ -1,4 +1,4 @@
-require 'keybox/randomizer'
+require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
 
 describe "a random device class" do
     it "should have a default source" do

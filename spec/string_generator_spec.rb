@@ -1,4 +1,5 @@
-require 'keybox'
+require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
+
 describe Keybox::StringGenerator  do
     before(:each) do
         @generator = Keybox::StringGenerator.new

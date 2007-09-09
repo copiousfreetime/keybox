@@ -463,9 +463,10 @@ module Keybox
                     if @actions.size == 0 then
                         @actions << [:list, ".*"]
                     end
+                    
                     action, param = *@actions.shift
                     self.send(action, param)
-
+                    
                     if @db.modified? then 
                         hsay "Database modified, saving.", :information
                         @db.save

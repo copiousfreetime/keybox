@@ -1,4 +1,5 @@
-require 'keybox/uuid'
+require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
+
 describe "UUID class" do
     it "should have 16 bytes" do
         uuid = Keybox::UUID.new

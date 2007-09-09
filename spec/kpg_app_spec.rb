@@ -1,4 +1,4 @@
-require 'keybox'
+require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
 require 'keybox/application/password_generator'
 
 describe "Keybox Password Generator Application" do

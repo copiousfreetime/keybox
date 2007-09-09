@@ -92,6 +92,9 @@ applications.
 * webgen >= 0.4.1
 * highline >= 1.2.6
 
+To run the RSpec test, you have to remove the termios library if it is installed. 
+stdin, stdout, and stderr are redirected and this doesn't play well with termios in highline.
+
 == INSTALL:
 
 * gem install keybox

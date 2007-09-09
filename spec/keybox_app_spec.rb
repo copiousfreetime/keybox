@@ -1,5 +1,4 @@
-require 'tempfile'
-require 'keybox'
+require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
 require 'keybox/application/password_safe'
 
 describe "Keybox Password Safe Application" do

@@ -6,9 +6,15 @@
 #----------------------------------------------------------------------
 # bootstrap
 #----------------------------------------------------------------------
-$: << File.expand_path(File.join(File.dirname(__FILE__),"..","lib"))
-require 'keybox'
-require 'keybox/application/password_generator'
+begin
+    require 'keybox'
+    require 'keybox/application/password_generator'
+rescue LoadError 
+    path = File.expand_path(File.join(File.dirname(__FILE__),"..","lib"))
+    raise if $:.include? path
+    $: << path
+    retry
+end
 
 #----------------------------------------------------------------------
 # instantiate the program and pass it the commandline parameters

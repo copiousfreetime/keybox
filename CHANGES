@@ -2,9 +2,9 @@
 
 === Version 1.2.0 - 2007-09-08
 
-* Fixed Bug [#13790] Truncation of account names at 20 chars
 * Added Feature [#11796] Change initial setup prompts to NOT have colorized output
 * Update to use HighLine 1.4.0
+* general code cleanup
 
 === Version 1.1.1 - 2007-06-21
 
