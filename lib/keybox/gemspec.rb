@@ -24,7 +24,8 @@ module Keybox
                 spec.rdoc_options       = [ "--line-numbers" , "--inline-source" ]
 
                 spec.test_files         = FileList["spec/**/*.rb"]
-                spec.executable         = Dir.entries("bin").delete_if { |f| f =~ /\A\./ }
+                spec.default_executable = "#{spec.name}"
+                spec.executables        = Dir.entries("bin").delete_if { |f| f =~ /\A\./ }
                 spec.files              = spec.test_files + spec.extra_rdoc_files + 
                                           FileList["lib/**/*.rb", "resources/**/*", "data/**/*"]
 
