@@ -6,8 +6,8 @@ require 'keybox'
 SITE = OpenStruct.new
 
 SITE.content_dir   = 'content'
-SITE.output_dir    = 'output'
-SITE.layout_dir    = 'layousts'
+SITE.output_dir    = File.join(Keybox::APP_ROOT_DIR,Keybox::SPEC.local_site_dir)
+SITE.layout_dir    = 'layouts'
 SITE.template_dir  = 'templates'
 SITE.exclude       = %w[tmp$ bak$ ~$ CVS \.svn]
 SITE.deploy_to     = Keybox::SPEC.remote_site_location

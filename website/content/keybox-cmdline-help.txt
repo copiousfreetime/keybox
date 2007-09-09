@@ -9,5 +9,5 @@ filter:
 h1. <%= @page.title %>
 
 <code>
-../bin/keybox -h
+<%= %x[#{::Keybox::APP_BIN_DIR}/keybox -h] %>
 </code>
