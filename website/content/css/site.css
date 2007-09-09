@@ -302,8 +302,10 @@ td {
 /* sidebar */
 #sidebar {
 	float: right;
-	width: 250px;
-	margin: 0 0 10px 0; padding: 0;
+	width: 240px;
+	margin: 0 0 10px 0; 
+	padding: 0;
+	padding-left: 10px;
 	background-color: inherit;	
 }
 #sidebar h1 {

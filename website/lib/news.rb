@@ -83,10 +83,10 @@ class News
         def format(e)
             content = StringIO.new
             e.each do |datetime,entry|
-                content.puts "#{DATE_TAG}. #{datetime.strftime(DATE_FORMAT)}"
+                content.puts "<#{DATE_TAG}> #{datetime.strftime(DATE_FORMAT)} </#{DATE_TAG}>"
                 content.puts
                 content.print "<#{CONTENT_TAG}>" if CONTENT_TAG.to_s.length > 0 
-                content.puts entry
+                content.puts RedCloth.new(entry).to_html
                 content.print "</#{CONTENT_TAG}>" if CONTENT_TAG.to_s.length > 0 
                 content.puts
             end

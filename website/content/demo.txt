@@ -1,13 +1,14 @@
 --- 
-title:      Demo
-created_at: Sun Sep 09 01:55:25 -0600 2007
+title:      	Demo
+sitemap_order: 	3
+created_at: 	Sun Sep 09 01:55:25 -0600 2007
 filter:
   - erb
   - textile
 --- 
 h1. See keybox in action
 
-{includeFile: {filename: video/flowplayer.html, escapeHTML: false, processOutput: false }}
+<%= include "video/flowplayer.html", :skip_textile => true %>
 
 h1. Screenshots of *keybox*
 

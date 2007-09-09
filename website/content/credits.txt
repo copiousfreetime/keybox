@@ -1,6 +1,7 @@
 --- 
-title:      Credits
-created_at: Sun Sep 09 01:56:45 -0600 2007
+title:      	Credits
+sitemap_order: 	6
+created_at: 	Sun Sep 09 01:56:45 -0600 2007
 filter:
   - erb
   - textile
@@ -39,7 +40,7 @@ h2. Other Tools
 
 * %"Rubyforge":http://www.rubyforge.org/ - hosting and project management%
 * %"Fyre":http://fyre.navi.cx/ - generated the background image of the banner%
-* %"webgen":http://webgen.rubyforge.org/ - site generation%
+* %"webby":http://webby.rubyforge.org/ - site generation%
 * %"xvidcap":http://xvidcap.sourceforge.net/ - screen capturing tool%
 * %"flowplayer":http://flowplayer.sourceforge.net/index.html - open source flash video player%
 

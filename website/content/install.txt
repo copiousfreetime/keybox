@@ -1,6 +1,7 @@
 --- 
-title:      Install
-created_at: Sun Sep 09 01:57:51 -0600 2007
+title:          Install
+sitemap_order:  4
+created_at:     Sun Sep 09 01:57:51 -0600 2007
 filter:
   - erb
   - textile

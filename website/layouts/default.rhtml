@@ -1,6 +1,7 @@
 --- 
 extension: html
-filter:    erb
+filter:
+  - erb
 --- 
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "DTD/xhtml1-strict.dtd">
@@ -31,11 +32,18 @@ filter:    erb
 
                 <div id="sidebar">
                     <h1>Sitemap</h1>
-                    {menu: {menuStyle: jjh-vertical}}
+					<%= sitemap %>
 
                     <h1>Latest News</h1>
-                    {news: {options: {maxEntries: 1, maxParagraphs: 1}}}
-
+					<%= news({:max_entries => 1, :max_paragraphs => 1}) %>
+					
+					<h1>Project Support</h1>
+					<ul class="sidemenu">
+						<li><a href="http://rubyforge.org/projects/keybox">Rubyforge page</a></li>
+						<li><a href="http://rubyforge.org/tracker/?func=add&group_id=2584&atid=9927">Report a bug</a></li>
+						<li><a href="http://rubyforge.org/tracker/?atid=9930&group_id=2584&func=browse">Ask for a feature</a></li>
+					</ul>
+						
                     <h1>Documentation</h1>
                     <ul class="sidemenu">
                         <li><a href="keybox-cmdline-help.html">keybox --help</a></li>
@@ -45,7 +53,6 @@ filter:    erb
                         <li><a href="keepassx-db-format.html">KeePassX db format</a></li>
                         <li><a href="rdoc/index.html">RDoc</a></li>
                         <li><a href="coverage/index.html">rcov report</a></li>
-
                     </ul>
 
                     <h1>Similar Applications</h1>

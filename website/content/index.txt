@@ -1,5 +1,6 @@
 --- 
-title:  Home 
+title:      Home 
+sitemap_order: 1
 filter:
   - erb
   - textile
