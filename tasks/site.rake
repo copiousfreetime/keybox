@@ -17,7 +17,7 @@ namespace :site do
 
     desc "Update the website on #{Keybox::SPEC.remote_site_location}"
     task :deploy => :build do
-        sh "rsync -zav --delete #{Keybox::SPEC.local_site_dir} #{Keybox::SPEC.remote_site_location}"
+        sh "rsync -zav --delete #{Keybox::SPEC.local_site_dir}/ #{Keybox::SPEC.remote_site_location}"
     end
 
     if HAVE_HEEL then

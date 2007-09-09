@@ -38,10 +38,10 @@ module Keybox
                 spec.remote_user        = "jjh"
                 spec.local_site_dir     = "doc"
                 spec.local_rdoc_dir     = "doc/rdoc"
-                spec.remote_rdoc_dir    = ""
+                spec.remote_rdoc_dir    = "rdoc/"
                 spec.local_coverage_dir = "doc/coverage"
 
-                spec.remote_site_dir    = "#{spec.name}/"
+                spec.remote_site_dir    = ""
                 
                 spec.post_install_message = "\e[1m\e[31m\e[40mTry `keybox --help` for more information\e[0m"
                 
