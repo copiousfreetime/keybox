@@ -97,7 +97,7 @@ acronym {
 blockquote {
 	margin: 15px;
  	padding: 0 0 0 32px;  	
-  	background: #FAFAFA url(images/quote.gif) no-repeat 5px 10px !important; 
+  	background: #FAFAFA url(../images/quote.gif) no-repeat 5px 10px !important; 
 	background-position: 8px 10px;
 	border: 1px solid #EAEAEA; 
 	border-left: 5px solid #a50c0c;  
@@ -135,7 +135,7 @@ input.button {
 	font: bolder 12px Arial, Sans-serif; 
 	border: 1px solid #EAEAEA;
 	padding: 2px 3px; 
-	background: #CCC url(images/buttonbg.gif) repeat-x left bottom; 
+	background: #CCC url(../images/buttonbg.gif) repeat-x left bottom; 
 	color: #333;/* color: #993311; */
 }
 /* table design */
@@ -173,7 +173,7 @@ td {
 	vertical-align: bottom;
 }
 #sidebar #search .textbox {
-	background: #FFF url(images/input.png) no-repeat top left; 
+	background: #FFF url(../images/input.png) no-repeat top left; 
 	border: 1px solid #EAEAEA;
 	font-size: 11px;
 	padding: 3px;	
@@ -183,7 +183,7 @@ td {
 	margin: 0; 
 	font: bold 100% Arial, Sans-serif;
 	border: 1px solid #CCC; 
-	background: #CCC url(images/buttonbg.gif) repeat-x left bottom; 
+	background: #CCC url(../images/buttonbg.gif) repeat-x left bottom; 
 	padding: 1px; 
 	height: 25px;
 	color: #333;	
@@ -214,7 +214,7 @@ td {
     width: 850px;
 	height: 135px; 
 	margin: 0; padding: 0;
-	background: #000 url(images/headerbg-red.jpg) no-repeat left bottom;	
+	background: #000 url(../images/headerbg-red.jpg) no-repeat left bottom;	
 }
 #header h1#logo-text {
 	position: absolute;
@@ -259,7 +259,7 @@ td {
 }
 #header-tabs a {
    float:left;
-   background: url(images/tableft.gif) no-repeat left top;
+   background: url(../images/tableft.gif) no-repeat left top;
    margin:0;
    padding:0 0 0 4px;
    text-decoration:none;
@@ -267,7 +267,7 @@ td {
 #header-tabs a span {
    float:left;
    display:block;
-   background: url(images/tabright.gif) no-repeat right top;
+   background: url(../images/tabright.gif) no-repeat right top;
    padding:7px 15px 4px 8px;
    color: #CCC;
 }
@@ -294,7 +294,7 @@ td {
 #main h1 {
 	padding: 8px 0 3px 25px;
 	text-transform: none;
-	background: url(images/square_arrow.gif) no-repeat 0% .7em;
+	background: url(../images/square_arrow.gif) no-repeat 0% .7em;
 	border-bottom: 2px solid #f2f2f2;	
 	color: #aa3311;
 }	
@@ -308,7 +308,7 @@ td {
 }
 #sidebar h1 {
 	padding: 8px 0px 3px 25px;
-	background: url(images/square_arrow.gif) no-repeat 0% .7em;
+	background: url(../images/square_arrow.gif) no-repeat 0% .7em;
 	text-transform: none;	
 	color: #993311;
 }
