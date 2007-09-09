@@ -7,6 +7,8 @@ require 'rake/gempackagetask'
 require 'rake/clean'
 require 'rake/rdoctask'
 require 'spec/rake/spectask'
+require 'rake/contrib/sshpublisher'
+
 require 'keybox'
 
 load 'tasks/setup.rb'
