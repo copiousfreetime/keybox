@@ -10,9 +10,10 @@ namespace :doc do |ns|
         rdoc.rdoc_files = Keybox::SPEC.rdoc_files
     end
 
-    #desc "View the RDoc documentation locally"
-    task :view => :rdoc do
-        show_files Keybox::SPEC.local_rdoc_dir
+    if HAVE_HEEL then
+        desc "View the RDoc documentation locally"
+        task :view => :rdoc do
+            show_files Keybox::SPEC.local_rdoc_dir
+        end
     end
-    
 end

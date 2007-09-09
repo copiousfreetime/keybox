@@ -2,16 +2,17 @@
 # Website maintenance
 #-----------------------------------------------------------------------
 namespace :site do
-
-    begin
-        require 'webby'
-    rescue LoadError
-        puts "Unable to build website.  Webby is not installed"
+    
+    if HAVE_WEBBY then
+        desc "Build the public website"
+        task :build do
+            sh "pushd website && rake"
+        end
     end
     
-    desc "Build the public website"
-    task :build do
-        sh "pushd website && rake"
+    desc "Remove all the files from the local deployment of the site"
+    task :clobber do
+        rm_rf Keybox::SPEC.local_site_dir
     end
 
     desc "Update the website on rubyforge"
@@ -19,9 +20,11 @@ namespace :site do
         sh "rsync -zav --delete #{Keybox::SPEC.local_site_dir} #{Keybox::SPEC.remote_site_location}"
     end
 
-    #desc "View the website locally"
-    task :view => :build do
-        show_files Keybox::SPEC.local_site_dir
+    if HAVE_HEEL then
+        desc "View the website locally"
+        task :view => :build do
+            show_files Keybox::SPEC.local_site_dir
+        end
     end
 
 end

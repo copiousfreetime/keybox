@@ -9,17 +9,5 @@ require 'rake/rdoctask'
 require 'spec/rake/spectask'
 require 'keybox'
 
-# load all the extra tasks for the project
-FileList["tasks/*.rake"].each { |tasklib| import tasklib }
+load 'tasks/setup.rb'
 
-task :default => 'test:default'
-
-#-----------------------------------------------------------------------
-# update the top level clobber task to depend on all possible sub-level
-# tasks that have a name like ':clobber'  in other namespaces
-#-----------------------------------------------------------------------
-Rake.application.tasks.each do |t|
-    if t.name =~ /:clobber/ then
-        task :clobber => [t.name]
-    end
-end
