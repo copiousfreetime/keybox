@@ -1,19 +1,10 @@
 require 'rubyforge'
 
 #-----------------------------------------------------------------------
-# Documentation - pushing documentation to rubyforge
-#-----------------------------------------------------------------------
-namespace :doc do
-    desc "Deploy the RDoc documentation to rubyforge"
-    task :deploy => :rerdoc do
-        sh "rsync -zav --delete #{Keybox::SPEC.local_rdoc_dir}/ #{Keybox::SPEC.remote_rdoc_location}"
-    end
-end
-
-#-----------------------------------------------------------------------
 # Packaging and Distribution - push to rubyforge
 #-----------------------------------------------------------------------
 namespace :dist do
+    
     desc "Release files to rubyforge"
     task :release => [:clean, :package] do
         

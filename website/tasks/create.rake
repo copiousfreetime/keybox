@@ -8,6 +8,5 @@ Rake::WebbyTask.new do |webby|
   webby.template_dir  = SITE.template_dir
   webby.exclude       = SITE.exclude
   webby.page_defaults = SITE.page_defaults
-  webby.deploy_to     = SITE.deploy_to
 end
 

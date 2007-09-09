@@ -15,7 +15,7 @@ namespace :site do
         rm_rf Keybox::SPEC.local_site_dir
     end
 
-    desc "Update the website on rubyforge"
+    desc "Update the website on #{Keybox::SPEC.remote_site_location}"
     task :deploy => :build do
         sh "rsync -zav --delete #{Keybox::SPEC.local_site_dir} #{Keybox::SPEC.remote_site_location}"
     end

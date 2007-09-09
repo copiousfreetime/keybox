@@ -16,4 +16,9 @@ namespace :doc do |ns|
             show_files Keybox::SPEC.local_rdoc_dir
         end
     end
+    
+    desc "Deploy the RDoc documentation to #{Keybox::SPEC.remote_rdoc_location}"
+    task :deploy => :rerdoc do
+        sh "rsync -zav --delete #{Keybox::SPEC.local_rdoc_dir}/ #{Keybox::SPEC.remote_rdoc_location}"
+    end
 end

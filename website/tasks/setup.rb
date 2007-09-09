@@ -10,7 +10,6 @@ SITE.output_dir    = File.join(Keybox::APP_ROOT_DIR,Keybox::SPEC.local_site_dir)
 SITE.layout_dir    = 'layouts'
 SITE.template_dir  = 'templates'
 SITE.exclude       = %w[tmp$ bak$ ~$ CVS \.svn]
-SITE.deploy_to     = Keybox::SPEC.remote_site_location
 SITE.news_file     = 'data/news.yaml'
   
 SITE.page_defaults = {
