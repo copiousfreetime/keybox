@@ -9,6 +9,24 @@ require 'rake/rdoctask'
 require 'spec/rake/spectask'
 require 'keybox'
 
+# load all the extra tasks for the project
+TASK_DIR = File.join(File.dirname(__FILE__),"tasks")
+FileList[File.join(TASK_DIR,"*.rb")].each do |tasklib|
+    require "tasks/#{File.basename(tasklib)}"
+end
+
+task :default => 'test:default'
+
+#-----------------------------------------------------------------------
+# update the top level clobber task to depend on all possible sub-level
+# tasks that have a name like ':clobber'  in other namespaces
+#-----------------------------------------------------------------------
+Rake.application.tasks.each do |t|
+    if t.name =~ /:clobber/ then
+        task :clobber => [t.name]
+    end
+end
+
 #-----------------------------------------------------------------------
 # most of this is out of hoe, but I needed more flexibility in directory
 # structures, publishing options for docs and such
