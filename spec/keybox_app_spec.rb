@@ -49,13 +49,15 @@ describe "Keybox Password Safe Application" do
 
     it "executing with no args should have output on stdout" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path])
-        kps.set_io(StringIO.new(@passphrase),StringIO.new,StringIO.new)
+        prompted_values = ["dark", @passphrase].join("\n")
+        kps.set_io(StringIO.new(prompted_values),StringIO.new,StringIO.new)
         kps.run
         kps.stdout.string.size.should > 0
     end
 
     it "general options get set correctly" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--debug", "--no-use-hash-for-url"])
+        kps.set_io(StringIO.new("dark"),StringIO.new,StringIO.new)
         kps.merge_options
         kps.options.db_file.should == @testing_db.path
         kps.options.config_file.should == @testing_cfg.path
@@ -77,7 +79,7 @@ describe "Keybox Password Safe Application" do
 
     it "space separated words are okay for names" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--add", "An Example"])
-        prompted_values = [@passphrase, "An example"] + %w(example.com someuser apassword apassword noinfo yes)
+        prompted_values = ["none", @passphrase, "An example"] + %w(example.com someuser apassword apassword noinfo yes)
         stdin = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
@@ -125,7 +127,7 @@ describe "Keybox Password Safe Application" do
     it "prompted for password twice to create database initially" do
         File.unlink(@testing_db.path)
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path])
-        stdin  = StringIO.new([@passphrase,@passphrase].join("\n"))
+        stdin  = StringIO.new(["dark", @passphrase,@passphrase].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
         kps.db.records.size.should == 0
@@ -135,7 +137,7 @@ describe "Keybox Password Safe Application" do
 
     it "file can be opened with password" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path])
-        stdin  = StringIO.new(@passphrase + "\n")
+        stdin  = StringIO.new(["light",@passphrase].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
         kps.db.records.size.should == 3
@@ -143,7 +145,7 @@ describe "Keybox Password Safe Application" do
 
     it "adding an entry to the database works" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--add", "example.com"])
-        prompted_values = [@passphrase] + %w(example.com example.com someuser apassword apassword noinfo yes)
+        prompted_values = ["dark",@passphrase] + %w(example.com example.com someuser apassword apassword noinfo yes)
         stdin  = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
@@ -152,7 +154,7 @@ describe "Keybox Password Safe Application" do
 
     it "editing an entry in the database works" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--edit", "localhost"])
-        prompted_values = [@passphrase] + %w(yes example.com example.com someother anewpassword anewpassword someinfo yes)
+        prompted_values = ["dark", @passphrase] + %w(yes example.com example.com someother anewpassword anewpassword someinfo yes)
         stdin  = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
@@ -162,7 +164,7 @@ describe "Keybox Password Safe Application" do
 
     it "add a url entry to the database" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--use-hash-for-url", "--add", "http://www.example.com"])
-        prompted_values = [@passphrase] + %w(www.example.com http://www.example.com someuser noinfo yes)
+        prompted_values = ["dark", @passphrase] + %w(www.example.com http://www.example.com someuser noinfo yes)
         stdin  = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
@@ -173,7 +175,7 @@ describe "Keybox Password Safe Application" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, 
                                                      "-c", @testing_cfg.path, 
                                                      "--add", "example.com"])
-        prompted_values = [@passphrase, ""] + %w(example.com someuser apassword abadpassword abcdef abcdef noinfo yes)
+        prompted_values = ["dark", @passphrase, ""] + %w(example.com someuser apassword abadpassword abcdef abcdef noinfo yes)
         stdin  = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
@@ -182,7 +184,7 @@ describe "Keybox Password Safe Application" do
 
     it "able to delete an entry" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--delete", "example"])
-        prompted_values = [@passphrase] + %w(Yes)
+        prompted_values = ["dark", @passphrase] + %w(Yes)
         stdin = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
@@ -192,7 +194,7 @@ describe "Keybox Password Safe Application" do
 
     it "able to cancel deletion" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--delete", "example"])
-        prompted_values = [@passphrase] + %w(No)
+        prompted_values = ["dark", @passphrase] + %w(No)
         stdin = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
@@ -202,7 +204,7 @@ describe "Keybox Password Safe Application" do
 
     it "list all the entries" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--list"])
-        stdin = StringIO.new(@passphrase)
+        stdin = StringIO.new(["dark", @passphrase].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
         kps.stdout.string.should =~ /2./m 
@@ -210,7 +212,7 @@ describe "Keybox Password Safe Application" do
 
     it "listing no entries found" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--list", "nothing"])
-        stdin = StringIO.new(@passphrase)
+        stdin = StringIO.new(["dark", @passphrase].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
         kps.stdout.string.should =~ /No matching records were found./ 
@@ -218,7 +220,7 @@ describe "Keybox Password Safe Application" do
 
     it "showing no entries found" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--show", "nothing"])
-        stdin = StringIO.new(@passphrase)
+        stdin = StringIO.new(["dark", @passphrase].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
         kps.stdout.string.should =~ /No matching records were found./ 
@@ -227,7 +229,7 @@ describe "Keybox Password Safe Application" do
 
     it "show all the entries" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--show"])
-        stdin = StringIO.new([@passphrase, "", "", ""].join("\n"))
+        stdin = StringIO.new(["dark", @passphrase, "", "", ""].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
         kps.stdout.string.should =~ /2./m 
@@ -235,7 +237,7 @@ describe "Keybox Password Safe Application" do
 
     it "changing master password works" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--master-password"])
-        stdin  = StringIO.new([@passphrase, "I really love ruby.", "I really love ruby."].join("\n"))
+        stdin  = StringIO.new(["dark", @passphrase, "I really love ruby.", "I really love ruby."].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
         kps.stdout.string.should =~ /New master password set/m 
@@ -243,7 +245,7 @@ describe "Keybox Password Safe Application" do
 
     it "master password must be non-zero" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--master-password"])
-        stdin  = StringIO.new([@passphrase, "", ""].join("\n"))
+        stdin  = StringIO.new(["dark",@passphrase, "", ""].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         begin
             kps.run
@@ -255,7 +257,7 @@ describe "Keybox Password Safe Application" do
 
     it "importing from a valid csv file" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"-i", @import_csv.path])
-        stdin  = StringIO.new([@passphrase, @passphrase].join("\n"))
+        stdin  = StringIO.new(["dark",@passphrase, @passphrase].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
         kps.stdout.string.should =~ /Imported \d* records from/m 
@@ -263,7 +265,7 @@ describe "Keybox Password Safe Application" do
 
     it "Error message give on invalid imported csv" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"-i", @bad_import_csv.path])
-        stdin  = StringIO.new([@passphrase, @passphrase].join("\n"))
+        stdin  = StringIO.new(["dark",@passphrase, @passphrase].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         begin
             kps.run
@@ -275,7 +277,7 @@ describe "Keybox Password Safe Application" do
 
     it "able to export to a csv" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"-x", @export_csv.path])
-        stdin  = StringIO.new([@passphrase, @passphrase].join("\n"))
+        stdin  = StringIO.new(["dark",@passphrase, @passphrase].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
         kps.stdout.string.should  =~ /Exported \d* records to/m 
@@ -283,14 +285,14 @@ describe "Keybox Password Safe Application" do
 
     it "able to turn off color schemes" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"--color","none"])
-        kps.set_io(StringIO.new(@passphrase),StringIO.new,StringIO.new)
+        kps.set_io(StringIO.new(["dark",@passphrase].join("\n")),StringIO.new,StringIO.new)
         kps.run
         kps.options.color_scheme.should == :none
     end
 
     it "an invalid color scheme results in a no color scheme" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"--color","dne"])
-        kps.set_io(StringIO.new(@passphrase),StringIO.new,StringIO.new)
+        kps.set_io(StringIO.new(["dark",@passphrase].join("\n")),StringIO.new,StringIO.new)
         kps.run
         kps.options.color_scheme.should == :none
     end
@@ -299,7 +301,7 @@ describe "Keybox Password Safe Application" do
         bad_color_scheme = { :bad => [:bold, :white, :on_magenta] }
         File.open("/tmp/test.color_scheme.yaml", "w+") { |f| f.write(bad_color_scheme.to_yaml) }
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"--color","test"])
-        kps.set_io(StringIO.new(@passphrase),StringIO.new,StringIO.new)
+        kps.set_io(StringIO.new(["dark",@passphrase].join("\n")),StringIO.new,StringIO.new)
         kps.run
 
         File.unlink("/tmp/test.color_scheme.yaml")

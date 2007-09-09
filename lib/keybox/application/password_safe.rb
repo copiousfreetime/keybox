@@ -19,7 +19,7 @@ module Keybox
             DEFAULT_DIRECTORY    = File.join(home_directory,".keybox")
             DEFAULT_DB           = File.join(DEFAULT_DIRECTORY,"database.yaml")
             DEFAULT_CONFIG       = File.join(DEFAULT_DIRECTORY,"config.yaml")
-            DEFAULT_COLOR_SCHEME = :dark_bg
+            DEFAULT_COLOR_SCHEME = :none
 
             ACTION_LIST       = %w(add delete edit show list master-password)
 
@@ -113,15 +113,17 @@ module Keybox
             end
 
             def default_options
-                options = OpenStruct.new
-                options.debug                       = 0
-                options.show_help                   = false
-                options.show_version                = false
-                options.config_file                 = Keybox::Application::PasswordSafe::DEFAULT_CONFIG
-                options.db_file                     = Keybox::Application::PasswordSafe::DEFAULT_DB
-                options.use_password_hash_for_url   = false
-                options.color_scheme                = Keybox::Application::PasswordSafe::DEFAULT_COLOR_SCHEME
-                return options
+                if not @default_options then 
+                    @default_options                            = OpenStruct.new
+                    @default_options.debug                      = 0
+                    @default_options.show_help                  = false
+                    @default_options.show_version               = false
+                    @default_options.config_file                = Keybox::Application::PasswordSafe::DEFAULT_CONFIG
+                    @default_options.db_file                    = Keybox::Application::PasswordSafe::DEFAULT_DB
+                    @default_options.use_password_hash_for_url  = false
+                    @default_options.color_scheme               = Keybox::Application::PasswordSafe::DEFAULT_COLOR_SCHEME
+                end
+                return @default_options
             end
 
             # load options from the configuration file, if the file
@@ -136,6 +138,7 @@ module Keybox
                 # if the file is 0 bytes, then this is illegal and needs
                 # to be overwritten.
                 if not File.exists?(file_path) or File.size(file_path) == 0 then
+                    determine_color_scheme
                     FileUtils.mkdir_p(File.dirname(file_path))
                     File.open(file_path,"w") do |f|
                         YAML.dump(default_options.marshal_dump,f)
@@ -144,6 +147,20 @@ module Keybox
                 options = YAML.load_file(file_path) || Hash.new
             end
 
+            # determine the color scheme to store in the initial creation of the configuration
+            # file.  We ask the user which of the color schemes will work best for them.
+            def determine_color_scheme
+                @default_options.color_scheme = @highline.choose do |menu|
+                    menu.layout     = :one_line
+                    menu.select_by  = :name
+                    menu.header     = nil
+                    menu.prompt     = "What color scheme would you like? "
+                    menu.choice("none") { :none }
+                    menu.choice("dark terminal background") { :dark_bg }
+                    menu.choice("light terminal background") { :light_bg }
+                end
+            end
+            
             #
             # load the given color scheme.  If the scheme cannot be
             # found it will default to the +:none+ scheme which has no
@@ -204,7 +221,7 @@ module Keybox
 
                     else
                         # if we don't have a file then set the color
-                        # scheme to nil and we're done
+                        # scheme to :none and we're done
                         @options.color_scheme = :none
                         ::HighLine.color_scheme = ::HighLine::ColorScheme.new(NONE_SCHEME)
                     end
@@ -267,7 +284,6 @@ module Keybox
                     hsay "-" * 40, :separator_bar
                     hsay entry, :normal
                     hsay "-" * 40, :separator_bar
-                    
 
                     gathered = hagree "Is this information correct? (y/n)"
                 end

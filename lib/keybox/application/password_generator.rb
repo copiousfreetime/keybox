@@ -75,17 +75,19 @@ module Keybox
             end
             
             def default_options
-                options = OpenStruct.new
-                options.debug               = 0
-                options.show_version        = false
-                options.show_help           = false
-                options.algorithm           = :random
-                options.number_to_generate  = 6
-                options.min_length          = 8
-                options.max_length          = 10
-                options.use_symbols         = options_to_symbol_sets(["all"])
-                options.require_symbols     = options_to_symbol_sets([])
-                return options
+                if not @default_options then
+                    @default_options = OpenStruct.new
+                    @default_options.debug               = 0
+                    @default_options.show_version        = false
+                    @default_options.show_help           = false
+                    @default_options.algorithm           = :random
+                    @default_options.number_to_generate  = 6
+                    @default_options.min_length          = 8
+                    @default_options.max_length          = 10
+                    @default_options.use_symbols         = options_to_symbol_sets(["all"])
+                    @default_options.require_symbols     = options_to_symbol_sets([])
+                end
+                return @default_options
             end
 
             def options_to_symbol_sets(args)

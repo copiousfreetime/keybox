@@ -89,11 +89,13 @@ module Keybox
             end
 
             def default_options
-                options = OpenStruct.new
-                options.debug           = 0
-                options.show_version    = false
-                options.show_help       = false
-                return options
+                if not @default_options then
+                    @default_options = OpenStruct.new
+                    @default_options.debug           = 0
+                    @default_options.show_version    = false
+                    @default_options.show_help       = false
+                end
+                return @default_options
             end
 
             def configuration_file_options
