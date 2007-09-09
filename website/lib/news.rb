@@ -27,10 +27,10 @@ require 'stringio'
 # When utilzed in a template the 'news' tag can optionally take to
 # additional parameters 'maxEntries' and 'maxParagraphs'.  
 #
-#   maxEntries: the N most recent entries by date in the news.yaml
+#   max_entries: the N most recent entries by date in the news.yaml
 #               file to display.
 #
-#   maxParagraphs: the content of an entry is truncated to N
+#   max_paragraphs: the content of an entry is truncated to N
 #                  paragraphs, where a paragraphs ending is defined by
 #                  "\n\n"
 # 
@@ -58,7 +58,7 @@ class News
             @entries ||= YAML::load(File.read(SITE.news_file))
         end
         
-        def sorted_entries
+        def sorted_entries            
             if not @sorted_entries then
                 # convert the entries to something sortable by date
                 @sorted_entries = []
@@ -71,22 +71,22 @@ class News
                     when DateTime
                         p = [date.year, date.month, date.day, date.hour, date.min, date.sec]
                     end
-                    @sorted_entries << [Time.mktime(*p), content]
+                    @sorted_entries << { :time => Time.mktime(*p), :content => content }
                 end
 
                 # we want a descending sort
-                @sorted_entries.sort! { |a,b| b[0] <=> a[0] }
+                @sorted_entries.sort! { |a,b| b[:time] <=> a[:time] }
             end
-            return @sorted_entries
+            return @sorted_entries.freeze
         end
         
         def format(e)
             content = StringIO.new
-            e.each do |datetime,entry|
-                content.puts "<#{DATE_TAG}> #{datetime.strftime(DATE_FORMAT)} </#{DATE_TAG}>"
+            e.each do |entry|
+                content.puts "<#{DATE_TAG}> #{entry[:time].strftime(DATE_FORMAT)} </#{DATE_TAG}>"
                 content.puts
                 content.print "<#{CONTENT_TAG}>" if CONTENT_TAG.to_s.length > 0 
-                content.puts RedCloth.new(entry).to_html
+                content.puts RedCloth.new(entry[:content]).to_html
                 content.print "</#{CONTENT_TAG}>" if CONTENT_TAG.to_s.length > 0 
                 content.puts
             end
@@ -98,15 +98,13 @@ end
 def news(options = {})
     max_entries     = options[:max_entries] || News.sorted_entries.size
     max_paragraphs  = options[:max_paragraphs] || nil
+            
     
-    to_format = News.sorted_entries[0...max_entries]
-    if max_paragraphs then
-        max_paragraphs = max_paragraphs.to_i
-        to_format = News.sorted_entries[0...max_entries].collect do |e|
-            e[1] = e[1].split("\n\n")[0...max_paragraphs].join("\n\n")
-            e
-        end
-    end
- 
-    News.format(to_format)
+    to_format = News.sorted_entries.collect do |e|
+                    paragraphs = e[:content].split("\n\n")
+                    trim_to    = max_paragraphs || paragraphs.size
+                    { :time    => e[:time],
+                      :content => paragraphs[0...trim_to].join("\n\n") }
+                end
+    News.format(to_format[0...max_entries])
 end

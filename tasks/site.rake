@@ -23,7 +23,7 @@ namespace :site do
     if HAVE_HEEL then
         desc "View the website locally"
         task :view => :build do
-            show_files Keybox::SPEC.local_site_dir
+            sh "heel --root #{Keybox::SPEC.local_site_dir}"
         end
     end
 

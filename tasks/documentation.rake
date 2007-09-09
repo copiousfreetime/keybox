@@ -13,7 +13,7 @@ namespace :doc do |ns|
     if HAVE_HEEL then
         desc "View the RDoc documentation locally"
         task :view => :rdoc do
-            show_files Keybox::SPEC.local_rdoc_dir
+            sh "heel --root #{Keybox::SPEC.local_rdoc_dir}"
         end
     end
     

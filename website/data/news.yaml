@@ -3,8 +3,8 @@
   
   Changes in this release
   
+  * %Added Feature [#11796] Change initial setup prompts to NOT have colorized output and ask the user what color scheme is appropriate for them%  
   * %Update to use HighLine 1.4.0%
-  * %Added Feature [#11796] Change initial setup prompts to NOT have colorized output and ask the user what color scheme is appropriate for them%
   * %general code cleanup%
   * %rework rake tasks to keep in line with other projects%
   * %switch to "webby":http://webby.rubyforge.org for site generation%
