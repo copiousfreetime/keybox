@@ -13,7 +13,10 @@ namespace :test do
         r.spec_opts = %w(--format specdoc --color)
     end
 
-    task :coverage => [:spec] do
-        show_files Keybox::SPEC.local_coverage_dir
-    end 
+    if HAVE_HEEL then
+        desc "View the code coverage report locally"
+        task :view_coverage => [:spec] do
+            sh "heel --root #{Keybox::SPEC.local_coverage_dir}"
+        end 
+    end
 end

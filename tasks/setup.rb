@@ -12,7 +12,7 @@ end
 # setup global constants so the task libs can make decisions based upon the availability
 # of other libraries.
 
-%w(heel webby).each do |lib|
+%w(heel webby rubyforge).each do |lib|
   Object.instance_eval { const_set "HAVE_#{lib.upcase}", try_require(lib) }
 end
 
