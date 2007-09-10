@@ -25,6 +25,7 @@ BODY
 
     return subject, title, body, urls
 end
+
 namespace :announce do
     desc "create email for ruby-talk"
     task :email do
