@@ -27,7 +27,7 @@ module Keybox
                 spec.default_executable = "#{spec.name}"
                 spec.executables        = Dir.entries(Keybox::APP_BIN_DIR).delete_if { |f| f =~ /\A\./ }
                 spec.files              = spec.test_files + spec.extra_rdoc_files + 
-                                          FileList["lib/**/*.rb", "resources/**/*", "data/**/*"]
+                                          FileList["lib/**/*.rb", "resources/**/*"]
 
                 spec.add_dependency("highline", ">= 1.4.0")
 
