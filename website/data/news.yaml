@@ -3,7 +3,7 @@
   
   Changes in this release
   
-  * %Removal of non-existent directories from gemspec%
+  * %Removal of non-existent directories from gemspec which caused a slow startup time for some users%
   
 2007-09-09: |
   h4. Version 1.2.0 of keybox is released.

@@ -1,7 +1,7 @@
 = Changelog
 === Version 1.2.1 - 2007-09-26
 
-* Bugfix - Removed traversal of non-existent directories from gemspec
+* Bugfix - Removed traversal of non-existent directories from gemspec which caused a slow startup time for some users.
 
 === Version 1.2.0 - 2007-09-09
 
