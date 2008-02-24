@@ -297,7 +297,7 @@ describe "Keybox Password Safe Application" do
         kps.options.color_scheme.should == :none
     end
 
-    it "an incomplete color scheme results in an error message and then 'none' color scheme" do
+    it "an incomplete color scheme results in a prompt for a color scheme" do
         bad_color_scheme = { :bad => [:bold, :white, :on_magenta] }
         File.open("/tmp/test.color_scheme.yaml", "w+") { |f| f.write(bad_color_scheme.to_yaml) }
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"--color","test"])
@@ -305,7 +305,7 @@ describe "Keybox Password Safe Application" do
         kps.run
 
         File.unlink("/tmp/test.color_scheme.yaml")
-        kps.stdout.string.should =~ /It is missing the following items/m 
+        kps.stdout.string.should =~ /What color scheme would you like/m
         kps.options.color_scheme.should == :none
     end
 
