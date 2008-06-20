@@ -3,6 +3,8 @@ load 'tasks/setup.rb'
 
 task :default => :build
 
-SITE.news_file = File.expand_path( File.join( File.dirname( __FILE__ ), %w[ data news.yaml ] ))
+SITE.news_file  = File.expand_path( File.join( File.dirname( __FILE__ ), %w[ data news.yaml ] ))
+SITE.output_dir = File.expand_path( File.join( File.dirname( __FILE__ ), "..", Keybox::SPEC.local_site_dir))
+puts "output_dir = #{SITE.output_dir}"
 
 # EOF
