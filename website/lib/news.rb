@@ -1,5 +1,6 @@
 require 'parsedate'
 require 'stringio'
+require 'yaml'
 
 # This plugin creates a 'news' tag which can be used to display the
 # contents of a news file.

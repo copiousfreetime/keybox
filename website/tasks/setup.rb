@@ -1,6 +1,4 @@
 
-require 'keybox'
-
 begin
   require 'webby'
 rescue LoadError
@@ -10,10 +8,10 @@ end
 
 SITE = Webby.site
 
-SITE.output_dir    = File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "doc"))
-SITE.news_file     = 'data/news.yaml'
-
 # Load the other rake files in the tasks folder
-Dir.glob('tasks/*.rake').sort.each {|fn| import fn}
+Dir.glob(::File.join(%w[tasks *.rake])).sort.each {|fn| import fn}
+
+# Load all the ruby files in the lib folder
+Dir.glob(::File.join(%w[lib ** *.rb])).sort.each {|fn| require fn}
 
 # EOF
