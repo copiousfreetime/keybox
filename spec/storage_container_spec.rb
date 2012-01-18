@@ -39,7 +39,7 @@ describe 'a storage container' do
     it "should validate passphrase" do
         nc = Keybox::Storage::Container.new("i love ruby", @keybox_file)
         nc.save(@testing_file)
-        nc.key_digest.should == @container.key_digest
+        nc.key_digest.should be == @container.key_digest
         lambda { Keybox::Storage::Container.new("i hate ruby", @testing_file) }.should raise_error(Keybox::ValidationError)
 
     end
@@ -48,8 +48,8 @@ describe 'a storage container' do
         @container.save(@testing_file)
         new_container = Keybox::Storage::Container.new(@passphrase, @testing_file)
         recs = new_container.find_by_url("nytimes")
-        new_container.records.size.should == 2
-        recs.size.should == 1
+        new_container.records.size.should be == 2
+        recs.size.should be == 1
         recs[0].password.should == "2f85a2e2f"
     end
 
@@ -97,7 +97,7 @@ describe 'a storage container' do
     end
 
     it "able to see how many items are in the container" do
-        @container.size.should == 2
+        @container.size.should be == 2
         @container.length.should == 2
     end
 end

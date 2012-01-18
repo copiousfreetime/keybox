@@ -9,8 +9,6 @@ end
 $: << Keybox::APP_LIB_DIR
 
 require 'keybox/version'
-require 'keybox/specification'
-require 'keybox/gemspec'
 require 'keybox/cipher'
 require 'keybox/digest'
 require 'keybox/entry'

@@ -18,7 +18,7 @@ describe "a random device class" do
     end
 
     it "should be able to assign a new default source" do
-        (Keybox::RandomDevice.default = "/dev/random").should == "/dev/random"
+        (Keybox::RandomDevice.default = "/dev/random").should be == "/dev/random"
         Keybox::RandomDevice.default = "/dev/urandom"
     end
 end
@@ -64,7 +64,7 @@ describe "a random source class " do
     end
 
     it "valid class should allow default to be set" do
-        (Keybox::RandomSource.source = @random_source_class).should == @random_source_class
+        (Keybox::RandomSource.source = @random_source_class).should be == @random_source_class
         Keybox::RandomSource.source_classes.should have(3).entries
         Keybox::RandomSource.source_classes.delete(@random_source_class)
         Keybox::RandomSource.source_classes.should have(2).entries
@@ -73,8 +73,8 @@ describe "a random source class " do
 
     it "rand with no parameters should return a value between 0 and 1" do
         r = Keybox::RandomSource.rand
-        r.should >= 0.0
-        r.should < 1.0
+        r.should be >= 0.0
+        r.should be < 1.0
     end
 
     it "rand with parameters should return an integer value between 0 and that value" do

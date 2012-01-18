@@ -26,7 +26,7 @@ describe 'a storage record entry' do
         e = Keybox::Storage::Record.new
         sleep 1
         e.testing = "testing"
-        e.modification_time.should > e.creation_time 
+        e.modification_time.should be > e.creation_time 
         e.last_access_time.should == e.modification_time
     end
 
@@ -35,8 +35,8 @@ describe 'a storage record entry' do
         e.testing = "testing"
         sleep 1
         e.testing
-        e.last_access_time.should > e.creation_time 
-        e.last_access_time.should > e.modification_time
+        e.last_access_time.should be > e.creation_time 
+        e.last_access_time.should be > e.modification_time
     end
 
     it "assigning to a modification, creation or acces_time should raise and exception " do
@@ -57,7 +57,7 @@ describe 'a storage record entry' do
     it "comparison between records is valid" do
         e = Keybox::Storage::Record.new
         f = e.dup
-        e.should == e.uuid
-        e.should == f
+        e.should be == e.uuid
+        e.should be == f
     end
 end

@@ -2,7 +2,7 @@ require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
 describe "Account Entry" do
     it "fields get set correctly" do
         k = Keybox::AccountEntry.new("a test title", "user")
-        k.username.should == "user"
+        k.username.should be == "user"
         k.title.should == "a test title"
     end
 
@@ -15,7 +15,7 @@ describe "Account Entry" do
 
     it "fields can be private or visible" do
         k = Keybox::AccountEntry.new("a test title", "user")
-        k.private_fields.size.should == 0
+        k.private_fields.size.should be == 0
         k.visible_field?("title").should == true
     end
 end
@@ -23,10 +23,10 @@ end
 describe "Host Account" do
     it "fields get set correctly" do
         ha = Keybox::HostAccountEntry.new("a title", "host", "user", "password")
-        ha.title.should == "a title"
-        ha.username.should == "user"
-        ha.hostname.should == "host"
-        ha.password.should == "password"
+        ha.title.should be == "a title"
+        ha.username.should be == "user"
+        ha.hostname.should be == "host"
+        ha.password.should be == "password"
     end
 
     it "password is displayable, private and non-visible" do
@@ -40,8 +40,8 @@ end
 describe "URL Account" do
     it "fields get set correctly" do
         urla = Keybox::URLAccountEntry.new("url title", "http://www.example.com", "someuser")
-        urla.title.should == "url title"
-        urla.url.should == "http://www.example.com"
+        urla.title.should be == "url title"
+        urla.url.should be == "http://www.example.com"
         urla.username.should == "someuser"
     end
 

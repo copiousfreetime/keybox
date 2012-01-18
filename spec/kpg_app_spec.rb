@@ -31,7 +31,7 @@ describe "Keybox Password Generator Application" do
         kpg = Keybox::Application::PasswordGenerator.new(["--num", "4"])
         kpg.set_io(StringIO.new,StringIO.new)
         kpg.run
-        kpg.options.number_to_generate.should == 4
+        kpg.options.number_to_generate.should be == 4
         kpg.stdout.string.split(/\s+/).should have(4).items
     end
 
@@ -41,7 +41,7 @@ describe "Keybox Password Generator Application" do
         begin
             kpg.run
         rescue SystemExit => se
-            se.status.should == 0
+            se.status.should be == 0
             kpg.stdout.string.length.should > 0
         end
         kpg.stdout.string.should =~ /--help/m
@@ -63,7 +63,7 @@ describe "Keybox Password Generator Application" do
         kpg.set_io(StringIO.new,StringIO.new)
         kpg.run
 
-        kpg.options.min_length.should == 4
+        kpg.options.min_length.should be == 4
         kpg.stdout.string.split("\n").each do |pass|
             pass.length.should >= kpg.options.min_length 
         end
@@ -74,7 +74,7 @@ describe "Keybox Password Generator Application" do
         kpg.set_io(StringIO.new,StringIO.new,StringIO.new)
         kpg.run
 
-        kpg.options.max_length.should == 4
+        kpg.options.max_length.should be == 4
         kpg.stdout.string.split("\n").each do |pass|
             pass.length.should <= 4 
         end

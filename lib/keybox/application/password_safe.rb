@@ -113,7 +113,7 @@ module Keybox
             end
 
             def default_options
-                if not @default_options then 
+                if not defined? @default_options then 
                     @default_options                            = OpenStruct.new
                     @default_options.debug                      = 0
                     @default_options.show_help                  = false

@@ -59,9 +59,9 @@ describe "Keybox Password Safe Application" do
         kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--debug", "--no-use-hash-for-url"])
         kps.set_io(StringIO.new("dark"),StringIO.new,StringIO.new)
         kps.merge_options
-        kps.options.db_file.should == @testing_db.path
-        kps.options.config_file.should == @testing_cfg.path
-        kps.options.debug.should == true
+        kps.options.db_file.should be == @testing_db.path
+        kps.options.config_file.should be == @testing_cfg.path
+        kps.options.debug.should be == true
         kps.options.use_password_hash_for_url.should == false
     end
 
@@ -97,7 +97,7 @@ describe "Keybox Password Safe Application" do
         rescue SystemExit => se
             kps.error_message.should =~ /Try.*--help/m 
             kps.stderr.string.should =~ /Try.*--help/m 
-            kps.stdout.string.size.should == 0
+            kps.stdout.string.size.should be == 0
             se.status.should == 1
         end
     end
@@ -108,7 +108,7 @@ describe "Keybox Password Safe Application" do
         begin
             kps.run
         rescue SystemExit => se
-            se.status.should == 0
+            se.status.should be == 0
             kps.stdout.string.length.should > 0
         end
     end
@@ -119,7 +119,7 @@ describe "Keybox Password Safe Application" do
         begin
             kps.run
         rescue SystemExit => se
-            se.status.should == 0
+            se.status.should be == 0
             kps.stdout.string.length.should > 0
         end
     end
@@ -130,7 +130,7 @@ describe "Keybox Password Safe Application" do
         stdin  = StringIO.new(["dark", @passphrase,@passphrase].join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
-        kps.db.records.size.should == 0
+        kps.db.records.size.should be == 0
         kps.stdout.string.should =~ /Creating initial database./m 
         kps.stdout.string.should =~ /Initial Password for/m 
     end
@@ -158,7 +158,7 @@ describe "Keybox Password Safe Application" do
         stdin  = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
-        kps.db.records.size.should == 3
+        kps.db.records.size.should be == 3
         kps.db.find("someother")[0].additional_info.should == "someinfo"
     end
 
@@ -188,7 +188,7 @@ describe "Keybox Password Safe Application" do
         stdin = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
-        kps.db.records.size.should == 2
+        kps.db.records.size.should be == 2
         kps.stdout.string.should =~ /example' deleted/ 
     end
 
@@ -198,7 +198,7 @@ describe "Keybox Password Safe Application" do
         stdin = StringIO.new(prompted_values.join("\n"))
         kps.set_io(stdin,StringIO.new,StringIO.new)
         kps.run
-        kps.db.records.size.should == 3
+        kps.db.records.size.should be == 3
         kps.stdout.string.should =~ /example' deleted/ 
     end
 

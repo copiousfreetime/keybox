@@ -14,8 +14,8 @@ describe "UUID class" do
     it "array elements should have values between 0 and 256 " do
         uuid = Keybox::UUID.new
         uuid.to_a.each do |b|
-            b.should >= 0
-            b.should <= 256
+            b.should be >= 0
+            b.should be <= 256
         end
     end
 
@@ -69,8 +69,8 @@ describe "UUID class" do
     it "should not equal some other uuid or random string" do
         s = "c8b5a23a-2507-4834-ab19-60f2cb2a5271"
         one = Keybox::UUID.new(s)
-        one.should_not == Keybox::UUID.new
-        one.should_not == "i love ruby"
-        one.should_not == 4
+        one.should_not be == Keybox::UUID.new
+        one.should_not be == "i love ruby"
+        one.should_not be == 4
     end
 end

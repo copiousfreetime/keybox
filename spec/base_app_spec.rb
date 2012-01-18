@@ -12,7 +12,7 @@ describe "Keybox Base Application" do
         kba = Keybox::Application::Base.new(nil)
         kba.set_io(StringIO.new,StringIO.new,StringIO.new)
         kba.run
-        kba.stdout.string.size.should > 0
+        kba.stdout.string.size.should be > 0
     end
 
     it "invalid options set the error message, exit 1 and have output on stderr" do
@@ -23,8 +23,8 @@ describe "Keybox Base Application" do
         rescue SystemExit => se
             kba.error_message.should =~ /Try.*--help/m 
             kba.stderr.string.should =~ /Try.*--help/m 
-            kba.stdout.string.size.should == 0
-            se.status.should == 1
+            kba.stdout.string.size.should be == 0
+            se.status.should be == 1
         end
     end
 
@@ -34,7 +34,7 @@ describe "Keybox Base Application" do
         begin
             kba.run
         rescue SystemExit => se
-            se.status.should == 0
+            se.status.should be == 0
             kba.stdout.string.length.should > 0
         end
     end
@@ -45,7 +45,7 @@ describe "Keybox Base Application" do
         begin
             kba.run
         rescue SystemExit => se
-            se.status.should == 0
+            se.status.should be == 0
             kba.stdout.string.length.should > 0
         end
     end

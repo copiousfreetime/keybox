@@ -27,9 +27,9 @@ describe "CSV Convert class" do
 
     it "able to load records from a file" do
         entries = Keybox::Convert::CSV.from_file(@import_csv.path)
-        entries.size.should == 3
-        entries[0].hostname.should == "host.example.com"
-        entries[1].password.should == "mywebpassword"
+        entries.size.should be == 3
+        entries[0].hostname.should be == "host.example.com"
+        entries[1].password.should be == "mywebpassword"
         entries[2].additional_info.should == "web forum login's information"
     end
 
