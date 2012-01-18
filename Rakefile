@@ -2,10 +2,10 @@
 $: << File.expand_path(File.join(File.dirname(__FILE__),"lib"))
 
 require 'rubygems'
-require 'rake/gempackagetask'
+require 'rubygems/package_task'
 require 'rake/clean'
-require 'rake/rdoctask'
-require 'spec/rake/spectask'
+require 'rdoc/task'
+require 'rspec/core/rake_task'
 require 'rake/contrib/sshpublisher'
 
 require 'keybox'

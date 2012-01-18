@@ -29,7 +29,11 @@ module Keybox
                 spec.files              = spec.test_files + spec.extra_rdoc_files + 
                                           FileList["lib/**/*.rb", "resources/**/*"]
 
-                spec.add_dependency("highline", ">= 1.4.0")
+                spec.add_dependency("highline", "~> 1.6.2")
+
+                spec.add_development_dependency("rspec", "~> 2.8.0")
+                spec.add_development_dependency("rdoc", "~> 3.12" )
+                spec.add_development_dependency("rake", "~> 0.9.2.2")
 
                 spec.required_ruby_version  = ">= 1.8.5"
 

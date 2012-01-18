@@ -1,7 +1,7 @@
 begin
     require 'rubygems'
     require 'keybox'
-    require 'spec'
+    require 'rspec'
     require 'stringio'
     require 'tempfile'
     

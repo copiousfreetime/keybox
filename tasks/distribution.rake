@@ -5,7 +5,7 @@ namespace :dist do
 
     GEM_SPEC = eval(Keybox::SPEC.to_ruby)
 
-    Rake::GemPackageTask.new(GEM_SPEC) do |pkg|
+    Gem::PackageTask.new(GEM_SPEC) do |pkg|
         pkg.need_tar = Keybox::SPEC.need_tar
         pkg.need_zip = Keybox::SPEC.need_zip
     end
