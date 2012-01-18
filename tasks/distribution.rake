@@ -9,7 +9,7 @@ namespace :dist do
         pkg.need_tar = Keybox::SPEC.need_tar
         pkg.need_zip = Keybox::SPEC.need_zip
     end
-    
+
     desc "Install as a gem"
     task :install => [:clobber_package, :package] do
         sh "sudo gem install pkg/#{Keybox::SPEC.full_name}.gem"

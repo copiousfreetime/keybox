@@ -4,7 +4,7 @@ begin
     require 'rspec'
     require 'stringio'
     require 'tempfile'
-    
+
     # termios cannot be used during testing
     begin
         require 'termios'
@@ -12,7 +12,7 @@ begin
         exit 2
     rescue LoadError
     end
-    
+
 rescue LoadError
     path = File.expand_path(File.join(File.dirname(__FILE__),"..","lib"))
     raise if $:.include? path

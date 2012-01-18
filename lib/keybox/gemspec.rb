@@ -46,9 +46,9 @@ module Keybox
                 spec.local_coverage_dir = "doc/coverage"
 
                 spec.remote_site_dir    = ""
-                
+
                 spec.post_install_message = "\e[1m\e[31m\e[40mTry `keybox --help` for more information\e[0m"
-                
+
 
            end
 end

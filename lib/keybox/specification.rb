@@ -6,10 +6,10 @@ module Keybox
     # Add some additional items to Gem::Specification
     # A Keybox::Specification adds additional pieces of information the
     # typical gem specification
-    class Specification 
+    class Specification
 
         RUBYFORGE_ROOT = "/var/www/gforge-projects/"
-      
+
         # user that accesses remote site
         attr_accessor :remote_user
 
@@ -28,14 +28,14 @@ module Keybox
 
         # local directory for coverage report
         attr_accessor :local_coverage_dir
-        
+
         # remote directory for storing coverage reports
         # This defaults to 'coverage'
         attr_accessor :remote_coverage_dir
 
         # local directory for generated website, default +site/public+
         attr_accessor :local_site_dir
-       
+
         # remote directory relative to +remote_root+ for the website.
         # website.
         attr_accessor :remote_site_dir
@@ -58,7 +58,7 @@ module Keybox
             @remote_coverage_dir    = "coverage"
             @local_site_dir         = "site/public"
             @remote_site_dir        = "."
-            
+
             @need_tar   = true
             @need_zip   = true
 
@@ -82,8 +82,8 @@ module Keybox
         # name.  If rubyforge project and name are set, but they are
         # different then assume that name is a subproject of the
         # rubyforge project
-        def remote_root 
-            if rubyforge_project.nil? or 
+        def remote_root
+            if rubyforge_project.nil? or
                 rubyforge_project == name then
                 return RUBYFORGE_ROOT + "#{name}/"
             else
@@ -107,7 +107,7 @@ module Keybox
         def remote_root_location
             "#{remote_user}@#{remote_host}:#{remote_root}"
         end
-           
+
         def remote_rdoc_location
             remote_root_location + @remote_rdoc_dir
         end
