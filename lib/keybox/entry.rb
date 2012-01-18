@@ -178,7 +178,7 @@ module Keybox
         end
 
         def password_hash_alg
-            if not instance_variables.include?("@password_hash_alg") then
+            unless instance_variable_defined?(:@password_hash_alg)
                 @password_hash_alg = Keybox::PasswordHash.new
             end
             @password_hash_alg
