@@ -41,9 +41,10 @@ module Keybox
                 #
                 def from_file(csv_filename)
                     reader = ::CSV.open(csv_filename,"r")
-                    entries = Keybox::Convert::CSV.from_reader(reader)
-                    reader.close
+                    entries = from_reader(reader)
                     return entries
+                ensure
+                    reader.close
                 end
 
                 # pull all the items from the CSV file.  There MUST be a
