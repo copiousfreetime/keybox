@@ -1,5 +1,4 @@
 require 'keybox/randomizer'
-require 'yaml'
 module Keybox
     #
     # A quick implementation of a UUID class using the internal

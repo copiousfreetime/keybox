@@ -6,7 +6,7 @@ module Keybox
     # AccountEntry with current child classes HostAccountEntry and
     # URLAccountEntry.
     #
-    # In most cases HostAccountEntry will suffice.  Use URLAccountEntry 
+    # In most cases HostAccountEntry will suffice.  Use URLAccountEntry
     # when you would like to link an entry's +password+ field to be
     # generated based upon the master password of the container.
     class AccountEntry < Keybox::Storage::Record
@@ -15,21 +15,8 @@ module Keybox
                 %w(title username additional_info)
             end
 
-            # fields that can be displayed, some could be calculated
-            def display_fields
-                (visible_fields + private_fields).uniq
-            end
-            
             def private_fields
                 []
-            end
-
-            def visible_fields
-                default_fields - private_fields
-            end
-
-            def visible_field?(field_name)
-                visible_fields.include?(field_name)
             end
 
             def private_field?(field_name)
@@ -52,10 +39,6 @@ module Keybox
             self.class.default_fields
         end
 
-        def display_fields
-            self.class.display_fields
-        end
-        
         def private_fields
             self.class.private_fields
         end
@@ -63,15 +46,6 @@ module Keybox
         def private_field?(field_name)
             self.class.private_field?(field_name)
         end
-
-        def visible_fields
-            self.class.visible_fields
-        end
-
-        def visible_field?(field_name)
-            self.class.visible_field?(field_name)
-        end
-
 
         def values
             fields.collect { |f| self.send(f) }
@@ -123,7 +97,7 @@ module Keybox
     # other fields may be added dynamically.
     #
     class HostAccountEntry < Keybox::AccountEntry
-        
+
         class << self
             def default_fields
                 %w(title hostname username password additional_info)
@@ -166,7 +140,7 @@ module Keybox
             def initial_fields
                 %w(title url username additional_info)
             end
-            
+
             def private_fields
                 %w(password)
             end
