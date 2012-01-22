@@ -80,5 +80,10 @@ module Keybox
                 false
             end
         end
+
+        def to_yaml(*args)
+            Keybox.fix_encoding @bytes if @bytes
+            super
+        end
     end
 end

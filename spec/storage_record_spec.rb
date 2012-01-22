@@ -67,4 +67,10 @@ describe 'a storage record entry' do
         e.should be == e.uuid
         e.should be == f
     end
+
+    it "can be round-tripped to YAML multiple times" do
+        record = Keybox::Storage::Record.new
+        restored = YAML.load(record.to_yaml)
+        YAML.load(restored.to_yaml).should == record
+    end
 end
