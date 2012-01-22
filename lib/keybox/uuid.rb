@@ -7,8 +7,6 @@ module Keybox
     # 
     class UUID
 
-        attr_reader :bytes
-
         XF     = "%0.2x"
         FORMAT = sprintf("%s-%s-%s-%s-%s", XF * 4, XF * 2, XF * 2, XF * 2, XF * 6)
         REGEX  = %r|^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$|
@@ -21,7 +19,6 @@ module Keybox
         #   - a string of bytes, in this case they are considered to be
         #     the bytes used internally so 16 of them are taken
         def initialize(bytes = nil)
-
             if bytes.nil? then
                 @bytes = Keybox::RandomDevice.random_bytes(16)
             elsif bytes.size == 36 and bytes.split("-").size == 5 then
@@ -49,6 +46,7 @@ module Keybox
             else
                 raise ArgumentError, "[#{bytes}] cannot be converted to a UUID"
             end
+
         end
 
         #
@@ -70,7 +68,7 @@ module Keybox
         def eql?(other)
             case other
             when Keybox::UUID
-                self.bytes == other.bytes
+                self.to_s == other.to_s
             when String
                 begin
                     o = Keybox::UUID.new(other)
