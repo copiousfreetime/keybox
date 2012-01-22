@@ -89,8 +89,20 @@ module Keybox
                 end
             end
 
+            def to_yaml(*args)
+              Keybox.fix_encoding *@data_members.values
+              super
+            end
+
+            # FIXME use of this method is deprecated in ruby 1.9
             def to_yaml_properties
-                %w{ @creation_time @modification_time @last_access_time @data_members @uuid }
+              properties = %w{ @creation_time @modification_time
+                               @last_access_time @data_members @uuid }
+              # FIXME is there a better way?
+              if RUBY_VERSION =~ /1.9/
+                properties = properties.map { |p| p.to_sym }
+              end
+              properties
             end
 
             def ==(other)

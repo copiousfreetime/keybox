@@ -68,4 +68,12 @@ describe "UUID class" do
         one.should_not be == "i love ruby"
         one.should_not be == 4
     end
+
+    it "can be round-tripped with yaml multiple times" do
+        uuid = Keybox::UUID.new
+        yaml = uuid.to_yaml
+        restored = YAML.load(yaml)
+        restored.should == uuid
+        YAML.load(restored.to_yaml).should == uuid
+    end
 end
