@@ -10,10 +10,11 @@ describe "CSV Convert class" do
         @import_csv.close
 
         @bad_import_csv = Tempfile.new("keybox_bad_header.csv")
-        # missing a valid header
+        # "ttle" is incorrect, "hostname" header is misnamed as "host"
         @bad_import_csv.puts "ttle,host,username,password,additional_info"
         @bad_import_csv.puts "example host,host.example.com,guest,mysecretpassword,use this account only for honeybots"
         @bad_import_csv.puts "example site,http://www.example.com,guest,mywebpassword,web forum login"
+        @bad_import_csv.close
 
         @export_csv = Tempfile.new("keybox_export.csv")
 
