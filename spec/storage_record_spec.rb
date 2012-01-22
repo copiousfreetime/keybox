@@ -30,6 +30,13 @@ describe 'a storage record entry' do
         e.last_access_time.should == e.modification_time
     end
 
+    it "sets modified to be true when a key is changed" do
+         e = Keybox::Storage::Record.new
+         e.should_not be_modified
+         e.thing = "test"
+         e.should be_modified
+    end
+
     it "reading a field after assignment the access time > modification time " do
         e = Keybox::Storage::Record.new
         e.testing = "testing"
