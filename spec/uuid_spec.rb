@@ -1,11 +1,6 @@
 require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
 
 describe "UUID class" do
-    it "should have 16 bytes" do
-        uuid = Keybox::UUID.new
-        uuid.bytes.size.should == 16 
-    end
-
     it "as an array should have 16 members" do
         uuid = Keybox::UUID.new
         uuid.to_a.size.should == 16
