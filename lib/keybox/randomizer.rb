@@ -187,7 +187,7 @@ module Keybox
         private
 
         def has_correct_duck_type?(obj)
-            (REQUIRED_METHODS & obj.public_methods).size == REQUIRED_METHODS.size
+            (REQUIRED_METHODS & obj.public_methods.map { |m| m.to_s} ).size == REQUIRED_METHODS.size
         end
     end
 end

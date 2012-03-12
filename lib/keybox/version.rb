@@ -4,7 +4,7 @@ module Keybox
     class Version
         MAJOR   = 1 
         MINOR   = 2 
-        BUILD   = 1 
+        BUILD   = 2 
 
         class << self
             def to_a
