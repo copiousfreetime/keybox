@@ -1,4 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
+require 'spec_helper'
 
 describe 'a storage container' do
     before(:each) do
@@ -17,16 +17,16 @@ describe 'a storage container' do
     end
 
     it 'should have a uuid' do
-        @container.uuid.to_s.length.should == 36 
+        @container.uuid.to_s.length.should == 36
     end
 
     it 'should have a valid key ' do
-        @container.key_digest.length.should == 64 
+        @container.key_digest.length.should == 64
     end
 
     it 'should save correctly to a file' do
         @container.save(@testing_file)
-        File.size(@testing_file).should > 0 
+        File.size(@testing_file).should > 0
     end
 
     it "should load correctly from a file" do
@@ -41,7 +41,6 @@ describe 'a storage container' do
         nc.save(@testing_file)
         nc.key_digest.should be == @container.key_digest
         lambda { Keybox::Storage::Container.new("i hate ruby", @testing_file) }.should raise_error(Keybox::ValidationError)
-
     end
 
     it "url accounts should have the correct password after save" do
@@ -62,7 +61,7 @@ describe 'a storage container' do
         matches = @container.find(/Times/)
         matches.size.should == 1
     end
-    
+
     it "can find matching records - case insensitive via string input" do
         matches = @container.find("Times")
         matches.size.should == 1
@@ -80,7 +79,7 @@ describe 'a storage container' do
         times_1.should == times_2
     end
 
-    it "should not be modified upon load" do 
+    it "should not be modified upon load" do
         @container.modified?.should == false
     end
 

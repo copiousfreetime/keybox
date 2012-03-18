@@ -1,4 +1,5 @@
-require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
+require 'spec_helper'
+
 describe "Account Entry" do
     it "fields get set correctly" do
         k = Keybox::AccountEntry.new("a test title", "user")
@@ -13,10 +14,9 @@ describe "Account Entry" do
         k.fields.should be_include("additional_info")
     end
 
-    it "fields can be private or visible" do
+    it "fields can be private" do
         k = Keybox::AccountEntry.new("a test title", "user")
         k.private_fields.size.should be == 0
-        k.visible_field?("title").should == true
     end
 end
 
@@ -29,11 +29,9 @@ describe "Host Account" do
         ha.password.should be == "password"
     end
 
-    it "password is displayable, private and non-visible" do
+    it "password is private" do
         ha = Keybox::HostAccountEntry.new("a title", "host", "user", "password")
-        ha.display_fields.should be_include("password")
         ha.private_fields.should be_include("password")
-        ha.visible_fields.should_not be_include("password")
     end
 end
 
@@ -60,4 +58,3 @@ describe "URL Account" do
     end
 
 end
-                                          

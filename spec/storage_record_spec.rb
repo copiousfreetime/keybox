@@ -1,4 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
+require 'spec_helper'
 
 describe 'a storage record entry' do
     before(:each) do
@@ -30,6 +30,13 @@ describe 'a storage record entry' do
         e.last_access_time.should == e.modification_time
     end
 
+    it "sets modified to be true when a key is changed" do
+         e = Keybox::Storage::Record.new
+         e.should_not be_modified
+         e.thing = "test"
+         e.should be_modified
+    end
+
     it "reading a field after assignment the access time > modification time " do
         e = Keybox::Storage::Record.new
         e.testing = "testing"
@@ -59,5 +66,11 @@ describe 'a storage record entry' do
         f = e.dup
         e.should be == e.uuid
         e.should be == f
+    end
+
+    it "can be round-tripped to YAML multiple times" do
+        record = Keybox::Storage::Record.new
+        restored = YAML.load(record.to_yaml)
+        YAML.load(restored.to_yaml).should == record
     end
 end

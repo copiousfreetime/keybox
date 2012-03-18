@@ -1,9 +1,3 @@
-require 'keybox/cipher'
-require 'keybox/digest'
-require 'keybox/storage/record'
-require 'keybox/uuid'
-require 'keybox/randomizer'
-require 'keybox/error'
 require 'openssl'
 require 'yaml'
 
@@ -25,19 +19,19 @@ module Keybox
         #
         # The records are held decrypted in memory, so keep that in mind
         # if that is a concern.
-        #  
+        #
         # Add Records
         #
         #   record = Keybox::Storage::Record.new
         #   record.field1 = "data"
         #   record.field2 = "some more data"
-        #   
+        #
         #   container << record
         #
         # Delete Records
         #
         #   container.delete(record)
-        # 
+        #
         # There is no 'update' record, just delete it and add it.
         #
         # Find a record accepts a string and will look in all the
@@ -58,7 +52,7 @@ module Keybox
         # Or to some other location
         #
         #   container.save("/some/other/path.yml")
-        # 
+        #
         # Direct access to the decrypted records is also available
         # through the +records+ accessor.
         #
@@ -68,7 +62,7 @@ module Keybox
 
             attr_reader     :records
 
-            ITERATIONS            = 2048 
+            ITERATIONS            = 2048
             MINIMUM_PHRASE_LENGTH = 4
             def initialize(passphrase,path)
                 super()
@@ -80,7 +74,7 @@ module Keybox
                 if not load_from_file then
                     strength_check(@passphrase)
                     self.version                    = Keybox::VERSION
-                    
+
                     self.key_calc_iterations        = ITERATIONS
                     self.key_digest_salt            = Keybox::RandomDevice.random_bytes(32)
                     self.key_digest_algorithm       = Keybox::Digest::DEFAULT_ALGORITHM
@@ -133,7 +127,7 @@ module Keybox
             # save the current container to a file
             #
             def save(path = @path)
-                calculate_records_digest 
+                calculate_records_digest
                 encrypt_records
                 File.open(path,"w") do |f|
                     f.write(self.to_yaml)
@@ -151,13 +145,13 @@ module Keybox
             #
             def calculated_key(passphrase = @passphrase)
                 key = self.key_digest_salt + passphrase
-                self.key_calc_iterations.times do 
+                self.key_calc_iterations.times do
                     key = Keybox::Digest::CLASSES[self.key_digest_algorithm].digest(key)
                 end
                 return key
             end
 
-            # 
+            #
             # calculate the key digest of the encryption key
             #
             def calculated_key_digest(passphrase)
@@ -280,7 +274,7 @@ module Keybox
                 cipher.encrypt
                 cipher.key = calculated_key
                 cipher.iv  = self.records_init_vector
-                self.records_encrypted_data  = cipher.update(@records.to_yaml) 
+                self.records_encrypted_data  = cipher.update(@records.to_yaml)
                 self.records_encrypted_data << cipher.final
             end
 
