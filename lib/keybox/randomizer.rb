@@ -34,9 +34,6 @@ module Keybox
   #   random_bytes.size                              # => 42
   #
   class RandomDevice
-    @@DEVICES = [ "/dev/urandom", "/dev/random" ]
-    @@DEFAULT = nil
-
     attr_accessor :source
 
     def initialize(device = nil)
@@ -52,22 +49,26 @@ module Keybox
     end
 
     class << self
-      def default
-        return @@DEFAULT unless @@DEFAULT.nil?
+      def devices
+        @devices ||= [ "/dev/urandom", "/dev/random" ]
+      end
 
-        @@DEVICES.each do |device|
-          if File.readable?(device) then
-            @@DEFAULT = device
-            break
+      def default
+        if not defined? @default then
+          devices.each do |device|
+            if File.readable?(device) then
+              @default = device
+              break
+            end
           end
         end
-        return @@DEFAULT
+        return @default
       end
 
       def default=(device)
         if File.readable?(device) then
-          @@DEVICES << device
-          @@DEFAULT = device
+          self.devices << device unless self.devices.include?( device )
+          @default = device
         else
           raise ArgumentError, "device #{device} is not readable and therefore makes a bad random device"
         end
@@ -82,7 +83,7 @@ module Keybox
 
   #
   # A RandomSource uses one from a set of possible source
-  # class/modules.  So long as the @@DEFAULT item responds to
+  # class/modules.  So long as the default item responds to
   # +random_bytes+ it is fine.
   #
   # RandomSource supplies a +rand+ method in the same vein as
