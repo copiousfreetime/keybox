@@ -90,7 +90,7 @@ module Keybox
             end
 
             def to_yaml(*args)
-              Keybox.fix_encoding *@data_members.values
+              Keybox.fix_encoding( *@data_members.values )
               super
             end
 
