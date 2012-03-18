@@ -3,8 +3,6 @@ module Keybox
     APP_ROOT_DIR        = File.dirname(File.expand_path(File.join(__FILE__,".."))).freeze
     APP_LIB_DIR         = File.join(APP_ROOT_DIR,"lib").freeze
     APP_RESOURCE_DIR    = File.join(APP_ROOT_DIR,"resources").freeze
-    APP_VENDOR_DIR      = File.join(APP_ROOT_DIR,"vendor").freeze
-    APP_BIN_DIR         = File.join(APP_ROOT_DIR,"bin").freeze
 
     # Ruby 1.9 compatibility fix for string encoding when reading/writing:
     def self.fix_encoding(*strings)
