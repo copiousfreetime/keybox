@@ -73,7 +73,7 @@ describe "UUID class" do
         uuid = Keybox::UUID.new
         yaml = uuid.to_yaml
         restored = YAML.load(yaml)
-        restored.should == uuid
+        restored.should be == uuid
         YAML.load(restored.to_yaml).should == uuid
     end
 end
