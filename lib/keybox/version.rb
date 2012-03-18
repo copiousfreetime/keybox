@@ -1,5 +1,3 @@
-require 'keybox'
-
 module Keybox
     class Version
         MAJOR   = 1 

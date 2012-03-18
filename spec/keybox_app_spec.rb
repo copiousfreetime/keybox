@@ -1,4 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
+require 'spec_helper'
 require 'keybox/application/password_safe'
 
 describe "Keybox Password Safe Application" do

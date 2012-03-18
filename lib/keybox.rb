@@ -13,8 +13,6 @@ module Keybox
     end
 end
 
-$: << Keybox::APP_LIB_DIR
-
 require 'keybox/version'
 require 'keybox/cipher'
 require 'keybox/digest'

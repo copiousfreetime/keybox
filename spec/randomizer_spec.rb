@@ -1,4 +1,4 @@
-require File.expand_path(File.join(File.dirname(__FILE__),"spec_helper.rb"))
+require 'spec_helper'
 
 describe "a random device class" do
     it "should have a default source" do

@@ -1,6 +1,4 @@
-
 require 'csv'
-require 'keybox/entry'
 module Keybox
     module Convert
         #
