@@ -1,5 +1,6 @@
 COPYING
 HISTORY.rdoc
+Manifest.txt
 README.rdoc
 Rakefile
 bin/keybox
