@@ -1,4 +1,5 @@
 module Keybox
+    VERSION             = "1.3.0"
     APP_ROOT_DIR        = File.dirname(File.expand_path(File.join(__FILE__,".."))).freeze
     APP_LIB_DIR         = File.join(APP_ROOT_DIR,"lib").freeze
     APP_RESOURCE_DIR    = File.join(APP_ROOT_DIR,"resources").freeze
@@ -13,7 +14,6 @@ module Keybox
     end
 end
 
-require 'keybox/version'
 require 'keybox/cipher'
 require 'keybox/digest'
 require 'keybox/entry'
