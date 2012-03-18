@@ -1,13 +1,13 @@
-Keybox
+= Keybox
 
 * Homepage[http://keybox.rubyforge.org]
-* {Rubyforge Project}[http://rubyforge.org/projects/keybox/]
+* {Githup Project}[http://github.com/copiousfreetime/keybox/]
 * email jeremy at hinegardner dot org
 
 == DESCRIPTION:
 
 Keybox is a set of command line applications and ruby libraries for
-secure password storage and password generation.  
+secure password storage and password generation.
 
 == FEATURES/PROBLEMS:
 
