@@ -318,6 +318,6 @@ module Keybox
                     end
                 end
             end
-       end
+        end
     end
 end
