@@ -1,3 +1,6 @@
 *~
 Gemfile*
 *.gemspec
+pkg/
+doc/
+coverage/
