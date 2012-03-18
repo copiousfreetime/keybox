@@ -1,19 +1,19 @@
 module Keybox
-    APP_ROOT_DIR        = File.dirname(File.expand_path(File.join(__FILE__,".."))).freeze
-    APP_LIB_DIR         = File.join(APP_ROOT_DIR,"lib").freeze
-    APP_RESOURCE_DIR    = File.join(APP_ROOT_DIR,"resources").freeze
-    APP_VENDOR_DIR      = File.join(APP_ROOT_DIR,"vendor").freeze
-    APP_BIN_DIR         = File.join(APP_ROOT_DIR,"bin").freeze
+  VERSION             = "1.3.0"
 
-    # Ruby 1.9 compatibility fix for string encoding when reading/writing:
-    def self.fix_encoding(*strings)
-      strings.each do |string|
-        string.force_encoding "binary" if string.respond_to?(:force_encoding)
-      end
+  # Some untility directories for introspection
+  APP_ROOT_DIR     = File.dirname(File.expand_path(File.join(__FILE__,"..")))
+  APP_LIB_DIR      = File.join(APP_ROOT_DIR,"lib")
+  APP_RESOURCE_DIR = File.join(APP_ROOT_DIR,"resources")
+
+  # Ruby 1.9 compatibility fix for string encoding when reading/writing:
+  def self.fix_encoding(*strings)
+    strings.each do |string|
+      string.force_encoding "binary" if string.respond_to?(:force_encoding)
     end
+  end
 end
 
-require 'keybox/version'
 require 'keybox/cipher'
 require 'keybox/digest'
 require 'keybox/entry'

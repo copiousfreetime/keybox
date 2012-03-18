@@ -1,20 +1,7 @@
 #!/usr/bin/env ruby
-########################################################################
-# 
-########################################################################
 
-#----------------------------------------------------------------------
-# bootstrap
-#----------------------------------------------------------------------
-begin
-    require 'keybox'
-    require 'keybox/application/password_generator'
-rescue LoadError 
-    path = File.expand_path(File.join(File.dirname(__FILE__),"..","lib"))
-    raise if $:.include? path
-    $: << path
-    retry
-end
+require 'keybox'
+require 'keybox/application/password_generator'
 
 #----------------------------------------------------------------------
 # instantiate the program and pass it the commandline parameters
