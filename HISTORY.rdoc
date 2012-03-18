@@ -1,4 +1,10 @@
 = Changelog
+=== Version 1.3.1 - 2012-03-17
+
+* Ruby 1.9 supoort - thanks aniero
+* Switch to a single Rakefile
+* Remove ruby warnings
+
 === Version 1.2.1 - 2007-09-26
 
 * Bugfix - Removed traversal of non-existent directories from gemspec which caused a slow startup time for some users.
