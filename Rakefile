@@ -7,9 +7,9 @@ This.homepage = "http://github.com/copiousfreetime/#{ This.name }"
 This.version  = Util.version
 
 #------------------------------------------------------------------------------
-# If you want to Develop on qup just run 'rake develop' and you'll have all you
-# need to get going. If you want to use bundler for development, then run
-# 'rake develop:using_bundler'
+# If you want to Develop on this project just run 'rake develop' and you'll have
+# all you need to get going. If you want to use bundler for development, then
+# run 'rake develop:using_bundler'
 #------------------------------------------------------------------------------
 namespace :develop do
   task :default do
