@@ -90,36 +90,38 @@ module Keybox
   # Kernel#rand.
   #
   class RandomSource
-    @@SOURCE_CLASSES = [ ::Keybox::RandomDevice, ::OpenSSL::Random ]
-    @@SOURCE = nil
-
     class << self
+      def default_source_classes
+        [ ::Keybox::RandomDevice, ::OpenSSL::Random ]
+      end
+
+      def source_classes
+        @source_classes ||= default_source_classes
+      end
+
       def register(klass)
         if klass.respond_to?("random_bytes") then
-          @@SOURCE_CLASSES << klass unless @@SOURCE_CLASSES.include?(klass)
+          @source_classes << klass unless self.source_classes.include?(klass)
         else
           raise ArgumentError, "class #{klass.name} does not have a 'random_bytes' method"
         end
       end
 
-      def source_classes
-        @@SOURCE_CLASSES
-      end
-
       def source=(klass)
         register(klass)
-        @@SOURCE = klass
+        @source = klass
       end
 
       def source
-        return @@SOURCE unless @@SOURCE.nil? or not @@SOURCE_CLASSES.include?(@@SOURCE)
-        @@SOURCE_CLASSES.each do |klass|
-          if klass.random_bytes(2).length == 2 then
-            RandomSource.source = klass
-            break
+        if (not defined? @source) or  (not source_classes.include?( @source ) ) then
+          self.source_classes.each do |klass|
+            if klass.random_bytes(2).length == 2 then
+              RandomSource.source = klass
+              break
+            end
           end
         end
-        @@SOURCE
+        return @source
       end
 
       #
