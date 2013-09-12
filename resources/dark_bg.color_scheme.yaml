@@ -15,18 +15,44 @@
 #   :separator_bar  -> Separator displayed entries
 #   :name           -> Names from name : value pairs
 #   :value          -> Values from name : value pairs
----
-:normal:        [ :clear            ]
-:prompt:        [ :bold, :white     ]
-:header:        [ :bold, :yellow    ]
-:header_bar:    [ :blue             ]
-:line_number:   [ :bold, :white     ]
-:even_row:      [ :bold, :magenta   ]
-:odd_row:       [ :bold, :cyan      ]
-:information:   [ :bold, :green     ]
-:error:         [ :bold, :red       ]
-:private:       [ :bold, :red       ]
-:separator:     [ :bold, :white     ]
-:separator_bar: [ :bold, :blue      ]
-:name:          [ :bold, :blue      ]
-:value:         [ :bold, :cyan      ]
+--- 
+:normal: 
+- :clear
+:prompt: 
+- :bold
+- :white
+:header: 
+- :bold
+- :yellow
+:header_bar: 
+- :blue
+:line_number: 
+- :bold
+- :white
+:even_row: 
+- :bold
+- :magenta
+:odd_row: 
+- :bold
+- :cyan
+:information: 
+- :bold
+- :green
+:error: 
+- :bold
+- :red
+:private: 
+- :bold
+- :red
+:separator: 
+- :bold
+- :white
+:separator_bar: 
+- :bold
+- :blue
+:name: 
+- :bold
+- :blue
+:value: 
+- :bold
+- :cyan

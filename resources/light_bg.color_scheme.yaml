@@ -16,17 +16,35 @@
 #   :name           -> Names from name : value pairs
 #   :value          -> Values from name : value pairs
 ---
-:normal:        [ :clear    ]
-:prompt:        [ :red      ]
-:header:        [ :green    ]
-:header_bar:    [ :magenta  ]
-:line_number:   [ :cyan     ]
-:even_row:      [ :blue     ]
-:odd_row:       [ :red      ]
-:information:   [ :green    ]
-:error:         [ :bold, :yellow, :on_red ]
-:private:       [ :bold, :red, :on_black  ]
-:separator:     [ :cyan     ]
-:separator_bar: [ :green    ]
-:name:          [ :magenta  ]
-:value:         [ :blue     ]
+:normal: 
+- :clear
+:prompt: 
+- :red
+:header: 
+- :green
+:header_bar: 
+- :magenta
+:line_number: 
+- :cyan
+:even_row: 
+- :blue
+:odd_row: 
+- :red
+:information: 
+- :green
+:error: 
+- :bold
+- :yellow
+- :on_red
+:private: 
+- :bold
+- :red
+- :on_black
+:separator: 
+- :cyan
+:separator_bar: 
+- :green
+:name: 
+- :magenta
+:value: 
+- :blue
