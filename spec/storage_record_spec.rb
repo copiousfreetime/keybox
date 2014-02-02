@@ -65,6 +65,7 @@ describe 'a storage record entry' do
     e = Keybox::Storage::Record.new
     f = e.dup
     e.uuid.must_equal f.uuid
+    f.uuid.must_equal e
     e.must_equal f
   end
 
