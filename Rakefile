@@ -16,6 +16,8 @@ This.ruby_gemspec do |spec|
   spec.add_development_dependency( 'minitest' , '~> 5.2'  )
   spec.add_development_dependency( 'rdoc'  , '~> 4.1'   )
 
+  # have to move to 1.9.3 and up now
+  spec.required_ruby_version = ">= 1.9.3"
 end
 
 
