@@ -1,7 +1,7 @@
 COPYING
 HISTORY.rdoc
 Manifest.txt
-README.rdoc
+README.md
 Rakefile
 bin/keybox
 bin/kpg
@@ -39,3 +39,5 @@ spec/storage_container_spec.rb
 spec/storage_record_spec.rb
 spec/string_generator_spec.rb
 spec/uuid_spec.rb
+tasks/default.rake
+tasks/this.rb

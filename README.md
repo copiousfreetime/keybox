@@ -1,34 +1,30 @@
-= Keybox
+# Keybox
 
-* Homepage[http://keybox.rubyforge.org]
-* {Github Project}[http://github.com/copiousfreetime/keybox/]
+* [Homepage](http://keybox.rubyforge.org)
+* [Github Project](http://github.com/copiousfreetime/keybox/)
 * email jeremy at hinegardner dot org
 
-== DESCRIPTION
+## DESCRIPTION
 
 Keybox is a set of command line applications and ruby libraries for
 secure password storage and password generation.
 
-== FEATURES/PROBLEMS
+## FEATURES/PROBLEMS
 
 Provides the following command line applications
 
-[keybox]
+**keybox**: a pure ruby command line password storage application using the
+ embedded OpenSSL included with ruby for encryption.
 
-  a pure ruby command line password storage application using
-  the embedded OpenSSL included with ruby for encryption.
-
-[kpg]
-
-  a pure ruby implementation of the Automated Password Generator
-  (apg) program. It attempts to implemented all the functionality
-  of 'apg', but it is not completely compatible.
+**kpg**: a pure ruby implementation of the Automated Password Generator (apg)
+ program. It attempts to implemented all the functionality of 'apg', but it is
+not completely compatible.
 
 The full functionality of the command line applications is also
 available via included ruby libraries and could be embedded in other
 applications.
 
-== SYNOPSYS
+## SYNOPSYS
 
 * keybox command line application 
 
@@ -81,13 +77,13 @@ applications.
                                            [all, lower, numerical, upper, special]
         -v, --version                    Show version information
 
-== REQUIREMENTS
+## REQUIREMENTS
 
-=== For running:
+### For running:
 
 * highilne
 
-=== For development:
+### For development:
 
 Run:
    $ rake develop
@@ -95,29 +91,29 @@ Run:
 To run the RSpec test, you have to remove the termios library if it is installed.
 stdin, stdout, and stderr are redirected and this doesn't play well with termios in highline.
 
-== INSTALL
+## INSTALL
 
 * gem install keybox
 
-== CREDITS
+## CREDITS
 
 keybox is inspired by:
 
-* Password Safe - http://passwordsafe.sourceforge.net/  
-* KeePassX - http://keepassx.sourceforge.net/
-* pwdsafe - http://nsd.dyndns.org/pwsafe/
-* MyPassword Safe - http://www.semanticgap.com/myps/
-* Password Gorilla - http://www.fpx.de/fp/Software/Gorilla/
+* Password Safe - <http://passwordsafe.sourceforge.net/>
+* KeePassX - <http://keepassx.sourceforge.net/>
+* pwdsafe - <http://nsd.dyndns.org/pwsafe/>
+* MyPassword Safe - <http://www.semanticgap.com/myps/>
+* Password Gorilla - <http://www.fpx.de/fp/Software/Gorilla/>
 
 kpg is based on the functionality of 'apg' or Automated Password Generator.
 Automated Password Generator was was originally developed by Adel I.
-Mirzazhanov and can be found at http://www.adel.nursat.kz/apg/
+Mirzazhanov and can be found at <http://www.adel.nursat.kz/apg/>
 
-== LICENSE
+## LICENSE
 
 (The MIT License)
 
-Copyright (c) 2006, 2007 Jeremy Hinegardner
+Copyright (c) 2006-2014 Jeremy Hinegardner
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
