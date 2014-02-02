@@ -141,7 +141,7 @@ module Keybox::Application
           YAML.dump(default_options.marshal_dump,f)
         end
       end
-      options = YAML.load_file(file_path) || Hash.new
+      YAML.load_file(file_path) || Hash.new
     end
 
     # determine the color scheme to store in the initial creation of the configuration
@@ -255,7 +255,7 @@ module Keybox::Application
           if not account_uri.scheme.nil? then
             entry = Keybox::URLAccountEntry.new(account,account)
           end
-        rescue ::URI::InvalidURIError => e
+        rescue ::URI::InvalidURIError
           # just ignore it, we're fine with the Host
           # Account Entry
         end
@@ -347,7 +347,6 @@ module Keybox::Application
           :additional_info    => add_info.length
         }
 
-        full_length = lengths.values.inject(0) { |sum,n| sum + n}
         header = "  # #{"Title".ljust(lengths[:title])}    #{"Username".ljust(lengths[:username])}    #{add_info}"
         hsay header, :header
         #  3 spaces for number column + 1 space after and 4 spaces between
@@ -486,7 +485,7 @@ module Keybox::Application
         else
           hsay "Database not modified.", :information
         end
-      rescue SignalException => se
+      rescue SignalException
         @stdout.puts
         hsay "Interrupted", :error
         hsay "There may be private information on your screen.", :error
