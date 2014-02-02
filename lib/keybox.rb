@@ -1,5 +1,5 @@
 module Keybox
-  VERSION             = "1.3.0"
+  VERSION             = "1.4.0"
 
   # Some untility directories for introspection
   APP_ROOT_DIR     = File.dirname(File.expand_path(File.join(__FILE__,"..")))
