@@ -66,7 +66,6 @@ module Keybox
       s = StringIO.new
       max_length = self.max_field_length
       fields.each do |f|
-        line = "#{f.rjust(max_length + 1)} :"
         value = self.send(f)
         if private_field?(f) then
           # if its private field, then blank out value just to
