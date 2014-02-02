@@ -8,7 +8,8 @@ This.homepage = "http://github.com/copiousfreetime/#{ This.name }"
 
 This.exclude_from_manifest = %r/\.(git|DS_Store)|^(doc|coverage|pkg|tmp|website|Gemfile(\.lock)?)|^[^\/]+\.gemspec|\.(swp|jar|bundle|so|rvmrc)$|~$/
 This.ruby_gemspec do |spec|
-  spec.add_runtime_dependency( 'highline', '~> 1.6.11' )
+  spec.licenses = %w[MIT]
+  spec.add_runtime_dependency( 'highline', '~> 1.6' )
 
   # The Development Dependencies
   spec.add_development_dependency( 'rake'  , '~> 10.1')
