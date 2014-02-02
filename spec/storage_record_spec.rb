@@ -64,7 +64,7 @@ describe 'a storage record entry' do
   it "comparison between records is valid" do
     e = Keybox::Storage::Record.new
     f = e.dup
-    e.must_equal e.uuid
+    e.uuid.must_equal f.uuid
     e.must_equal f
   end
 
