@@ -28,14 +28,14 @@ describe "CSV Convert class" do
 
   it "able to load records from a file" do
     entries = Keybox::Convert::CSV.from_file(@import_csv.path)
-    entries.size.should be == 3
-    entries[0].hostname.should be == "host.example.com"
-    entries[1].password.should be == "mywebpassword"
-    entries[2].additional_info.should == "web forum login's information"
+    entries.size.must_equal 3
+    entries[0].hostname.must_equal "host.example.com"
+    entries[1].password.must_equal "mywebpassword"
+    entries[2].additional_info.must_equal "web forum login's information"
   end
 
   it "throws error if the header is bad" do
-    lambda { Keybox::Convert::CSV.from_file(@bad_import_csv.path) }.should raise_error(Keybox::ValidationError)
+    lambda { Keybox::Convert::CSV.from_file(@bad_import_csv.path) }.must_raise(Keybox::ValidationError)
   end
 
   it "able to write to a csv file" do
@@ -43,6 +43,6 @@ describe "CSV Convert class" do
     Keybox::Convert::CSV.to_file(entries,@export_csv.path)
     @export_csv.open
     data = @export_csv.read
-    data.size.should > 0
+    data.size.must_be( :>, 0 )
   end
 end

@@ -56,6 +56,10 @@ module Keybox
       sprintf(FORMAT,*to_a)
     end
 
+    def to_str
+      to_s
+    end
+
     def to_a
       @bytes.unpack("C*")
     end
@@ -80,9 +84,9 @@ module Keybox
       end
     end
 
-    def to_yaml(*args)
+    def encode_with( coder )
       Keybox.fix_encoding @bytes if @bytes
-      super
+      coder['bytes'] = @bytes
     end
   end
 end

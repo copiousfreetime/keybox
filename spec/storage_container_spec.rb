@@ -16,55 +16,55 @@ describe 'a storage container' do
     File.unlink(@keybox_file) if File.exists?(@keybox_file)
   end
 
-  it 'should have a uuid' do
-    @container.uuid.to_s.length.should == 36
+  it 'has a uuid' do
+    @container.uuid.to_s.length.must_equal 36
   end
 
-  it 'should have a valid key ' do
-    @container.key_digest.length.should == 64
+  it 'has a valid key ' do
+    @container.key_digest.length.must_equal 64
   end
 
-  it 'should save correctly to a file' do
+  it 'saves correctly to a file' do
     @container.save(@testing_file)
-    File.size(@testing_file).should > 0
+    File.size(@testing_file).must_be( :>, 0 )
   end
 
-  it "should load correctly from a file" do
+  it "loads correctly from a file" do
     @container.save(@testing_file)
     new_container = Keybox::Storage::Container.new(@passphrase,@testing_file)
-    new_container.should_be_not_modified
-    new_container.uuid.should == @container.uuid
+    new_container.wont_be(:modified?)
+    new_container.uuid.must_equal @container.uuid
   end
 
-  it "should validate passphrase" do
+  it "validates passphrase" do
     nc = Keybox::Storage::Container.new("i love ruby", @keybox_file)
     nc.save(@testing_file)
-    nc.key_digest.should be == @container.key_digest
-    lambda { Keybox::Storage::Container.new("i hate ruby", @testing_file) }.should raise_error(Keybox::ValidationError)
+    nc.key_digest.must_equal @container.key_digest
+    lambda { Keybox::Storage::Container.new("i hate ruby", @testing_file) }.must_raise(Keybox::ValidationError)
   end
 
-  it "url accounts should have the correct password after save" do
+  it "url accounts have the correct password after save" do
     @container.save(@testing_file)
     new_container = Keybox::Storage::Container.new(@passphrase, @testing_file)
     recs = new_container.find_by_url("nytimes")
-    new_container.records.size.should be == 2
-    recs.size.should be == 1
-    recs[0].password.should == "2f85a2e2f"
+    new_container.records.size.must_equal 2
+    recs.size.must_equal 1
+    recs[0].password.must_equal "2f85a2e2f"
   end
 
   it "can find matching records" do
     matches = @container.find(/times/)
-    matches.size.should == 1
+    matches.size.must_equal 1
   end
 
   it "can find matching records - case insensitive via regex input" do
     matches = @container.find(/Times/)
-    matches.size.should == 1
+    matches.size.must_equal 1
   end
 
   it "can find matching records - case insensitive via string input" do
     matches = @container.find("Times")
-    matches.size.should == 1
+    matches.size.must_equal 1
   end
 
   it "changing the password is safe" do
@@ -76,27 +76,27 @@ describe 'a storage container' do
     @container.save(@keybox_file)
     @container = Keybox::Storage::Container.new("I love ruby too!", @keybox_file)
     times_2 = @container.find_by_url("nytimes").first
-    times_1.should == times_2
+    times_1.must_equal times_2
   end
 
-  it "should not be modified upon load" do
-    @container.modified?.should == false
+  it "is not be modified upon load" do
+    @container.wont_be(:modified?)
   end
 
   it "a modified db can be detected" do
     l1 = @container.find("localhost").first
     l1.username = "new username"
-    @container.modified?.should == true
+    @container.must_be(:modified?)
   end
 
-  it "deleting an item should modify the container" do
+  it "deleting an item modifies the container" do
     ll = @container.find("localhost").first
     @container.delete(ll)
-    @container.modified?.should == true
+    @container.must_be(:modified?)
   end
 
   it "able to see how many items are in the container" do
-    @container.size.should be == 2
-    @container.length.should == 2
+    @container.size.must_equal 2
+    @container.length.must_equal 2
   end
 end

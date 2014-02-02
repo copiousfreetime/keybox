@@ -7,6 +7,6 @@ describe "PasswordHash" do
 
   it "creates string for password" do
     pwd = @pwd_hash.password_for_url("http://www.nytimes.com")
-    pwd.should == "2f85a2e2f"
+    pwd.must_equal "2f85a2e2f"
   end
 end

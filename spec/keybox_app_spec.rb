@@ -43,27 +43,27 @@ describe "Keybox Password Safe Application" do
 
   end
 
-  it "nil argv should do nothing" do
+  it "nil argv does nothing" do
     kps = Keybox::Application::PasswordSafe.new
-    kps.error_message.should == nil
+    kps.error_message.must_be_nil
   end
 
-  it "executing with no args should have output on stdout" do
+  it "executing with no args has output on stdout" do
     kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path])
     prompted_values = ["dark", @passphrase].join("\n")
     kps.set_io(StringIO.new(prompted_values),StringIO.new,StringIO.new)
     kps.run
-    kps.stdout.string.size.should > 0
+    kps.stdout.string.size.must_be( :>, 0)
   end
 
   it "general options get set correctly" do
     kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path, "--debug", "--no-use-hash-for-url"])
     kps.set_io(StringIO.new("dark"),StringIO.new,StringIO.new)
     kps.merge_options
-    kps.options.db_file.should be == @testing_db.path
-    kps.options.config_file.should be == @testing_cfg.path
-    kps.options.debug.should be == true
-    kps.options.use_password_hash_for_url.should == false
+    kps.options.db_file.must_equal @testing_db.path
+    kps.options.config_file.must_equal @testing_cfg.path
+    kps.options.debug.must_equal true
+    kps.options.use_password_hash_for_url.must_equal false
   end
 
   it "more than one command options is an error" do
@@ -72,9 +72,9 @@ describe "Keybox Password Safe Application" do
     begin
       kps.run
     rescue SystemExit => se
-      kps.error_message.should =~ /Only one of/m 
-      kps.stderr.string.should =~ /Only one of/m
-      se.status.should == 1
+      kps.error_message.must_match( /Only one of/m )
+      kps.stderr.string.must_match( /Only one of/m )
+      se.status.must_equal 1
     end
   end
 
@@ -84,7 +84,7 @@ describe "Keybox Password Safe Application" do
     stdin = StringIO.new(prompted_values.join("\n"))
     kps.set_io(stdin,StringIO.new,StringIO.new)
     kps.run
-    kps.db.records.size.should == 4
+    kps.db.records.size.must_equal 4
 end
 
 
@@ -96,10 +96,10 @@ it "invalid options set the error message, exit 1 and have output on stderr" do
   begin
     kps.run
   rescue SystemExit => se
-    kps.error_message.should =~ /Try.*--help/m 
-    kps.stderr.string.should =~ /Try.*--help/m 
-    kps.stdout.string.size.should be == 0
-    se.status.should == 1
+    kps.error_message.must_match( /Try.*--help/m )
+    kps.stderr.string.must_match( /Try.*--help/m )
+    kps.stdout.string.size.must_equal 0
+    se.status.must_equal 1
   end
 end
 
@@ -109,8 +109,8 @@ it "help has output on stdout and exits 0" do
   begin
     kps.run
   rescue SystemExit => se
-    se.status.should be == 0
-    kps.stdout.string.length.should > 0
+    se.status.must_equal 0
+    kps.stdout.string.length.must_be( :>, 0 )
   end
 end
 
@@ -120,8 +120,8 @@ it "version has output on stdout and exits 0" do
   begin
     kps.run
   rescue SystemExit => se
-    se.status.should be == 0
-    kps.stdout.string.length.should > 0
+    se.status.must_equal 0
+    kps.stdout.string.length.must_be( :>, 0)
   end
 end
 
@@ -131,9 +131,9 @@ it "prompted for password twice to create database initially" do
   stdin  = StringIO.new(["dark", @passphrase,@passphrase].join("\n"))
   kps.set_io(stdin,StringIO.new,StringIO.new)
   kps.run
-  kps.db.records.size.should be == 0
-  kps.stdout.string.should =~ /Creating initial database./m 
-  kps.stdout.string.should =~ /Initial Password for/m 
+  kps.db.records.size.must_equal 0
+  kps.stdout.string.must_match( /Creating initial database./m )
+  kps.stdout.string.must_match( /Initial Password for/m )
     end
 
     it "file can be opened with password" do
@@ -141,7 +141,7 @@ it "prompted for password twice to create database initially" do
       stdin  = StringIO.new(["light",@passphrase].join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.db.records.size.should == 3
+      kps.db.records.size.must_equal 3
     end
 
     it "adding an entry to the database works" do
@@ -150,7 +150,7 @@ it "prompted for password twice to create database initially" do
       stdin  = StringIO.new(prompted_values.join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.db.records.size.should == 4
+      kps.db.records.size.must_equal 4
     end
 
     it "editing an entry in the database works" do
@@ -159,8 +159,8 @@ it "prompted for password twice to create database initially" do
       stdin  = StringIO.new(prompted_values.join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.db.records.size.should be == 3
-      kps.db.find("someother")[0].additional_info.should == "someinfo"
+      kps.db.records.size.must_equal 3
+      kps.db.find("someother")[0].additional_info.must_equal "someinfo"
     end
 
     it "add a url entry to the database" do
@@ -169,7 +169,7 @@ it "prompted for password twice to create database initially" do
       stdin  = StringIO.new(prompted_values.join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.db.records.size.should == 4
+      kps.db.records.size.must_equal 4
     end
 
     it "double prompting on failed password for entry to the database works" do
@@ -180,7 +180,7 @@ it "prompted for password twice to create database initially" do
       stdin  = StringIO.new(prompted_values.join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.db.records.size.should == 4
+      kps.db.records.size.must_equal 4
     end
 
     it "able to delete an entry" do
@@ -189,8 +189,8 @@ it "prompted for password twice to create database initially" do
       stdin = StringIO.new(prompted_values.join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.db.records.size.should be == 2
-      kps.stdout.string.should =~ /example' deleted/ 
+      kps.db.records.size.must_equal 2
+      kps.stdout.string.must_match( /example' deleted/ )
     end
 
     it "able to cancel deletion" do
@@ -199,8 +199,8 @@ it "prompted for password twice to create database initially" do
       stdin = StringIO.new(prompted_values.join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.db.records.size.should be == 3
-      kps.stdout.string.should =~ /example' deleted/ 
+      kps.db.records.size.must_equal 3
+      kps.stdout.string.must_match( /example' deleted/ )
     end
 
     it "list all the entries" do
@@ -208,7 +208,7 @@ it "prompted for password twice to create database initially" do
       stdin = StringIO.new(["dark", @passphrase].join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.stdout.string.should =~ /2./m 
+      kps.stdout.string.must_match( /2./m )
     end
 
     it "listing no entries found" do
@@ -216,7 +216,7 @@ it "prompted for password twice to create database initially" do
       stdin = StringIO.new(["dark", @passphrase].join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.stdout.string.should =~ /No matching records were found./ 
+      kps.stdout.string.must_match( /No matching records were found./ )
     end
 
     it "showing no entries found" do
@@ -224,7 +224,7 @@ it "prompted for password twice to create database initially" do
       stdin = StringIO.new(["dark", @passphrase].join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.stdout.string.should =~ /No matching records were found./ 
+      kps.stdout.string.must_match( /No matching records were found./ )
     end
 
 
@@ -233,7 +233,7 @@ it "prompted for password twice to create database initially" do
       stdin = StringIO.new(["dark", @passphrase, "", "", ""].join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.stdout.string.should =~ /2./m 
+      kps.stdout.string.must_match( /2./m )
     end
 
     it "changing master password works" do
@@ -241,7 +241,7 @@ it "prompted for password twice to create database initially" do
       stdin  = StringIO.new(["dark", @passphrase, "I really love ruby.", "I really love ruby."].join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.stdout.string.should =~ /New master password set/m 
+      kps.stdout.string.must_match( /New master password set/m )
     end
 
     it "master password must be non-zero" do
@@ -251,8 +251,8 @@ it "prompted for password twice to create database initially" do
       begin
         kps.run
       rescue SystemExit => se
-        kps.stdout.string.should =~ /Passphrase is not strong enough./m 
-        se.status.should == 1
+        kps.stdout.string.must_match( /Passphrase is not strong enough./m )
+        se.status.must_equal 1
       end
     end
 
@@ -261,7 +261,7 @@ it "prompted for password twice to create database initially" do
       stdin  = StringIO.new(["dark",@passphrase, @passphrase].join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.stdout.string.should =~ /Imported \d* records from/m 
+      kps.stdout.string.must_match( /Imported \d* records from/m )
     end
 
     it "Error message give on invalid imported csv" do
@@ -271,8 +271,8 @@ it "prompted for password twice to create database initially" do
       begin
         kps.run
       rescue SystemExit => se
-        kps.stdout.string.should =~ /Error: There must be a header on the CSV /m 
-        se.status.should == 1
+        kps.stdout.string.must_match( /Error: There must be a header on the CSV /m )
+        se.status.must_equal 1
       end
     end
 
@@ -281,21 +281,21 @@ it "prompted for password twice to create database initially" do
       stdin  = StringIO.new(["dark",@passphrase, @passphrase].join("\n"))
       kps.set_io(stdin,StringIO.new,StringIO.new)
       kps.run
-      kps.stdout.string.should  =~ /Exported \d* records to/m 
+      kps.stdout.string.must_match( /Exported \d* records to/m )
     end
 
     it "able to turn off color schemes" do
       kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"--color","none"])
       kps.set_io(StringIO.new(["dark",@passphrase].join("\n")),StringIO.new,StringIO.new)
       kps.run
-      kps.options.color_scheme.should == :none
+      kps.options.color_scheme.must_equal :none
     end
 
     it "an invalid color scheme results in a no color scheme" do
       kps = Keybox::Application::PasswordSafe.new(["-f", @testing_db.path, "-c", @testing_cfg.path,"--color","dne"])
       kps.set_io(StringIO.new(["dark",@passphrase].join("\n")),StringIO.new,StringIO.new)
       kps.run
-      kps.options.color_scheme.should == :none
+      kps.options.color_scheme.must_equal :none
     end
 
     it "an incomplete color scheme results in a prompt for a color scheme" do
@@ -306,11 +306,11 @@ it "prompted for password twice to create database initially" do
       kps.run
 
       File.unlink("/tmp/test.color_scheme.yaml")
-      kps.stdout.string.should =~ /What color scheme would you like/m
-      kps.options.color_scheme.should == :none
+      kps.stdout.string.must_match( /What color scheme would you like/m )
+      kps.options.color_scheme.must_equal :none
     end
 
-    it "should have a valid home directory" do
-      File.dirname(Keybox::Application::PasswordSafe::DEFAULT_DIRECTORY).size.should > 0
+    it "has a valid home directory" do
+      File.dirname(Keybox::Application::PasswordSafe::DEFAULT_DIRECTORY).size.must_be( :>, 0)
     end
 end

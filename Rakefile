@@ -12,8 +12,8 @@ This.ruby_gemspec do |spec|
 
   # The Development Dependencies
   spec.add_development_dependency( 'rake'  , '~> 10.1')
-  spec.add_development_dependency( 'rspec' , '~> 2.8.0'  )
-  spec.add_development_dependency( 'rdoc'  , '~> 4.0'   )
+  spec.add_development_dependency( 'minitest' , '~> 5.2'  )
+  spec.add_development_dependency( 'rdoc'  , '~> 4.1'   )
 
 end
 

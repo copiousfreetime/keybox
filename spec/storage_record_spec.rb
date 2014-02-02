@@ -6,19 +6,19 @@ describe 'a storage record entry' do
   end
   it 'has a creation date set on instantiation' do
     e = Keybox::Storage::Record.new
-    e.creation_time.should be_instance_of(Time)
+    e.creation_time.must_be_instance_of(Time)
   end
 
   it "assigning to a non-existant field creates the appropriate member " do
     e = Keybox::Storage::Record.new
     e.junk = "junk"
-    e.junk.should == "junk"
+    e.junk.must_equal "junk"
   end
 
   it 'default values for non-existant fields is nil' do 
     e = Keybox::Storage::Record.new
     @data_fields.each do |f|
-      e.send(f).should == nil
+      e.send(f).must_equal nil
     end
   end
 
@@ -26,15 +26,15 @@ describe 'a storage record entry' do
     e = Keybox::Storage::Record.new
     sleep 1
     e.testing = "testing"
-    e.modification_time.should be > e.creation_time 
-    e.last_access_time.should == e.modification_time
+    e.modification_time.must_be( :>, e.creation_time )
+    e.last_access_time.must_equal e.modification_time
   end
 
   it "sets modified to be true when a key is changed" do
     e = Keybox::Storage::Record.new
-    e.should_not be_modified
+    e.wont_be(:modified?)
     e.thing = "test"
-    e.should be_modified
+    e.must_be(:modified?)
   end
 
   it "reading a field after assignment the access time > modification time " do
@@ -42,35 +42,35 @@ describe 'a storage record entry' do
     e.testing = "testing"
     sleep 1
     e.testing
-    e.last_access_time.should be > e.creation_time 
-    e.last_access_time.should be > e.modification_time
+    e.last_access_time.must_be( :>, e.creation_time )
+    e.last_access_time.must_be( :>, e.modification_time )
   end
 
-  it "assigning to a modification, creation or acces_time should raise and exception " do
+  it "assigning to a modification, creation or acces_time raises an exception " do
     e = Keybox::Storage::Record.new
-    lambda {e.modification_time = Time.now}.should raise_error(NoMethodError)
+    lambda {e.modification_time = Time.now}.must_raise(NoMethodError)
   end
 
-  it "assiging multiple items should raise an argument exception" do
+  it "assiging multiple items raises an argument exception" do
     e = Keybox::Storage::Record.new
-    lambda {e.send(:stuff=,1,2)}.should raise_error(ArgumentError)
+    lambda {e.send(:stuff=,1,2)}.must_raise(ArgumentError)
   end
 
-  it "calling a method with arguments should raise exception" do
+  it "calling a method with arguments raises exception" do
     e = Keybox::Storage::Record.new
-    lambda {e.stuff(1,2)}.should raise_error(NoMethodError)
+    lambda {e.stuff(1,2)}.must_raise(NoMethodError)
   end
 
   it "comparison between records is valid" do
     e = Keybox::Storage::Record.new
     f = e.dup
-    e.should be == e.uuid
-    e.should be == f
+    e.must_equal e.uuid
+    e.must_equal f
   end
 
   it "can be round-tripped to YAML multiple times" do
     record = Keybox::Storage::Record.new
     restored = YAML.load(record.to_yaml)
-    YAML.load(restored.to_yaml).should == record
+    YAML.load(restored.to_yaml).must_equal record
   end
 end
