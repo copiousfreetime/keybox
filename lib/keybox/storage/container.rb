@@ -123,6 +123,14 @@ module Keybox
         true
       end
 
+      def encode_with( coder )
+        coder['creation_time']     = @creation_time
+        coder['modification_time'] = @modification_time
+        coder['last_access_time']  = @last_access_time
+        coder['uuid']              = @uuid
+        coder['data_members']      = @data_members
+      end
+
       #
       # save the current container to a file
       #
@@ -262,7 +270,7 @@ module Keybox
       # for the data.
       #
       def validate_passphrase
-        raise Keybox::ValidationError, "Passphrase digests do not match.  The passphrase given does not decrypt the data in this file." unless key_digest == calculated_key_digest(@passphrase)
+        raise Keybox::ValidationError, "Passphrase digests do not match. The passphrase given does not decrypt the data in this file." unless key_digest == calculated_key_digest(@passphrase)
       end
 
       #

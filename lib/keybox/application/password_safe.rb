@@ -112,7 +112,7 @@ module Keybox::Application
     def default_options
       if not defined? @default_options then 
         @default_options                            = OpenStruct.new
-        @default_options.debug                      = 0
+        @default_options.debug                      = false
         @default_options.show_help                  = false
         @default_options.show_version               = false
         @default_options.config_file                = Keybox::Application::PasswordSafe::DEFAULT_CONFIG

@@ -84,9 +84,5 @@ module Keybox
       end
     end
 
-    def encode_with( coder )
-      Keybox.fix_encoding @bytes if @bytes
-      coder['bytes'] = @bytes
-    end
   end
 end

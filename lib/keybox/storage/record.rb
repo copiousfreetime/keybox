@@ -39,6 +39,24 @@ module Keybox
         @modified          = false
       end
 
+      def clone
+        r = self.class.new
+        r.instance_variable_set( :@creation_time, self.creation_time.clone )
+        r.instance_variable_set( :@creation_time, self.creation_time.clone )
+        r.instance_variable_set( :@modification_time, self.modification_time.clone )
+        r.instance_variable_set( :@last_acccess_time, self.last_access_time.clone )
+        r.instance_variable_set( :@uuid, Keybox::UUID.new( self.uuid.to_s ) )
+        r.instance_variable_set( :@modified, self.modified? )
+
+        new_data_members = {}
+        data_members.each do |k,v|
+          new_data_members[k] = String.new(v).encode( 'UTF-8' )
+        end
+        r.instance_variable_set( :@data_members, new_data_members )
+
+        return r
+      end
+
       def modified?
         # since this class can be loaded from a YAML file and
         # modified is not stored in the serialized format, if
@@ -86,14 +104,6 @@ module Keybox
           @data_members[member_sym]
         else
           raise NoMethodError, "undefined method #{method_name} for #{self.class.name}", caller(1)
-        end
-      end
-
-      def encode_with( coder )
-        Keybox.fix_encoding( *@data_members.values )
-        %w{ creation_time modification_time
-            last_access_time data_members uuid  }.each do |i|
-          coder[i] = self.send( i )
         end
       end
 

@@ -6,12 +6,6 @@ module Keybox
   APP_LIB_DIR      = File.join(APP_ROOT_DIR,"lib")
   APP_RESOURCE_DIR = File.join(APP_ROOT_DIR,"resources")
 
-  # Ruby 1.9 compatibility fix for string encoding when reading/writing:
-  def self.fix_encoding(*strings)
-    strings.each do |string|
-      string.force_encoding "binary" if string.respond_to?(:force_encoding)
-    end
-  end
 end
 
 require 'keybox/cipher'
@@ -24,5 +18,3 @@ require 'keybox/storage'
 require 'keybox/string_generator'
 require 'keybox/uuid'
 require 'keybox/convert'
-
-

@@ -1,0 +1,106 @@
+#!/usr/bin/env ruby
+# This is a program that is used to upgrade the Keybox Database for use in 
+# Ruby 2.0. With the conversion from Syck to Psych for YAML serialization the
+# encrypted database also needs to change its format. 
+#
+# Because of the odd nature of this conversion you will need to run this program
+# with the lates version of ruby 1.9.3
+#
+# This program is to be run as:
+#
+#   keybox-db-upgrade [input-database] [output-database]
+#
+# This will convert the old database to the new database encodings.
+#
+require 'yaml'
+require 'keybox'
+require 'highline/import'
+
+#------------------------------------------------------------------------------
+# We must have Ruby 1.9.3 as it has both Syck and Psych engines. We are 
+# converting between them
+#------------------------------------------------------------------------------
+abort "This program MUST be run from Ruby 1.9.3" unless RUBY_VERSION == "1.9.3"
+
+#------------------------------------------------------------------------------
+# The old CSV::Cell class from ruby 1.8.7 may have crept into the yaml
+# seriazliation under Syck. This is my fault, after the conversion this will not
+# be the case. This is here so that Syck can deserialize the classes that were
+# imported via CSV
+#------------------------------------------------------------------------------
+class CSV
+  class Cell < String
+    def data
+      to_s
+    end
+  end
+end
+
+#------------------------------------------------------------------------------
+# We need a old database and a new database on the commandline
+#------------------------------------------------------------------------------
+old_db_file = ARGV.shift
+new_db_file = ARGV.shift
+abort "Usage: #{$0} password-database" unless old_db_file and new_db_file
+
+#------------------------------------------------------------------------------
+# The old db must exist
+#------------------------------------------------------------------------------
+abort "Database file #{old_db_file} is not readable" unless File.readable?( old_db_file )
+
+#------------------------------------------------------------------------------
+# The new db must NOT exist
+#------------------------------------------------------------------------------
+abort "Database file #{new_db_file} exists. Not overwriting" if File.readable?( new_db_file )
+
+
+puts "We are now going to convert #{old_db_file} to  #{new_db_file}"
+
+#------------------------------------------------------------------------------
+# Load the old database using the syck parser so all the fiels are read
+# correctly
+#------------------------------------------------------------------------------
+password = ask("Enter your password for #{old_db_file} : " ) { |q| q.echo = "*" }
+puts "Loading #{old_db_file}"
+YAML::ENGINE.yamler = 'syck'
+old_db = Keybox::Storage::Container.new(password,old_db_file)
+
+#------------------------------------------------------------------------------
+# Create the new database and copy over each record one by one
+#------------------------------------------------------------------------------
+puts 
+puts "Copying data to new database #{new_db_file}"
+YAML::ENGINE.yamler = 'psych'
+new_db = Keybox::Storage::Container.new(password,new_db_file)
+old_db.records.each do |r|
+  new_r = r.clone
+  new_db << new_r
+end
+puts "Saving #{new_db_file}"
+new_db.save
+
+#------------------------------------------------------------------------------
+# Validate that the data in both the new and old database is the same
+#------------------------------------------------------------------------------
+new_db = Keybox::Storage::Container.new(password,new_db_file)
+puts "Validating that all the records in both databases match."
+puts "Previous Records: #{old_db.records.size}"
+puts "New Records     : #{new_db.records.size}"
+
+abort "Record count is not the same" unless old_db.records.size == new_db.records.size
+
+old_db.records.each_with_index do |o,i|
+  n = new_db.records[i]
+  errors = []
+  o.data_members.each do |k,v|
+    new_v = n.data_members[k]
+    errors << "#{k}" if v != new_v
+  end
+  status = errors.empty? ? "  OK" : "FAIL"
+  puts " #{status} : #{o.title}  #{errors.join(' ')}"
+end
+puts
+puts "Done."
+
+
+
